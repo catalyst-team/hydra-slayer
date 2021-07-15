@@ -1,0 +1,3 @@
+catalyst-codestyle==21.03rc2
+pytest==5.3.1
+toml==0.10.0
