@@ -11,49 +11,72 @@ on:
 
 jobs:
 
-  flake8-linter:
-    name: codestyle-reviewdog
+  catalyst-check-codestyle:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 4
       matrix:
-        python-version: [3.6]
-    timeout-minutes: 30
-    env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        python-version: [3.8]
+
     steps:
       - uses: actions/checkout@v2
-
-      - name: set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
-      # https://github.com/actions/cache/blob/master/examples.md
-      # Note: This uses an internal pip API and may not always work
-      # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
-      - name: get pip cache
-        id: pip-cache
+      - name: Install poetry
         run: |
-          python -c "from pip._internal.locations import USER_CACHE_DIR; print('::set-output name=dir::' + USER_CACHE_DIR)"
-
-      - name: cache pip
+          pip install -U pip
+          curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
+          echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+      - name: Set up cache
         uses: actions/cache@v2
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ matrix.python-version }}-pip -${{ hashFiles('./requirements/requirements.txt') }} -${{ hashFiles('./requirements/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ matrix.python-version }}-pip-
-
-      - name: install dependencies
+          path: .venv
+          key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+      - name: Install dependencies
         run: |
-          # python -m pip install --upgrade --user pip
-          pip install -r ./requirements/requirements.txt -r ./requirements/requirements-dev.txt
-          python --version
-          pip --version
-          pip list
-        shell: bash
+          poetry config virtualenvs.in-project true
+          poetry run pip install -U pip
+          poetry install
+
+      - name: check codestyle
+        run: |
+          poetry run catalyst-check-codestyle
+          poetry run doc8 -q -- docs
+
+  reviewdog:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.6]
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install poetry
+        run: |
+          pip install -U pip
+          curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
+          echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+      - name: Set up cache
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+      - name: Install dependencies
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry run pip install -U pip
+          poetry install
 
       - name: install reviewdog
         run: |
@@ -65,50 +88,3 @@ jobs:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           flake8 . | reviewdog -f=pep8 -reporter=github-pr-review
-          if (( $? != 0 )) ; then exit $? ; else exit 0 ; fi
-
-  catalyst-check-codestyle:
-    name: codestyle-and-docs
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 4
-      matrix:
-        python-version: [3.6]
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      # https://github.com/actions/cache/blob/master/examples.md
-      # Note: This uses an internal pip API and may not always work
-      # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
-      - name: get pip cache
-        id: pip-cache
-        run: |
-          python -c "from pip._internal.locations import USER_CACHE_DIR; print('::set-output name=dir::' + USER_CACHE_DIR)"
-
-      - name: cache pip
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ matrix.python-version }}-pip -${{ hashFiles('./requirements/requirements.txt') }} -${{ hashFiles('./requirements/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ matrix.python-version }}-pip-
-
-      - name: install dependencies
-        run: |
-          # python -m pip install --upgrade --user pip
-          pip install -r ./requirements/requirements.txt -r ./requirements/requirements-dev.txt
-          python --version
-          pip --version
-          pip list
-        shell: bash
-
-      - name: check codestyle
-        run: |
-          catalyst-check-codestyle

@@ -12,54 +12,49 @@ on:
 jobs:
 
   build:
-    name: dl-cpu
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       max-parallel: 4
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04, macOS-10.15]  # windows-2019,
-        python-version: [3.6, 3.7, 3.8]
+        os: [ubuntu-18.04, ubuntu-latest]
+        python-version: [3.6, 3.7, 3.8, 3.9]
         requirements: ['latest', 'minimal']
-        exclude:
-          # pickle problems
-          - python-version: 3.8
-            os: macOS-10.15
-          - python-version: 3.6
-            os: macOS-10.15
 
-    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
-
-      - name: set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
-      # https://github.com/pytorch/pytorch/issues/20030
-      - name: Setup macOS
-        if: startsWith(runner.os, 'macOS')
+      - name: Install poetry
         run: |
-          brew install libomp
-          brew install gnu-sed
-
-      - name: set minimal dependencies
-        if: matrix.requirements == 'minimal'
+          pip install -U pip
+          curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
+          echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+      - name: Set up cache
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+      - name: Install dependencies
         run: |
-          python -c "req = open('./requirements/requirements.txt').read().replace('>', '=') ; open('./requirements/requirements.txt', 'w').write(req)"
-
-      - name: install dependencies
+          poetry config virtualenvs.in-project true
+          poetry run pip install -U pip
+          poetry install
+      - name: Install latest dependencies
+        if: matrix.requirements == 'latest'
         run: |
-          # python -m pip install --upgrade --user pip
-          pip install -r ./requirements/requirements.txt -r ./requirements/requirements-dev.txt
-          python --version
-          pip --version
-          pip list
-        shell: bash
+          poetry update
 
-      - name: check examples
+      - name: Unit tests
         env:
           REQUIREMENTS: ${{ matrix.requirements }}
         run: |
-          pytest .
+          poetry run pytest .
+
+      - name: Check dependencies compatibility
+        run: |
+          poetry run poetry check
+          poetry run pip check
