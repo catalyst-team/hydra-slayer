@@ -17,9 +17,8 @@ authors = [
 
 readme = "README.md"
 repository = "https://github.com/catalyst-team/hydra-slayer"
-# TODO: add docs
-# homepage = "https://github.com/catalyst-team/hydra-slayer"
-# documentation = "https://github.com/catalyst-team/hydra-slayer"
+homepage = "https://catalyst-team.github.io/hydra-slayer/"
+documentation = "https://catalyst-team.github.io/hydra-slayer/"
 
 keywords = [
   "distributed computing"
@@ -50,12 +49,14 @@ python = "^3.6"
 PyYAML = "^5.1"
 
 [tool.poetry.dev-dependencies]
+# codestyle
 catalyst-codestyle = "21.6rc1"
 pytest = "^5.3.1"
 toml = "0.10.0"
 
 # docs
-sphinx = "2.2.1"
+Sphinx = "^4.1.1"
+sphinx-multiversion = "^0.2.4"
 sphinx-rtd-theme = "^0.5.2"
 tomlkit = "^0.7.2"
 

@@ -53,6 +53,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
     "sphinx.ext.napoleon",
+    "sphinx_multiversion",
     # "releases",
 ]
 
@@ -95,7 +96,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"  # "catalyst_sphinx_theme"
+html_theme = "sphinx_rtd_theme"
 html_favicon = "_static/icon.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -106,3 +107,7 @@ html_static_path = ["_static"]
 html_short_title = project
 
 html_scaled_image_link = False
+
+
+# Whitelist pattern for branches - build docs only for tags, master and develop branches
+smv_branch_whitelist = r'^(master|develop)$'

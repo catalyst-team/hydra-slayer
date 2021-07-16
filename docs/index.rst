@@ -1,6 +1,6 @@
-============
-Hydra Slayer
-============
+======================
+Hydra Slayer |version|
+======================
 
 .. raw:: html
 
@@ -61,6 +61,12 @@ License
 
 ``hydra-slayer`` is released under a Apache-2.0 license. See `LICENSE <../LICENSE>`__ for additional details about it.
 
+.. toctree::
+   :maxdepth: 3
+   :caption: General
+
+   pages/install
+   pages/quickstart
 
 .. toctree::
    :maxdepth: 2
