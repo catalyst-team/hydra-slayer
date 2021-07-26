@@ -1,0 +1,67 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "hydra-slayer"
+version = "0.1.0rc0"
+description = "A framework for elegantly configuring complex applications"
+
+license = "Apache License 2.0"
+
+authors = [
+  "Sergey Kolesnikov <scitator@gmail.com>",
+  "Yauheni Kachan <yauheni.kachan@gmail.com>"
+]
+
+readme = "README.md"
+repository = "https://github.com/catalyst-team/hydra-slayer"
+homepage = "https://catalyst-team.github.io/hydra-slayer/"
+documentation = "https://catalyst-team.github.io/hydra-slayer/"
+
+keywords = [
+  "distributed computing"
+]
+classifiers = [
+  "Environment :: Console",
+  "Natural Language :: English",
+  "Development Status :: 4 - Beta",
+  "Operating System :: OS Independent",
+  "License :: OSI Approved :: Apache Software License",
+  # Audience
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  # Topics
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  # Programming
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.6",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: Implementation :: CPython"
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+PyYAML = "^5.1"
+
+[tool.poetry.dev-dependencies]
+# codestyle
+# catalyst-codestyle = "21.06rc1"
+doc8 = "^0.8"
+pytest = "^5.3.1"
+toml = "0.10.0"
+
+# docs
+Sphinx = "^4.1.1"
+sphinx-multiversion = "^0.2.4"
+sphinx-rtd-theme = "^0.5.2"
+tomlkit = "^0.7.2"
+
+#[tool.nitpick]
+#style = "https://raw.githubusercontent.com/catalyst-team/codestyle/v21.06rc1/styles/nitpick-style-catalyst.toml"
+
+[tool.black]
+line-length = 99

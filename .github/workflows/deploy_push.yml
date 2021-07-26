@@ -1,0 +1,65 @@
+name: deploy-docs-on-push
+
+on:
+  push:
+    branches:
+      - master
+  # any tags
+
+jobs:
+
+  build-docs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install poetry
+        run: |
+          pip install -U pip
+          curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
+          echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+      - name: Set up cache
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+      - name: Install dependencies
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry run pip install -U pip
+          poetry install
+
+      - name: make docs
+        run: |
+          rm -rf builds
+          git fetch --all --tags
+          poetry run sphinx-multiversion docs/ builds/
+
+      - name: commit documentation changes
+        env:
+          TAG: "${{ github.event.release.tag_name }}"
+        run: |
+          git clone https://github.com/catalyst-team/hydra-slayer.git --branch gh-pages --single-branch gh-pages
+          cd gh-pages
+          rm -rf master
+          \cp -a ../builds/* .
+          # commit changes
+          git config --local user.email "action@ithub.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "${TAG:=master docs}" || true
+
+      - name: push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: gh-pages
+          directory: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
