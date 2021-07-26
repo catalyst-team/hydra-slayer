@@ -43,48 +43,48 @@ jobs:
 
       - name: check codestyle
         run: |
-          poetry run catalyst-check-codestyle
-          poetry run doc8 -q -- docs
+          # TODO: poetry run catalyst-check-codestyle
+          poetry run doc8 -q --file-encoding utf-8 -- docs
 
-  reviewdog:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [3.6]
-    env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  # reviewdog:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       python-version: [3.6]
+  #   env:
+  #     ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
 
-      - name: Install poetry
-        run: |
-          pip install -U pip
-          curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
-          echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
-      - name: Set up cache
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
-      - name: Install dependencies
-        run: |
-          poetry config virtualenvs.in-project true
-          poetry run pip install -U pip
-          poetry install
+  #     - name: Install poetry
+  #       run: |
+  #         pip install -U pip
+  #         curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
+  #         echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+  #     - name: Set up cache
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: .venv
+  #         key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+  #     - name: Install dependencies
+  #       run: |
+  #         poetry config virtualenvs.in-project true
+  #         poetry run pip install -U pip
+  #         poetry install
 
-      - name: install reviewdog
-        run: |
-          mkdir -p $HOME/bin && curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b $HOME/bin
-          echo ::add-path::$HOME/bin
+  #     - name: install reviewdog
+  #       run: |
+  #         mkdir -p $HOME/bin && curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b $HOME/bin
+  #         echo ::add-path::$HOME/bin
 
-      - name: Run reviewdog
-        env:
-          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          flake8 . | reviewdog -f=pep8 -reporter=github-pr-review
+  #     - name: Run reviewdog
+  #       env:
+  #         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       run: |
+  #         flake8 . | reviewdog -f=pep8 -reporter=github-pr-review

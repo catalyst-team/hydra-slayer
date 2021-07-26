@@ -4,8 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "hydra-slayer"
-version = "0.1.0"
-# TODO: replace description
+version = "0.1.0rc0"
 description = "A framework for elegantly configuring complex applications"
 
 license = "Apache License 2.0"
@@ -50,7 +49,8 @@ PyYAML = "^5.1"
 
 [tool.poetry.dev-dependencies]
 # codestyle
-catalyst-codestyle = "21.6rc1"
+# catalyst-codestyle = "21.06rc1"
+doc8 = "^0.8"
 pytest = "^5.3.1"
 toml = "0.10.0"
 
@@ -60,8 +60,8 @@ sphinx-multiversion = "^0.2.4"
 sphinx-rtd-theme = "^0.5.2"
 tomlkit = "^0.7.2"
 
-[tool.nitpick]
-style = "https://raw.githubusercontent.com/catalyst-team/codestyle/v21.06rc1/styles/nitpick-style-catalyst.toml"
+#[tool.nitpick]
+#style = "https://raw.githubusercontent.com/catalyst-team/codestyle/v21.06rc1/styles/nitpick-style-catalyst.toml"
 
 [tool.black]
 line-length = 99

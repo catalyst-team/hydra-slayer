@@ -10,10 +10,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
+from typing import Iterable
 from datetime import datetime
 import os
 import sys
-from typing import Iterable
 
 import tomlkit
 
@@ -21,6 +21,7 @@ sys.path.insert(0, os.path.abspath("../"))
 
 
 # -- Project information -----------------------------------------------------
+
 
 def _get_project_meta():
     with open("../pyproject.toml") as pyproject:
@@ -40,7 +41,7 @@ version = str(pkg_meta["version"])
 release = version
 
 
-## -- General configuration ---------------------------------------------------
+# -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named "sphinx.ext.*") or your custom
@@ -95,7 +96,7 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
+
 html_theme = "sphinx_rtd_theme"
 html_favicon = "_static/icon.png"
 
@@ -110,4 +111,4 @@ html_scaled_image_link = False
 
 
 # Whitelist pattern for branches - build docs only for master branch
-smv_branch_whitelist = r'^master$'
+smv_branch_whitelist = "^master$"
