@@ -109,5 +109,5 @@ html_short_title = project
 html_scaled_image_link = False
 
 
-# Whitelist pattern for branches - build docs only for tags, master and develop branches
-smv_branch_whitelist = r'^(master|develop)$'
+# Whitelist pattern for branches - build docs only for master branch
+smv_branch_whitelist = r'^master$'
