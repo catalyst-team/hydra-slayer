@@ -1,4 +1,4 @@
-name: deploy-docs-on-push
+name: deploy-on-push
 
 on:
   push:
