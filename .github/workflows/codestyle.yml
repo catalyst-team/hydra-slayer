@@ -1,4 +1,4 @@
-name: codestyle
+name: code-style
 
 on:
   push:
