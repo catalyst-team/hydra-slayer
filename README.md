@@ -18,14 +18,50 @@ What is more, it also allows configuring of complex applications just by config 
 ---
 
 ## Installation
+Using pip you can easily install the latest release version [PyPI](https://pypi.org/):
+
 ```sh
 pip install hydra-slayer
 ```
 
 ## Example
-```sh
->> 1 + 1
+```yaml title="config.yaml"
+dataset:
+  _target_: torchvision.datasets.CIFAR100
+  root: ./data
+  train: false
+  transform:
+    _target_: torchvision.transforms.Compose
+    transforms:
+      - _target_: torchvision.transforms.ToTensor
+      - _target_: torchvision.transforms.Normalize
+        mean: [0.1307]
+        std: [0.3081]
+  download: true
 ```
+
+```python title="run.py"
+import hydra_slayer
+import yaml
+
+registry = hydra_slayer.Registry()
+with open("dataset.yaml") as stream:
+    raw_config = yaml.safe_load(stream)
+
+config = registry.get_from_params(**raw_config)
+config["dataset"]
+# Dataset CIFAR100
+#     Number of datapoints: 10000
+#     Root location: ./data
+#     Split: Test
+#     StandardTransform
+# Transform: Compose(
+#     ToTensor()
+#     Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+# )
+```
+
+Please check [documentation](https://catalyst-team.github.io/hydra-slayer/master/pages/examples) for more examples.
 
 ## Documentation
 Full documentation for the project is available at https://catalyst-team.github.io/hydra-slayer
