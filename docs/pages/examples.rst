@@ -71,15 +71,20 @@ Advanced Level
      left:
        _target_: pandas.read_csv
        filepath_or_buffer: dataset/dataset_part1.csv
+
+       # By default, hydra-slayer use partial fit for functions
+       # (what is useful with activation functions in neural networks).
+       # But if we want to call ``pandas.read_csv`` function instead,
+       # then we should pass ``call_meta_factory`` manually.
+       meta_factory: &call_function
+         _target_: catalyst.tools.registry.call_meta_factory
      right:
        _target_: pandas.read_csv
        filepath_or_buffer: dataset/dataset_part2.csv
+       meta_factory: *call_function
      how: inner
      on: user
-
-     # TODO: add comments why we need meta factory
-     meta_factory:
-       _target_: catalyst.tools.registry.call_meta_factory
+     meta_factory: *call_function
 
 .. code-block:: python
 
@@ -94,7 +99,12 @@ Advanced Level
 
    dataset = config["dataframe"]
    dataset
-   # <pandas.core.frame.DataFrame>...
+   # <class 'pandas.core.frame.DataFrame'>
+   #    user country  premium  ...
+   # 0     1     USA     True  ...
+   # 1     2     USA    False  ...
+   #     ...     ...      ...  ...
+
 
 Expert level
 ^^^^^^^^^^^^
@@ -130,8 +140,7 @@ Expert level
       _target_: torch.utils.data.DataLoader
       # TODO: will not work as dict will be retuned, not dataset
       dataset:
-        # read dataset from "dataset.yaml",
-        # roughly equivalent to
+        # Read dataset from "dataset.yaml", roughly equivalent to
         # with open("dataset.yaml") as stream:
         #     params = yaml.safe_load(stream)
         _target_: yaml.safe_load
