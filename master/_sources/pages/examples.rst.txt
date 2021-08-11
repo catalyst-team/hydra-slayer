@@ -90,7 +90,7 @@ Expert level
 .. raw:: html
 
    <div>
-     <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px;" />
+     <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px;" />
      <p>Read multiple CSV files as pandas dataframes and merge them.</p>
      <blockquote>Please note that <b>Expert Fire Magic</b> also allows your hero to cast fire spells at reduced cost and maximum effectiveness.</blockquote>
    </div>
