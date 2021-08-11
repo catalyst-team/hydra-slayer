@@ -30,13 +30,6 @@ dataset:
   _target_: torchvision.datasets.CIFAR100
   root: ./data
   train: false
-  transform:
-    _target_: torchvision.transforms.Compose
-    transforms:
-      - _target_: torchvision.transforms.ToTensor
-      - _target_: torchvision.transforms.Normalize
-        mean: [0.1307]
-        std: [0.3081]
   download: true
 ```
 
@@ -55,10 +48,6 @@ config["dataset"]
 #     Root location: ./data
 #     Split: Test
 #     StandardTransform
-# Transform: Compose(
-#     ToTensor()
-#     Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
-# )
 ```
 
 Please check [documentation](https://catalyst-team.github.io/hydra-slayer/master/pages/examples) for more examples.
