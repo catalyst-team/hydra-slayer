@@ -4,6 +4,7 @@ import pytest
 from hydra_slayer.exceptions import RegistryException
 from hydra_slayer.factory import call_meta_factory
 from hydra_slayer.registry import Registry
+from hydra_slayer.search_path import SearchPath
 
 from .foo import foo
 from . import foo as module
@@ -101,6 +102,37 @@ def test_instantiation_from_path():
     assert res == {"a": 1, "b": 2}
 
 
+def test_instantiate_relative_import_fail():
+    """@TODO: Docs. Contribution is welcome."""
+    r = Registry()
+
+    with pytest.raises(RegistryException):
+        r.get_instance("foo", a=1, b=2)
+
+
+def test_instantiate_relative_import_with_search_path_provided():
+    """@TODO: Docs. Contribution is welcome."""
+    r = Registry()
+
+    res = r.get_instance(
+        "foo", search_path=SearchPath.from_description(["tests.foo.foo"]), a=1, b=2
+    )()
+    assert res == {"a": 1, "b": 2}
+
+    res = r.get_instance(
+        "foo.foo", search_path=SearchPath.from_description(["tests.foo"]), a=3, b=4
+    )()
+    assert res == {"a": 3, "b": 4}
+
+    res = r.get_instance("foo.bar", search_path=SearchPath.from_description(["tests.foo"]))()
+    assert res is None
+
+    res = r.get_instance(
+        "buzz", search_path=SearchPath.from_description([("tests.foo.foo", "buzz")]), a=10, b=20
+    )()
+    assert res == {"a": 10, "b": 20}
+
+
 def test_from_config():
     """@TODO: Docs. Contribution is welcome."""
     r = Registry()
@@ -112,6 +144,26 @@ def test_from_config():
 
     res = r.get_from_params(**{})
     assert res == {}
+
+
+def test_from_config_with_search_path():
+    """@TODO: Docs. Contribution is welcome."""
+    r = Registry()
+
+    res = r.get_from_params(
+        **{"_imports_": ["tests.foo.foo"], "_target_": "foo", "a": 1, "b": 2}
+    )()
+    assert res == {"a": 1, "b": 2}
+
+    res = r.get_from_params(
+        **{"_imports_": [("tests.foo.foo", "buzz")], "_target_": "buzz", "a": 1, "b": 2}
+    )()
+    assert res == {"a": 1, "b": 2}
+
+    res = r.get_from_params(
+        **{"_imports_": [("tests.foo", "functions")], "_target_": "functions.foo", "a": 1, "b": 2}
+    )()
+    assert res == {"a": 1, "b": 2}
 
 
 def test_name_key():
