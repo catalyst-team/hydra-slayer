@@ -2,11 +2,11 @@ from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Tuple
 from collections.abc import MutableMapping
 import copy
 import inspect
-import pydoc
 import warnings
 
 from hydra_slayer.exceptions import RegistryException
 from hydra_slayer.factory import default_meta_factory, Factory
+from hydra_slayer.search_path import SearchPath
 
 __all__ = ["Registry"]
 
@@ -23,12 +23,20 @@ class Registry(MutableMapping):
             Optional. Default just calls factory.
     """
 
-    def __init__(self, meta_factory: MetaFactory = None, name_key: str = "_target_"):
+    def __init__(
+        self,
+        meta_factory: MetaFactory = None,
+        name_key: str = "_target_",
+        search_path: SearchPath = None,
+        imports_key: str = "_imports_",
+    ):
         """Init."""
         self.meta_factory = meta_factory if meta_factory is not None else default_meta_factory
         self._factories: Dict[str, Factory] = {}
         self._late_add_callbacks: List[LateAddCallback] = []
         self.name_key = name_key
+        self.search_path = search_path if search_path is not None else SearchPath()
+        self.imports_key = imports_key
 
     @staticmethod
     def _get_factory_name(f, provided_name=None) -> str:
@@ -150,7 +158,7 @@ class Registry(MutableMapping):
         to_add = {f"{p}{name}": factories[name] for p in prefix for name in names_to_add}
         self.add(**to_add)
 
-    def get(self, name: str) -> Optional[Factory]:
+    def get(self, name: str, search_path: Optional[SearchPath] = None) -> Optional[Factory]:
         """
         Retrieves factory, without creating any objects with it
         or raises error.
@@ -169,22 +177,30 @@ class Registry(MutableMapping):
         if name is None:
             return None
 
-        res = self._factories.get(name, pydoc.locate(name))
+        search_path = search_path or self.search_path
+        res = self._factories.get(name, search_path.locate(name))
 
         if not res:
             raise RegistryException(f"No factory with name '{name}' was registered")
 
         return res
 
-    def get_if_str(self, obj: Union[str, Factory]):
+    def get_if_str(self, obj: Union[str, Factory], search_path: Optional[SearchPath] = None):
         """
         Returns object from the registry if ``obj`` type is string.
         """
         if type(obj) is str:
-            return self.get(obj)
+            return self.get(obj, search_path=search_path)
         return obj
 
-    def get_instance(self, name: str, *args, meta_factory: Optional[MetaFactory] = None, **kwargs):
+    def get_instance(
+        self,
+        name: str,
+        *args,
+        meta_factory: Optional[MetaFactory] = None,
+        search_path: Optional[SearchPath] = None,
+        **kwargs,
+    ):
         """
         Creates instance by calling specified factory
         with ``instantiate_fn``.
@@ -203,7 +219,7 @@ class Registry(MutableMapping):
             RegistryException: if could not create object instance
         """
         meta_factory = meta_factory or self.meta_factory
-        f = self.get(name)
+        f = self.get(name, search_path=search_path)
 
         try:
             if hasattr(f, "get_from_params"):
@@ -215,7 +231,10 @@ class Registry(MutableMapping):
             ) from e
 
     def _recursive_get_from_params(
-        self, params: Union[Dict[str, Any], Any], shared_params: Optional[Dict[str, Any]] = None
+        self,
+        params: Union[Dict[str, Any], Any],
+        shared_params: Optional[Dict[str, Any]] = None,
+        search_path: Optional[SearchPath] = None,
     ) -> Any:
         mapping_types = (dict,)
         # check for `list` but not all iterables to skip processing of generators
@@ -232,11 +251,13 @@ class Registry(MutableMapping):
             # note: it is assumed that `params` is mutable
             if isinstance(param, mapping_types):
                 params[key] = self._recursive_get_from_params(
-                    params=param, shared_params=shared_params
+                    params=param, shared_params=shared_params, search_path=search_path
                 )
             elif isinstance(param, iterable_types):
                 params[key] = [
-                    self._recursive_get_from_params(params=value, shared_params=shared_params)
+                    self._recursive_get_from_params(
+                        params=value, shared_params=shared_params, search_path=search_path
+                    )
                     for value in param
                 ]
 
@@ -245,7 +266,9 @@ class Registry(MutableMapping):
             shared_params = shared_params or {}
 
             # use additional dict to handle 'multiple values for keyword argument'
-            instance = self.get_instance(name=name, **{**shared_params, **params})
+            instance = self.get_instance(
+                name=name, search_path=search_path, **{**shared_params, **params}
+            )
             return instance
         return params
 
@@ -263,7 +286,13 @@ class Registry(MutableMapping):
         Returns:
             result of calling ``instantiate_fn(factory, **config)``
         """
-        instance = self._recursive_get_from_params(params=kwargs, shared_params=shared_params)
+        imports = kwargs.pop(self.imports_key, None)
+        search_path = (
+            SearchPath.from_description(imports) if imports is not None else self.search_path
+        )
+        instance = self._recursive_get_from_params(
+            params=kwargs, shared_params=shared_params, search_path=search_path
+        )
         return instance
 
     def all(self) -> List[str]:
