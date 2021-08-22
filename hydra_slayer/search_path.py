@@ -55,9 +55,9 @@ class SearchPathEntry:
         """
         Args:
             description: Config description of a SearchPathEntry.
-            Either a string or Tuple[str, str].
-            When passing a Tuple[str, str], its second component
-            is treated as an alias for a provided path.
+                Either a string or Sequence[str] of length 2.
+                When passing a Sequence[str], its second component
+                is treated as an alias for a provided path.
 
         Returns:
             A SearchPathEntry object corresponding to provided description
@@ -129,7 +129,7 @@ class SearchPath:
         """
         Args:
             description: Config description of a SearchPath.
-            A list of config descriptions of SearchPathEntries.
+                A list of config descriptions of SearchPathEntries.
 
         Returns:
             A SearchPath object corresponding to provided description
