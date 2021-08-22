@@ -165,6 +165,10 @@ class Registry(MutableMapping):
 
         Args:
             name: factory name
+            search_path: SearchPath object to look for Factories not added to Registry explicitly,
+                but referenced by their Python import paths.
+                Defaults to None.
+                If None is provided then default SearchPath of this Registry instance is used.
 
         Returns:
             Factory: factory by name
@@ -209,6 +213,10 @@ class Registry(MutableMapping):
             name: factory name
             meta_factory: Function that calls factory the right way.
                 If not provided, default is used
+            search_path: SearchPath object to look for Factories not added to Registry explicitly,
+                but referenced by their Python import paths.
+                Defaults to None.
+                If None is provided then default SearchPath of this Registry instance is used.
             args: args to pass to the factory
             **kwargs: kwargs to pass to the factory
 
