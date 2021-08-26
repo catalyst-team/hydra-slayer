@@ -132,6 +132,11 @@ def test_instantiate_relative_import_with_search_path_provided():
     )()
     assert res == {"a": 10, "b": 20}
 
+    res = r.get_instance(
+        "buzz.foo", search_path=SearchPath.from_description([("tests.foo", "buzz")]), a=100, b=200
+    )()
+    assert res == {"a": 100, "b": 200}
+
 
 def test_from_config():
     """@TODO: Docs. Contribution is welcome."""
