@@ -21,7 +21,7 @@ def test_get_factories():
 
 def test_fail_get_factory():
     with pytest.raises(RegistryException) as e_ifo:
-        F.get_factory("tests.foobar.quux")()
+        F.get_factory("tests.foobar.corge")()
         assert hasattr(e_ifo.value, "__cause__")
 
 
@@ -41,7 +41,7 @@ def test_instantiations():
 
 def test_fail_instantiation():
     with pytest.raises(RegistryException) as e_ifo:
-        F.get_instance("tests.foobar.quux")()
+        F.get_instance("tests.foobar.corge")()
         assert hasattr(e_ifo.value, "__cause__")
 
     with pytest.raises(TypeError) as e_ifo:
@@ -214,14 +214,14 @@ def test_recursive_get_from_params_nested_structures():
 
 
 def test_get_from_params_args_support():
-    res = F.get_from_params(**{"_target_": "tests.foobar.baz", "args": [1, 2, 3]},)()
+    res = F.get_from_params(**{"_target_": "tests.foobar.baz", "args": [1, 2, 3]})()
     assert res == (1, 2, 3)
 
-    res = F.get_from_params(**{"_target_": "tests.foobar.qux", "argss": [1, 2, 3], "b": 4},)()
-    assert res == 10
+    res = F.get_from_params(**{"_target_": "tests.foobar.qux", "argss": [1, 2, 3], "b": 4})()
+    assert res == (1, 2, 3, 4)
 
-    res = F.get_from_params(**{"_target_": "tests.foobar.qux", "a": 1, "b": 2},)()
-    assert res == 3
+    res = F.get_from_params(**{"_target_": "tests.foobar.qux", "a": 1, "b": 2})()
+    assert res == (1, 2)
 
     res = F.get_from_params(
         **{
@@ -234,3 +234,28 @@ def test_get_from_params_args_support():
         shared_params={"meta_factory": call_meta_factory},
     )
     assert res == ({"a": 1, "b": 2}, {"a": 3, "b": 4})
+
+
+def test_get_from_params_kwargs_support():
+    res = F.get_from_params(**{"_target_": "tests.foobar.quux", "a": 3, "b": 4})()
+    assert res == {"a": 3, "b": 4}
+
+    res = F.get_from_params(
+        **{"_target_": "tests.foobar.quux", "a": 1, "b": 2, "kwargs": {"c": 3}}
+    )()
+    assert res == {"a": 1, "b": 2, "c": 3}
+
+    res = F.get_from_params(
+        **{"_target_": "tests.foobar.quux", "kwargs": {"c": 1, "b": 2, "a": 3}}
+    )()
+    assert res == {"a": 3, "b": 2, "c": 1}
+
+    res = F.get_from_params(
+        **{"_target_": "tests.foobar.quux", "a": 1, "b": 2, "kwargs": {"c": 3, "b": 4, "a": 5}}
+    )()
+    assert res == {"a": 5, "b": 4, "c": 3}
+
+    res = F.get_from_params(
+        **{"_target_": "tests.foobar.quuz", "params": {"a": 1, "b": 2, "c": 3}}
+    )()
+    assert res == {"a": 1, "b": 2}

@@ -25,12 +25,16 @@ def _extract_factory_name_arg(
     return factory_name, args, kwargs
 
 
-def _extract_var_positional_arg(func: Callable, kwargs: Dict) -> Tuple[Iterable, Dict]:
+def _extract_positional_keyword_vars(func: Callable, kwargs: Dict) -> Tuple[Iterable, Dict]:
     # make a copy of kwargs since we don't want to modify them directly
     kwargs = copy.deepcopy(kwargs)
 
-    sign = inspect.signature(func)
-    type2param = {param.kind: name for name, param in sign.parameters.items()}
+    signature = inspect.signature(func)
+    type2param = {p.kind: name for name, p in signature.parameters.items()}
+
+    var_kwarg = kwargs.pop(type2param.get(inspect.Parameter.VAR_KEYWORD), {})
+    kwargs.update(var_kwarg)
+
     args = kwargs.pop(type2param.get(inspect.Parameter.VAR_POSITIONAL), ())
 
     return args, kwargs
@@ -157,7 +161,7 @@ def _recursive_get_from_params(
             factory_key=factory_key, args=(), kwargs=kwargs
         )
         factory = get_factory_func(factory_name)
-        args, kwargs = _extract_var_positional_arg(factory, kwargs=kwargs)
+        args, kwargs = _extract_positional_keyword_vars(factory, kwargs=kwargs)
         meta_factory = kwargs.pop("meta_factory", default_meta_factory)
 
         instance = _get_instance_from_factory(

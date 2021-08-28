@@ -15,4 +15,12 @@ def baz(*args):
 
 
 def qux(a=1, *argss, b=2):
-    return sum((a, b, *argss))
+    return (a, *argss, b)
+
+
+def quux(a=1, b=2, **kwargs):
+    return {"a": a, "b": b, **kwargs}
+
+
+def quuz(**params):
+    return {"a": params["a"], "b": params["b"]}
