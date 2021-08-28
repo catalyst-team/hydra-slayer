@@ -1,5 +1,5 @@
 from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Tuple, Union
-import collections
+from collections import abc
 import copy
 import inspect
 import pydoc
@@ -14,7 +14,7 @@ LateAddCallback = Callable[["Registry"], None]
 MetaFactory = Callable[[Factory, Tuple, Mapping], Any]
 
 
-class Registry(collections.MutableMapping):
+class Registry(abc.MutableMapping):
     """
     Universal class allowing to add and access various factories by name.
 
