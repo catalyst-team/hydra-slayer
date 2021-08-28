@@ -5,6 +5,7 @@ import inspect
 __all__ = ["call_meta_factory", "partial_meta_factory", "default_meta_factory"]
 
 Factory = Union[Type, Callable[..., Any]]
+MetaFactory = Callable[[Factory, Tuple, Mapping], Any]
 
 
 def call_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):

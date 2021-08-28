@@ -3,10 +3,16 @@ __all__ = ["foo"]
 
 
 def foo(a, b):
-    """Docs? Contribution is welcome."""
     return {"a": a, "b": b}
 
 
 def bar():
-    """Docs? Contribution is welcome."""
     pass
+
+
+def baz(*args):
+    return args
+
+
+def qux(a=1, *argss, b=2):
+    return sum((a, b, *argss))
