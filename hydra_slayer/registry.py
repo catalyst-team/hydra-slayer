@@ -1,17 +1,15 @@
-from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Iterable, Iterator, List, Mapping, Optional, Tuple, Union
 from collections import abc
-import copy
 import inspect
-import pydoc
 import warnings
 
+from hydra_slayer import functional as F
 from hydra_slayer.exceptions import RegistryException
-from hydra_slayer.factory import default_meta_factory, Factory
+from hydra_slayer.factory import default_meta_factory, Factory, MetaFactory
 
 __all__ = ["Registry"]
 
 LateAddCallback = Callable[["Registry"], None]
-MetaFactory = Callable[[Factory, Tuple, Mapping], Any]
 
 
 class Registry(abc.MutableMapping):
@@ -169,10 +167,9 @@ class Registry(abc.MutableMapping):
         if name is None:
             return None
 
-        res = self._factories.get(name, pydoc.locate(name))
-
-        if not res:
-            raise RegistryException(f"No factory with name '{name}' was registered")
+        res = self._factories.get(name, None)
+        if res is None:
+            res = F.get_factory(name)
 
         return res
 
@@ -180,74 +177,36 @@ class Registry(abc.MutableMapping):
         """
         Returns object from the registry if ``obj`` type is string.
         """
-        if type(obj) is str:
+        if isinstance(obj, str):
             return self.get(obj)
         return obj
 
-    def get_instance(self, name: str, *args, meta_factory: Optional[MetaFactory] = None, **kwargs):
+    def get_instance(self, *args, meta_factory: Optional[MetaFactory] = None, **kwargs):
         """
         Creates instance by calling specified factory
         with ``instantiate_fn``.
 
         Args:
-            name: factory name
+            *args: args to pass to the factory
             meta_factory: Function that calls factory the right way.
                 If not provided, default is used
-            args: args to pass to the factory
             **kwargs: kwargs to pass to the factory
 
         Returns:
             created instance
 
         Raises:
+            TypeError: if factory name argument is missing
             RegistryException: if could not create object instance
         """
-        meta_factory = meta_factory or self.meta_factory
-        f = self.get(name)
-
-        try:
-            if hasattr(f, "get_from_params"):
-                return f.get_from_params(*args, **kwargs)
-            return meta_factory(f, args, kwargs)
-        except Exception as e:
-            raise RegistryException(
-                f"Factory '{name}' call failed: args={args} kwargs={kwargs}"
-            ) from e
-
-    def _recursive_get_from_params(
-        self, params: Union[Dict[str, Any], Any], shared_params: Optional[Dict[str, Any]] = None
-    ) -> Any:
-        mapping_types = (dict,)
-        # check for `list` but not all iterables to skip processing of generators
-        iterable_types = (list,)
-
-        if not isinstance(params, (*mapping_types, *iterable_types)):
-            return params
-
-        # make a copy of params since we don't want to modify them directly
-        params = copy.deepcopy(params)
-
-        params_iter = params.items() if isinstance(params, mapping_types) else enumerate(params)
-        for key, param in params_iter:
-            # note: it is assumed that `params` is mutable
-            if isinstance(param, mapping_types):
-                params[key] = self._recursive_get_from_params(
-                    params=param, shared_params=shared_params
-                )
-            elif isinstance(param, iterable_types):
-                params[key] = [
-                    self._recursive_get_from_params(params=value, shared_params=shared_params)
-                    for value in param
-                ]
-
-        if isinstance(params, mapping_types) and self.name_key in params:
-            name = params.pop(self.name_key)
-            shared_params = shared_params or {}
-
-            # use additional dict to handle 'multiple values for keyword argument'
-            instance = self.get_instance(name=name, **{**shared_params, **params})
-            return instance
-        return params
+        instance = F._get_instance(
+            factory_key=self.name_key,
+            get_factory_func=self.get,
+            meta_factory=meta_factory or self.meta_factory,
+            args=args,
+            kwargs=kwargs,
+        )
+        return instance
 
     def get_from_params(
         self, *, shared_params: Optional[Dict[str, Any]] = None, **kwargs,
@@ -263,25 +222,23 @@ class Registry(abc.MutableMapping):
         Returns:
             result of calling ``instantiate_fn(factory, **config)``
         """
-        instance = self._recursive_get_from_params(params=kwargs, shared_params=shared_params)
+        instance = F._recursive_get_from_params(
+            factory_key=self.name_key,
+            get_factory_func=self.get,
+            params=kwargs,
+            shared_params=shared_params or {},
+        )
         return instance
 
-    def all(self) -> List[str]:
+    def all(self) -> Iterable[str]:
         """
         Returns:
             list of names of registered items
         """
         self._do_late_add()
-        result = list(self._factories.keys())
+        result = tuple(self._factories.keys())
 
         return result
-
-    def len(self) -> int:
-        """
-        Returns:
-            length of registered items
-        """
-        return len(self._factories)
 
     def __str__(self) -> str:
         """Returns a string of registered items."""
@@ -295,7 +252,7 @@ class Registry(abc.MutableMapping):
     def __len__(self) -> int:
         """Returns length of registered items."""
         self._do_late_add()
-        return self.len()
+        return len(self._factories)
 
     def __getitem__(self, name: str) -> Optional[Factory]:
         """Returns a value from the registry by name."""
