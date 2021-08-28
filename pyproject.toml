@@ -45,8 +45,6 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.6"
 
-PyYAML = "^5.1"
-
 [tool.poetry.dev-dependencies]
 # codestyle
 catalyst-codestyle = "21.07rc0"
