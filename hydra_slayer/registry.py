@@ -18,11 +18,11 @@ class Registry(abc.MutableMapping):
 
     Args:
         meta_factory: default object that calls factory.
-            Optional. Default just calls factory.
+            Default: :py:func:`.factory.default_meta_factory`
+        name_key: key to use to extract names of the factories from
     """
 
     def __init__(self, meta_factory: MetaFactory = None, name_key: str = "_target_"):
-        """Init."""
         self.meta_factory = meta_factory if meta_factory is not None else default_meta_factory
         self._factories: Dict[str, Factory] = {}
         self._late_add_callbacks: List[LateAddCallback] = []
@@ -58,14 +58,14 @@ class Registry(abc.MutableMapping):
         name. Signature is flexible.
 
         Args:
-            factory: Factory instance
-            factories: More instances
-            name: Provided name for first instance. Use only when pass
-                single instance.
-            named_factories: Factory and their names as kwargs
+            factory: factory instance
+            factories: more instances
+            name: provided name for first instance. Use only when pass
+                single instance
+            named_factories: factory and their names as kwargs
 
         Returns:
-            Factory: First factory passed
+            first factory passed
 
         Raises:
             RegistryException: if factory with provided name is already present
@@ -103,7 +103,7 @@ class Registry(abc.MutableMapping):
         registry query.
 
         Args:
-            cb: Callback receives registry and must call it's methods to
+            cb: callback receives registry and must call it's methods to
                 register factories
         """
         self._late_add_callbacks.append(cb)
@@ -117,10 +117,9 @@ class Registry(abc.MutableMapping):
 
         Args:
             module: module to scan
-            prefix (Union[str, List[str]]): prefix string for all the module's
-                factories. If prefix is a list, all values will be treated
-                as aliases.
-            ignore_all: flag, ignore `__all__` or not
+            prefix: prefix string for all the module's factories.
+            If prefix is a list, all values will be treated as aliases
+            ignore_all: if ``True``, ignores `__all__` attribute of the module
 
         Raises:
             TypeError: if prefix is not a list or a string
@@ -132,7 +131,7 @@ class Registry(abc.MutableMapping):
         if ignore_all:
             names_to_add = list(factories.keys())
         else:
-            # Filter by __all__ if present
+            # filter by __all__ if present
             names_to_add = getattr(module, "__all__", list(factories.keys()))
 
         if prefix is None:
@@ -157,10 +156,7 @@ class Registry(abc.MutableMapping):
             name: factory name
 
         Returns:
-            Factory: factory by name
-
-        Raises:
-            RegistryException: if no factory with provided name was registered
+            factory by name
         """
         self._do_late_add()
 
@@ -174,30 +170,23 @@ class Registry(abc.MutableMapping):
         return res
 
     def get_if_str(self, obj: Union[str, Factory]):
-        """
-        Returns object from the registry if ``obj`` type is string.
-        """
+        """Returns object from the registry if ``obj`` type is string."""
         if isinstance(obj, str):
             return self.get(obj)
         return obj
 
     def get_instance(self, *args, meta_factory: Optional[MetaFactory] = None, **kwargs):
         """
-        Creates instance by calling specified factory
-        with ``instantiate_fn``.
+        Creates instance by calling specified factory with ``instantiate_fn``.
 
         Args:
-            *args: args to pass to the factory
-            meta_factory: Function that calls factory the right way.
-                If not provided, default is used
-            **kwargs: kwargs to pass to the factory
+            *args: \*args to pass to the factory
+            meta_factory: function that calls factory the right way.
+                Default: :py:func:`.factory.default_meta_factory`
+            **kwargs: \*\*kwargs to pass to the factory
 
         Returns:
             created instance
-
-        Raises:
-            TypeError: if factory name argument is missing
-            RegistryException: if could not create object instance
         """
         instance = F._get_instance(
             factory_key=self.name_key,
@@ -217,10 +206,10 @@ class Registry(abc.MutableMapping):
 
         Args:
             shared_params: params to pass on all levels in case of recursive creation
-            **kwargs: additional kwargs for factory
+            **kwargs: \*\*kwargs to pass to the factory
 
         Returns:
-            result of calling ``instantiate_fn(factory, **config)``
+            result of calling ``instantiate_fn(factory, **sub_kwargs)``
         """
         instance = F._recursive_get_from_params(
             factory_key=self.name_key,
@@ -231,10 +220,7 @@ class Registry(abc.MutableMapping):
         return instance
 
     def all(self) -> Iterable[str]:
-        """
-        Returns:
-            list of names of registered items
-        """
+        """Returns list with names of all registered items."""
         self._do_late_add()
         result = tuple(self._factories.keys())
 

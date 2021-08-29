@@ -26,6 +26,7 @@ def _extract_factory_name_arg(
 
 
 def _extract_positional_keyword_vars(func: Callable, kwargs: Dict) -> Tuple[Iterable, Dict]:
+    # TODO: check if needed
     # make a copy of kwargs since we don't want to modify them directly
     kwargs = copy.deepcopy(kwargs)
 
@@ -41,18 +42,21 @@ def _extract_positional_keyword_vars(func: Callable, kwargs: Dict) -> Tuple[Iter
 
 
 def get_factory(name_or_object: Union[str, T]) -> Union[Factory, T]:
-    """
-    Retrieves factory, without creating any objects with it
-    or raises error.
+    """Retrieves factory, without creating any objects with it.
 
     Args:
-        name: factory name
+        name_or_object: factory name or any valid python object
 
     Returns:
-        Factory: factory by name
+        factory
 
     Raises:
         RegistryException: if no factory with provided name was registered
+
+    Examples:
+        >>> to_int = get_factory("int")
+        >>> to_int("42")
+        42
     """
     if isinstance(name_or_object, str):
         factory = pydoc.locate(name_or_object)
@@ -63,8 +67,7 @@ def get_factory(name_or_object: Union[str, T]) -> Union[Factory, T]:
     return name_or_object
 
 
-# TODO: rename to ``_factory_call`` ?
-def _get_instance_from_factory(
+def _meta_factory_call(
     factory: Factory, meta_factory: MetaFactory, args: Iterable, kwargs: Dict
 ) -> Any:
     if hasattr(factory, "get_from_params"):
@@ -79,6 +82,28 @@ def _get_instance(
     args: Optional[Iterable] = None,
     kwargs: Optional[Dict] = None,
 ) -> Any:
+    """Creates instance by calling specified factory with ``instantiate_fn``.
+
+    Note:
+        The name of the factory to use must be provided as the first argument
+        or directly by ``'_target_'`` keyword.
+
+    Args:
+        factory_key: key to extract factory name from
+        get_factory_func: function that returns factory by its name.
+            Default: :py:func:`.functional.get_factory`
+        meta_factory: function that calls factory in the right way.
+            Default: :py:func:`.factory.default_meta_factory`
+        args: \*args to pass to the factory
+        kwargs: \*\*kwargs to pass to the factory
+
+    Returns:
+        created instance
+
+    Raises:
+        TypeError: if factory name argument is missing
+        RegistryException: if could not create object instance
+    """
     get_factory_func = get_factory_func or get_factory
     meta_factory = meta_factory or default_meta_factory
     args, kwargs = args or (), kwargs or {}
@@ -91,16 +116,10 @@ def _get_instance(
     if name is None:
         raise TypeError(f"get_instance() missing at least 1 required argument: '{factory_key}'")
 
-        # TODO: for debug only
-        # raise TypeError(
-        #     f"get_instance() missing at least 1 required argument: '{factory_key}'"
-        #     f" || name={name} args={args}, kwargs={kwargs}, factory={meta_factory}"
-        # )
-
     factory = get_factory_func(name)
 
     try:
-        instance = _get_instance_from_factory(
+        instance = _meta_factory_call(
             factory=factory, meta_factory=meta_factory, args=args, kwargs=kwargs
         )
         return instance
@@ -111,22 +130,24 @@ def _get_instance(
 
 
 def get_instance(*args, meta_factory: Optional[MetaFactory] = None, **kwargs) -> Any:
-    """
-    Creates instance by calling specified factory
-    with ``instantiate_fn``.
+    """Creates instance by calling specified factory with ``instantiate_fn``.
+
+    Note:
+        The name of the factory to use should be provided as the first argument
+        or directly by ``'_target_'`` keyword.
 
     Args:
-        *args: args to pass to the factory
-        meta_factory: Function that calls factory the right way.
-            If not provided, default is used
-        **kwargs: kwargs to pass to the factory
+        *args: positional arguments to pass to the factory
+        meta_factory: function that calls factory in the right way.
+            Default: :py:func:`.factory.default_meta_factory`
+        **kwargs: named parameters to pass to the factory
 
     Returns:
         created instance
 
-    Raises:
-        TypeError: if factory name argument is missing
-        RegistryException: if could not create object instance
+    Examples:
+        >>> get_instance(int, "42", base=10)
+        42
     """
     instance = _get_instance(meta_factory=meta_factory, args=args, kwargs=kwargs)
     return instance
@@ -164,7 +185,7 @@ def _recursive_get_from_params(
         args, kwargs = _extract_positional_keyword_vars(factory, kwargs=kwargs)
         meta_factory = kwargs.pop("meta_factory", default_meta_factory)
 
-        instance = _get_instance_from_factory(
+        instance = _meta_factory_call(
             factory=factory, meta_factory=meta_factory, args=args, kwargs=kwargs
         )
 
@@ -175,14 +196,20 @@ def _recursive_get_from_params(
 def get_from_params(*, shared_params: Optional[Dict[str, Any]] = None, **kwargs) -> Any:
     """
     Creates instance based in configuration dict with ``instantiation_fn``.
-    If ``config[name_key]`` is None, None is returned.
+
+    Note:
+        The name of the factory to use should be provided by ``'_target_'`` keyword.
 
     Args:
         shared_params: params to pass on all levels in case of recursive creation
-        **kwargs: additional kwargs for factory
+        **kwargs: named parameters for factory
 
     Returns:
-        result of calling ``instantiate_fn(factory, **config)``
+        result of calling ``instantiate_fn(factory, **sub_kwargs)``
+
+    Examples:
+        >>> get_from_params(_target_="torch.nn.Linear", in_features=20, out_features=30)
+        Linear(in_features=20, out_features=30, bias=True)
     """
     instance = _recursive_get_from_params(
         factory_key=DEFAULT_FACTORY_KEY,
