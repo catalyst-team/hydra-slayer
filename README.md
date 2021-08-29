@@ -25,7 +25,7 @@ pip install hydra-slayer
 ```
 
 ## Example
-```yaml title="config.yaml"
+```yaml title="dataset.yaml"
 dataset:
   _target_: torchvision.datasets.CIFAR100
   root: ./data
@@ -37,17 +37,15 @@ dataset:
 import hydra_slayer
 import yaml
 
-registry = hydra_slayer.Registry()
 with open("dataset.yaml") as stream:
     raw_config = yaml.safe_load(stream)
 
-config = registry.get_from_params(**raw_config)
+config = hydra_slayer.get_from_params(**raw_config)
 config["dataset"]
 # Dataset CIFAR100
 #     Number of datapoints: 10000
 #     Root location: ./data
 #     Split: Test
-#     StandardTransform
 ```
 
 Please check [documentation](https://catalyst-team.github.io/hydra-slayer/master/pages/examples) for more examples.
