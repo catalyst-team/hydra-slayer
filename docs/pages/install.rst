@@ -7,7 +7,7 @@ Installation
 You can install ``hydra-slayer`` via `pip <pip_>`_ or directly from source.
 
 Install from PyPi
-===================
+=================
 
 Using pip you can easily install the latest release version `PyPI <pypi_>`_:
 
@@ -25,7 +25,7 @@ You can install the latest development version using pip directly from the GitHu
     pip install git+https://github.com/catalyst-team/hydra-slayer.git
 
 Install from source
-============================
+===================
 
 It's also possible to clone the Git repository and install it from source with `Poetry <poetry_>`_:
 

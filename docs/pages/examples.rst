@@ -5,7 +5,7 @@ Examples
 ========
 
 Basic Level
-^^^^^^^^^^^
+===========
 
 .. raw:: html
 
@@ -27,17 +27,16 @@ Basic Level
    import hydra_slayer
    import yaml
 
-   registry = hydra_slayer.Registry()
-   with open("dataset.yaml") as stream:
+   with open("transform.yaml") as stream:
        raw_config = yaml.safe_load(stream)
 
-   transform = registry.get_from_params(**raw_config)
+   transform = hydra_slayer.get_from_params(**raw_config)
    transform
    # Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
 
 
 Advanced Level
-^^^^^^^^^^^^^^
+==============
 
 .. raw:: html
 
@@ -67,11 +66,10 @@ Advanced Level
    import hydra_slayer
    import yaml
 
-   registry = hydra_slayer.Registry()
    with open("dataset.yaml") as stream:
-       config = yaml.safe_load(stream)
+       raw_config = yaml.safe_load(stream)
 
-   dataset = registry.get_from_params(**config)
+   dataset = hydra_slayer.get_from_params(**raw_config)
    dataset
    # Dataset CIFAR100
    #     Number of datapoints: 10000
@@ -79,13 +77,16 @@ Advanced Level
    #     Split: Test
    #     StandardTransform
    # Transform: Compose(
-   #     ToTensor()
-   #     Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
-   # )
+   #                ToTensor()
+   #                Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+   #            )
 
 
 Expert level
-^^^^^^^^^^^^
+============
+
+Creating ``pd.DataFrame`` from config
+-------------------------------------
 
 .. raw:: html
 
@@ -109,13 +110,13 @@ Expert level
        # But if we want to call ``pandas.read_csv`` function instead,
        # then we should pass ``call_meta_factory`` manually.
        meta_factory: &call_function
-         _target_: catalyst.tools.registry.call_meta_factory
+         _target_: hydra_slayer.call_meta_factory
      right:
        _target_: pandas.read_csv
        filepath_or_buffer: dataset/dataset_part2.csv
        meta_factory: *call_function
      how: inner
-     on: user
+     'on': user
      meta_factory: *call_function
 
 .. code-block:: python
@@ -123,88 +124,100 @@ Expert level
    import hydra_slayer
    import yaml
 
-   registry = hydra_slayer.Registry()
-   with open("config.yaml") as stream:
+   with open("dataset.yaml") as stream:
        raw_config = yaml.safe_load(stream)
 
-   config = registry.get_from_params(**raw_config)
+   config = hydra_slayer.get_from_params(**raw_config)
 
    dataset = config["dataframe"]
    dataset
    # <class 'pandas.core.frame.DataFrame'>
    #    user country  premium  ...
-   # 0     1     USA     True  ...
-   # 1     2     USA    False  ...
+   # 0     1     USA    False  ...
+   # 1     2      UK     True  ...
    #     ...     ...      ...  ...
 
 
-..
-  Master level
-  ^^^^^^^^^^^^
+'Extending' configs
+-------------------
 
-  .. raw:: html
+.. raw:: html
 
-    <div>
-      <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px;" />
-      <p>Sorry, the person who is responsible for the expert level example was eaten by hydras last week.</p>
-      <blockquote>Please note that <b>Maximum Fire Magic</b> also allows your hero to cast fire spells at reduced cost and maximum effectiveness.</blockquote>
-    </div>
+  <div>
+    <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px;" />
+    <p>Define the dataset in a separate config file and then pass it to the main config.</p>
+    <blockquote>Please note that <b>Maximum Fire Magic</b> also allows your hero to cast fire spells at reduced cost and maximum effectiveness.</blockquote>
+  </div>
 
-  ..
-    .. code-block:: yaml
+.. code-block:: yaml
 
-      # dataset.yaml
-      _target_: torchvision.datasets.CIFAR100
-      root: ./data
-      train: false
-      transform:
-        _target_: torchvision.transforms.Compose
-        transforms:
-          - _target_: torchvision.transforms.ToTensor
-          - _target_: torchvision.transforms.Normalize
-            mean: [0.5,0.5,0.5]
-            std: [0.5,0.5,0.5]
-      download: true
+   # dataset.yaml
+   _target_: torch.utils.data.DataLoader
+   dataset:
+     _target_: torchvision.datasets.CIFAR100
+     root: ./data
+     train: false
+     transform:
+       _target_: torchvision.transforms.Compose
+       transforms:
+         - _target_: torchvision.transforms.ToTensor
+         - _target_: torchvision.transforms.Normalize
+           mean: [0.5,0.5,0.5]
+           std: [0.5,0.5,0.5]
+     download: true
+   batch_size: 32
+   shuffle: false
 
-    .. code-block:: yaml
+.. code-block:: yaml
 
-      # config.yaml
-      dataset:
-        _target_: torch.utils.data.DataLoader
-        # TODO: will not work as dict will be retuned, not dataset
-        dataset:
-          # Read dataset from "dataset.yaml", roughly equivalent to
-          # with open("dataset.yaml") as stream:
-          #     params = yaml.safe_load(stream)
-          _target_: yaml.safe_load
-          stream:
-            _target_: open
-            file: dataset_config.yaml
-          meta_factory:
-            _target_: hydra_slayer.call_meta_factory
-        batch_size: 32
-        shuffle: false
+   # config.yaml
+   dataset:
+     _target_: hydra_slayer.get_from_params
+     # ``yaml.safe_load`` will return dictionary with parameters,
+     # but to get ``DataLoader`` additional ``hydra_slayer.get_from_params``
+     # should be used.
 
-      model:
-        _target_: torchvision.models.resnet18
-        pretrained: true
-        meta_factory:
-          _target_: hydra_slayer.call_meta_factory
+     kwargs:
+       # Read dataset from "dataset.yaml", roughly equivalent to
+       #   with open("dataset.yaml") as stream:
+       #       kwargs = yaml.safe_load(stream)
+       _target_: yaml.safe_load
+       stream:
+         _target_: open
+         file: dataset.yaml
+       meta_factory: &call_function
+         _target_: hydra_slayer.call_meta_factory
 
-    .. code-block:: python
+     meta_factory: *call_function
 
-      import hydra_slayer
-      import torch
-      import yaml
+   model:
+     _target_: torchvision.models.resnet18
+     pretrained: true
+     meta_factory:
+       _target_: hydra_slayer.call_meta_factory
 
-      registry = hydra_slayer.Registry()
-      with open("config.yaml") as stream:
-          raw_config = yaml.safe_load(stream)
+   criterion:
+     _target_: torch.nn.CrossEntropyLoss
 
-      config = registry.get_from_params(**raw_config)
-      model, dataset = config["model"], config["dataset"]
+.. code-block:: python
 
-      model.eval()
-      with torch.no_grad():
-          for batch, y_true in dataset:
-              y_preds = model(batch)
+   import hydra_slayer
+   import torch
+   import yaml
+
+   with open("config.yaml") as stream:
+       raw_config = yaml.safe_load(stream)
+
+   config = hydra_slayer.get_from_params(**raw_config)
+   model, criterion = config["model"], config["criterion"]
+   model.eval()
+
+   losses = []
+   with torch.no_grad():
+       for batch, labels in config["dataset"]:
+           outputs = model(batch)
+           loss = criterion(outputs, labels)
+           losses.append(loss.tolist())
+   mean_loss = sum(losses) / len(losses)
+   mean_loss
+   # ≈8.6087
