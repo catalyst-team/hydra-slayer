@@ -26,9 +26,8 @@ def _extract_factory_name_arg(
 
 
 def _extract_positional_keyword_vars(func: Callable, kwargs: Dict) -> Tuple[Iterable, Dict]:
-    # TODO: check if needed
     # make a copy of kwargs since we don't want to modify them directly
-    kwargs = copy.deepcopy(kwargs)
+    kwargs = copy.copy(kwargs)
 
     signature = inspect.signature(func)
     type2param = {p.kind: name for name, p in signature.parameters.items()}
@@ -163,7 +162,7 @@ def _recursive_get_from_params(
         return params
 
     # make a copy of params since we don't want to modify them directly
-    params = copy.deepcopy(params)
+    params = copy.copy(params)
 
     view = params.items() if isinstance(params, dict) else enumerate(params)
     for key, param in view:
