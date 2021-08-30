@@ -118,8 +118,8 @@ class Registry(abc.MutableMapping):
         Args:
             module: module to scan
             prefix: prefix string for all the module's factories.
-            If prefix is a list, all values will be treated as aliases
-            ignore_all: if ``True``, ignores `__all__` attribute of the module
+                If prefix is a list, all values will be treated as aliases
+            ignore_all: if ``True``, ignores ``__all__`` attribute of the module
 
         Raises:
             TypeError: if prefix is not a list or a string
@@ -202,7 +202,7 @@ class Registry(abc.MutableMapping):
     ) -> Union[Any, Tuple[Any, Mapping[str, Any]]]:
         """
         Creates instance based in configuration dict with ``instantiation_fn``.
-        If ``config[name_key]`` is None, None is returned.
+        If ``config[name_key]`` is None, ``None`` is returned.
 
         Args:
             shared_params: params to pass on all levels in case of recursive creation
