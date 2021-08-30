@@ -100,6 +100,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../pages/api/registry.html">Registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pages/api/factory.html">Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/api/functional.html">Functional</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pages/api/exceptions.html">Exceptions</a></li>
 </ul>
 
@@ -171,16 +172,14 @@
 
 
 <div class="viewcode-block" id="RegistryException"><a class="viewcode-back" href="../../pages/api/exceptions.html#hydra_slayer.exceptions.RegistryException">[docs]</a><span class="k">class</span> <span class="nc">RegistryException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Exception class for all registry errors.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Exception class for all registry errors.</span>
 
-<div class="viewcode-block" id="RegistryException.__init__"><a class="viewcode-back" href="../../pages/api/exceptions.html#hydra_slayer.exceptions.RegistryException.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Init.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        message: exception message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            message: exception message</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

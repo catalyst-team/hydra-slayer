@@ -102,6 +102,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="factory.html">Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functional.html">Functional</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 </ul>
 
@@ -179,16 +180,13 @@
 <dd><p>Universal class allowing to add and access various factories by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>meta_factory</strong> – default object that calls factory.
-Optional. Default just calls factory.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>meta_factory</strong> – default object that calls factory.
+Default: <a class="reference internal" href="factory.html#hydra_slayer.factory.default_meta_factory" title="hydra_slayer.factory.default_meta_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">factory.default_meta_factory()</span></code></a></p></li>
+<li><p><strong>name_key</strong> – key to use to extract names of the factories from</p></li>
+</ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="hydra_slayer.registry.Registry.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta_factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">Mapping</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'_target_'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Init.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="hydra_slayer.registry.Registry.add">
 <span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">factories</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">named_factories</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry.add" title="Permalink to this definition">¶</a></dt>
@@ -197,21 +195,18 @@ name. Signature is flexible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>factory</strong> – Factory instance</p></li>
-<li><p><strong>factories</strong> – More instances</p></li>
-<li><p><strong>name</strong> – Provided name for first instance. Use only when pass
-single instance.</p></li>
-<li><p><strong>named_factories</strong> – Factory and their names as kwargs</p></li>
+<li><p><strong>factory</strong> – factory instance</p></li>
+<li><p><strong>factories</strong> – more instances</p></li>
+<li><p><strong>name</strong> – provided name for first instance. Use only when pass
+single instance</p></li>
+<li><p><strong>named_factories</strong> – factory and their names as kwargs</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>First factory passed</p>
+<dd class="field-even"><p>first factory passed</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Factory</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#hydra_slayer.exceptions.RegistryException" title="hydra_slayer.exceptions.RegistryException"><strong>RegistryException</strong></a> – if factory with provided name is already present</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#hydra_slayer.exceptions.RegistryException" title="hydra_slayer.exceptions.RegistryException"><strong>RegistryException</strong></a> – if factory with provided name is already present</p>
 </dd>
 </dl>
 </dd></dl>
@@ -225,10 +220,10 @@ If <code class="docutils literal notranslate"><span class="pre">__all__</span></
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>module</strong> – module to scan</p></li>
-<li><p><strong>prefix</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – prefix string for all the module’s
-factories. If prefix is a list, all values will be treated
-as aliases.</p></li>
-<li><p><strong>ignore_all</strong> – flag, ignore <cite>__all__</cite> or not</p></li>
+<li><p><strong>prefix</strong> – prefix string for all the module’s factories.</p></li>
+<li><p><strong>list</strong> (<em>If prefix is a</em>) – </p></li>
+<li><p><strong>aliases</strong> (<em>all values will be treated as</em>) – </p></li>
+<li><p><strong>ignore_all</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, ignores <cite>__all__</cite> attribute of the module</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -239,12 +234,8 @@ as aliases.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hydra_slayer.registry.Registry.all">
-<span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry.all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry.all" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>list of names of registered items</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry.all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list with names of all registered items.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -259,12 +250,6 @@ or raises error.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>factory by name</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Factory</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#hydra_slayer.exceptions.RegistryException" title="hydra_slayer.exceptions.RegistryException"><strong>RegistryException</strong></a> – if no factory with provided name was registered</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -277,11 +262,11 @@ If <code class="docutils literal notranslate"><span class="pre">config[name_key]
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>shared_params</strong> – params to pass on all levels in case of recursive creation</p></li>
-<li><p><strong>**kwargs</strong> – additional kwargs for factory</p></li>
+<li><p><strong>**kwargs</strong> – **kwargs to pass to the factory</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>result of calling <code class="docutils literal notranslate"><span class="pre">instantiate_fn(factory,</span> <span class="pre">**config)</span></code></p>
+<dd class="field-even"><p>result of calling <code class="docutils literal notranslate"><span class="pre">instantiate_fn(factory,</span> <span class="pre">**sub_kwargs)</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -294,24 +279,19 @@ If <code class="docutils literal notranslate"><span class="pre">config[name_key]
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hydra_slayer.registry.Registry.get_instance">
-<span class="sig-name descname"><span class="pre">get_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">Mapping</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry.get_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry.get_instance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates instance by calling specified factory
-with <code class="docutils literal notranslate"><span class="pre">instantiate_fn</span></code>.</p>
+<span class="sig-name descname"><span class="pre">get_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">Mapping</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry.get_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry.get_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates instance by calling specified factory with <code class="docutils literal notranslate"><span class="pre">instantiate_fn</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – factory name</p></li>
-<li><p><strong>meta_factory</strong> – Function that calls factory the right way.
-If not provided, default is used</p></li>
-<li><p><strong>args</strong> – args to pass to the factory</p></li>
-<li><p><strong>**kwargs</strong> – kwargs to pass to the factory</p></li>
+<li><p><strong>*args</strong> – *args to pass to the factory</p></li>
+<li><p><strong>meta_factory</strong> – function that calls factory the right way.
+Default: <a class="reference internal" href="factory.html#hydra_slayer.factory.default_meta_factory" title="hydra_slayer.factory.default_meta_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">factory.default_meta_factory()</span></code></a></p></li>
+<li><p><strong>**kwargs</strong> – **kwargs to pass to the factory</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>created instance</p>
-</dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#hydra_slayer.exceptions.RegistryException" title="hydra_slayer.exceptions.RegistryException"><strong>RegistryException</strong></a> – if could not create object instance</p>
 </dd>
 </dl>
 </dd></dl>
@@ -323,18 +303,8 @@ If not provided, default is used</p></li>
 registry query.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>cb</strong> – Callback receives registry and must call it’s methods to
+<dd class="field-odd"><p><strong>cb</strong> – callback receives registry and must call it’s methods to
 register factories</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hydra_slayer.registry.Registry.len">
-<span class="sig-name descname"><span class="pre">len</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry.len"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry.len" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>length of registered items</p>
 </dd>
 </dl>
 </dd></dl>

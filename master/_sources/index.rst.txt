@@ -50,6 +50,8 @@ Depending of the level of expertise in fire magic, slayer spell increases attack
    | affects giants/titans.                                   |
    +---------------------------------+------------------------+
 
+What is more, it also allows configuring of complex applications just by config and few lines of code.
+
 
 Communication
 =============
@@ -104,6 +106,7 @@ Please use this bibtex if you want to cite this repository in your publications:
 
    pages/api/registry
    pages/api/factory
+   pages/api/functional
    pages/api/exceptions
 
 Indices and tables
