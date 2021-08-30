@@ -288,8 +288,8 @@
 <span class="sd">        Args:</span>
 <span class="sd">            module: module to scan</span>
 <span class="sd">            prefix: prefix string for all the module&#39;s factories.</span>
-<span class="sd">            If prefix is a list, all values will be treated as aliases</span>
-<span class="sd">            ignore_all: if ``True``, ignores `__all__` attribute of the module</span>
+<span class="sd">                If prefix is a list, all values will be treated as aliases</span>
+<span class="sd">            ignore_all: if ``True``, ignores ``__all__`` attribute of the module</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            TypeError: if prefix is not a list or a string</span>
@@ -372,7 +372,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates instance based in configuration dict with ``instantiation_fn``.</span>
-<span class="sd">        If ``config[name_key]`` is None, None is returned.</span>
+<span class="sd">        If ``config[name_key]`` is None, ``None`` is returned.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            shared_params: params to pass on all levels in case of recursive creation</span>

@@ -179,13 +179,12 @@
 
 
 <div class="viewcode-block" id="call_meta_factory"><a class="viewcode-back" href="../../pages/api/factory.html#hydra_slayer.factory.call_meta_factory">[docs]</a><span class="k">def</span> <span class="nf">call_meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a new instance from ``factory``.</span>
+    <span class="sd">&quot;&quot;&quot;Creates a new instance from ``factory``.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        factory: factory to create instance from.</span>
-<span class="sd">        args: args to pass to the factory.</span>
-<span class="sd">        kwargs: kwargs to pass to the factory.</span>
+<span class="sd">        factory: factory to create instance from</span>
+<span class="sd">        args: \*args to pass to the factory</span>
+<span class="sd">        kwargs: \*\*kwargs to pass to the factory</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Instance.</span>
@@ -196,13 +195,13 @@
 
 <div class="viewcode-block" id="partial_meta_factory"><a class="viewcode-back" href="../../pages/api/factory.html#hydra_slayer.factory.partial_meta_factory">[docs]</a><span class="k">def</span> <span class="nf">partial_meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Return a new partial object which when called will behave like func called</span>
+<span class="sd">    Returns a new partial object which when called will behave like func called</span>
 <span class="sd">    with the positional arguments ``args`` and keyword arguments ``kwargs``.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        factory: factory to create instance from.</span>
-<span class="sd">        args: args to merge into the factory.</span>
-<span class="sd">        kwargs: kwargs to merge into the factory.</span>
+<span class="sd">        factory: factory to create instance from</span>
+<span class="sd">        args: \*args to merge into the factory</span>
+<span class="sd">        kwargs: \*\*kwargs to merge into the factory</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Partial object.</span>
@@ -213,12 +212,14 @@
 
 <div class="viewcode-block" id="default_meta_factory"><a class="viewcode-back" href="../../pages/api/factory.html#hydra_slayer.factory.default_meta_factory">[docs]</a><span class="k">def</span> <span class="nf">default_meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a new instance from ``factory``.</span>
+<span class="sd">    Creates a new instance from ``factory`` if ``factory`` is class</span>
+<span class="sd">    (like :py:func:`call_meta_factory`), else returns a new partial object</span>
+<span class="sd">    (like :py:func:`partial_meta_factory`).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        factory: factory to create instance from.</span>
-<span class="sd">        args: args to pass to the factory.</span>
-<span class="sd">        kwargs: kwargs to pass to the factory.</span>
+<span class="sd">        factory: factory to create instance from</span>
+<span class="sd">        args: \*args to pass to the factory</span>
+<span class="sd">        kwargs: \*\*kwargs to pass to the factory</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Instance.</span>

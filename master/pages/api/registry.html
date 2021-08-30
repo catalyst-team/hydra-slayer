@@ -220,10 +220,9 @@ If <code class="docutils literal notranslate"><span class="pre">__all__</span></
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>module</strong> – module to scan</p></li>
-<li><p><strong>prefix</strong> – prefix string for all the module’s factories.</p></li>
-<li><p><strong>list</strong> (<em>If prefix is a</em>) – </p></li>
-<li><p><strong>aliases</strong> (<em>all values will be treated as</em>) – </p></li>
-<li><p><strong>ignore_all</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, ignores <cite>__all__</cite> attribute of the module</p></li>
+<li><p><strong>prefix</strong> – prefix string for all the module’s factories.
+If prefix is a list, all values will be treated as aliases</p></li>
+<li><p><strong>ignore_all</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, ignores <code class="docutils literal notranslate"><span class="pre">__all__</span></code> attribute of the module</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -257,7 +256,7 @@ or raises error.</p>
 <dt class="sig sig-object py" id="hydra_slayer.registry.Registry.get_from_params">
 <span class="sig-name descname"><span class="pre">get_from_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry.get_from_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry.get_from_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates instance based in configuration dict with <code class="docutils literal notranslate"><span class="pre">instantiation_fn</span></code>.
-If <code class="docutils literal notranslate"><span class="pre">config[name_key]</span></code> is None, None is returned.</p>
+If <code class="docutils literal notranslate"><span class="pre">config[name_key]</span></code> is None, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

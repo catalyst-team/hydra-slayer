@@ -177,13 +177,13 @@
 <span class="target" id="module-hydra_slayer.factory"></span><dl class="py function">
 <dt class="sig sig-object py" id="hydra_slayer.factory.call_meta_factory">
 <span class="sig-prename descclassname"><span class="pre">hydra_slayer.factory.</span></span><span class="sig-name descname"><span class="pre">call_meta_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/factory.html#call_meta_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.factory.call_meta_factory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new instance from <code class="docutils literal notranslate"><span class="pre">factory</span></code>.</p>
+<dd><p>Creates a new instance from <code class="docutils literal notranslate"><span class="pre">factory</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>factory</strong> – factory to create instance from.</p></li>
-<li><p><strong>args</strong> – args to pass to the factory.</p></li>
-<li><p><strong>kwargs</strong> – kwargs to pass to the factory.</p></li>
+<li><p><strong>factory</strong> – factory to create instance from</p></li>
+<li><p><strong>args</strong> – *args to pass to the factory</p></li>
+<li><p><strong>kwargs</strong> – **kwargs to pass to the factory</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -195,13 +195,15 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="hydra_slayer.factory.default_meta_factory">
 <span class="sig-prename descclassname"><span class="pre">hydra_slayer.factory.</span></span><span class="sig-name descname"><span class="pre">default_meta_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/factory.html#default_meta_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.factory.default_meta_factory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new instance from <code class="docutils literal notranslate"><span class="pre">factory</span></code>.</p>
+<dd><p>Creates a new instance from <code class="docutils literal notranslate"><span class="pre">factory</span></code> if <code class="docutils literal notranslate"><span class="pre">factory</span></code> is class
+(like <a class="reference internal" href="#hydra_slayer.factory.call_meta_factory" title="hydra_slayer.factory.call_meta_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">call_meta_factory()</span></code></a>), else returns a new partial object
+(like <a class="reference internal" href="#hydra_slayer.factory.partial_meta_factory" title="hydra_slayer.factory.partial_meta_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">partial_meta_factory()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>factory</strong> – factory to create instance from.</p></li>
-<li><p><strong>args</strong> – args to pass to the factory.</p></li>
-<li><p><strong>kwargs</strong> – kwargs to pass to the factory.</p></li>
+<li><p><strong>factory</strong> – factory to create instance from</p></li>
+<li><p><strong>args</strong> – *args to pass to the factory</p></li>
+<li><p><strong>kwargs</strong> – **kwargs to pass to the factory</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -213,14 +215,14 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="hydra_slayer.factory.partial_meta_factory">
 <span class="sig-prename descclassname"><span class="pre">hydra_slayer.factory.</span></span><span class="sig-name descname"><span class="pre">partial_meta_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/factory.html#partial_meta_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.factory.partial_meta_factory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new partial object which when called will behave like func called
+<dd><p>Returns a new partial object which when called will behave like func called
 with the positional arguments <code class="docutils literal notranslate"><span class="pre">args</span></code> and keyword arguments <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>factory</strong> – factory to create instance from.</p></li>
-<li><p><strong>args</strong> – args to merge into the factory.</p></li>
-<li><p><strong>kwargs</strong> – kwargs to merge into the factory.</p></li>
+<li><p><strong>factory</strong> – factory to create instance from</p></li>
+<li><p><strong>args</strong> – *args to merge into the factory</p></li>
+<li><p><strong>kwargs</strong> – **kwargs to merge into the factory</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
