@@ -9,13 +9,12 @@ MetaFactory = Callable[[Factory, Tuple, Mapping], Any]
 
 
 def call_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
-    """
-    Create a new instance from ``factory``.
+    """Creates a new instance from ``factory``.
 
     Args:
-        factory: factory to create instance from.
-        args: args to pass to the factory.
-        kwargs: kwargs to pass to the factory.
+        factory: factory to create instance from
+        args: \*args to pass to the factory
+        kwargs: \*\*kwargs to pass to the factory
 
     Returns:
         Instance.
@@ -26,13 +25,13 @@ def call_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
 
 def partial_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
     """
-    Return a new partial object which when called will behave like func called
+    Returns a new partial object which when called will behave like func called
     with the positional arguments ``args`` and keyword arguments ``kwargs``.
 
     Args:
-        factory: factory to create instance from.
-        args: args to merge into the factory.
-        kwargs: kwargs to merge into the factory.
+        factory: factory to create instance from
+        args: \*args to merge into the factory
+        kwargs: \*\*kwargs to merge into the factory
 
     Returns:
         Partial object.
@@ -43,12 +42,14 @@ def partial_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
 
 def default_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
     """
-    Create a new instance from ``factory``.
+    Creates a new instance from ``factory`` if ``factory`` is class
+    (like :py:func:`call_meta_factory`), else returns a new partial object
+    (like :py:func:`partial_meta_factory`).
 
     Args:
-        factory: factory to create instance from.
-        args: args to pass to the factory.
-        kwargs: kwargs to pass to the factory.
+        factory: factory to create instance from
+        args: \*args to pass to the factory
+        kwargs: \*\*kwargs to pass to the factory
 
     Returns:
         Instance.
