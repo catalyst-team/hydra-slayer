@@ -6,7 +6,6 @@ from hydra_slayer.registry import RegistryException
 
 
 def test_call_meta_factory():
-    """@TODO: Docs. Contribution is welcome."""
     res = call_meta_factory(int, (42,), {})
 
     assert res == 42  # noqa: WPS437
@@ -21,7 +20,6 @@ def test_call_meta_factory():
 
 
 def test_partial_meta_factory():
-    """@TODO: Docs. Contribution is welcome."""
     res = partial_meta_factory(int, ("101",), {})
 
     assert callable(res)  # noqa: WPS437
@@ -32,7 +30,6 @@ def test_partial_meta_factory():
 
 
 def test_default_meta_factory():
-    """@TODO: Docs. Contribution is welcome."""
     # `int` is class, so `call_meta_factory` is expected
     res = default_meta_factory(int, (42,), {})
 
