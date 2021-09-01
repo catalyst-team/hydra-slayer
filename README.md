@@ -1,4 +1,4 @@
-<img src="docs/_static/slayer.png" align="right">
+<img src="docs/_static/slayer.png" width="198" align="right">
 
 # Hydra Slayer
 

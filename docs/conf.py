@@ -98,7 +98,8 @@ todo_include_todos = False
 # a list of builtin themes.
 
 html_theme = "sphinx_rtd_theme"
-html_favicon = "_static/icon.png"
+html_favicon = "_static/catalyst.png"
+html_logo = "_static/slayer_sidebar_logo.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

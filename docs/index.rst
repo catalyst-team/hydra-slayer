@@ -22,7 +22,7 @@ Depending of the level of expertise in fire magic, slayer spell increases attack
    | .. centered:: Hydra Slayer                               |
    +=================================+========================+
    | .. image:: ./_static/slayer.png | :School: Fire Magic 🔥 |
-   +                                 +------------------------+
+   +   :width: 192                   +------------------------+
    |                                 | :Level: 4th 📜         |
    +                                 +------------------------+
    |                                 | :Cost: 16/12 🔮        |
