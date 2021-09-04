@@ -104,7 +104,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../pages/api/registry.html">Registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pages/api/factory.html">Factory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pages/api/functional.html">Functional</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../pages/api/exceptions.html">Exceptions</a></li>
 </ul>
 
             
@@ -176,7 +175,6 @@
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">pydoc</span>
 
-<span class="kn">from</span> <span class="nn">hydra_slayer.exceptions</span> <span class="kn">import</span> <span class="n">RegistryException</span>
 <span class="kn">from</span> <span class="nn">hydra_slayer.factory</span> <span class="kn">import</span> <span class="n">default_meta_factory</span><span class="p">,</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">MetaFactory</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;get_factory&quot;</span><span class="p">,</span> <span class="s2">&quot;get_instance&quot;</span><span class="p">,</span> <span class="s2">&quot;get_from_params&quot;</span><span class="p">]</span>
@@ -223,7 +221,7 @@
 <span class="sd">        factory</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        RegistryException: if no factory with provided name was registered</span>
+<span class="sd">        LookupError: if no factory with provided name was registered</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; to_int = get_factory(&quot;int&quot;)</span>
@@ -233,7 +231,7 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name_or_object</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">factory</span> <span class="o">=</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">name_or_object</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">factory</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">RegistryException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No factory with name &#39;</span><span class="si">{</span><span class="n">name_or_object</span><span class="si">}</span><span class="s2">&#39; was registered&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No factory with name &#39;</span><span class="si">{</span><span class="n">name_or_object</span><span class="si">}</span><span class="s2">&#39; was registered&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">factory</span>
     <span class="k">return</span> <span class="n">name_or_object</span></div>
@@ -274,7 +272,7 @@
 
 <span class="sd">    Raises:</span>
 <span class="sd">        TypeError: if factory name argument is missing</span>
-<span class="sd">        RegistryException: if could not create object instance</span>
+<span class="sd">        RuntimeError: if could not create object instance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">get_factory_func</span> <span class="o">=</span> <span class="n">get_factory_func</span> <span class="ow">or</span> <span class="n">get_factory</span>
     <span class="n">meta_factory</span> <span class="o">=</span> <span class="n">meta_factory</span> <span class="ow">or</span> <span class="n">default_meta_factory</span>
@@ -296,9 +294,7 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">instance</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">RegistryException</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Factory &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; call failed: args=</span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2"> kwargs=</span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Factory &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; call failed: args=</span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2"> kwargs=</span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
 
 
 <div class="viewcode-block" id="get_instance"><a class="viewcode-back" href="../../pages/api/functional.html#hydra_slayer.functional.get_instance">[docs]</a><span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">meta_factory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MetaFactory</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>

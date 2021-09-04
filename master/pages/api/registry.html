@@ -106,7 +106,6 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="factory.html">Factory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functional.html">Functional</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 </ul>
 
             
@@ -200,16 +199,19 @@ name. Signature is flexible.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>factory</strong> – factory instance</p></li>
 <li><p><strong>factories</strong> – more instances</p></li>
-<li><p><strong>name</strong> – provided name for first instance. Use only when pass
-single instance</p></li>
-<li><p><strong>named_factories</strong> – factory and their names as kwargs</p></li>
+<li><p><strong>name</strong> – name to use for the first factory instance,
+if a single instance is passed</p></li>
+<li><p><strong>named_factories</strong> – factory and their names as **kwargs</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>first factory passed</p>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#hydra_slayer.exceptions.RegistryException" title="hydra_slayer.exceptions.RegistryException"><strong>RegistryException</strong></a> – if factory with provided name is already present</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – if multiple factories with a single name are provided</p></li>
+<li><p><strong>LookupError</strong> – if factory with provided name is already registered</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
