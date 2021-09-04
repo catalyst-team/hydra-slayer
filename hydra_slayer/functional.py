@@ -3,7 +3,6 @@ import copy
 import inspect
 import pydoc
 
-from hydra_slayer.exceptions import RegistryException
 from hydra_slayer.factory import default_meta_factory, Factory, MetaFactory
 
 __all__ = ["get_factory", "get_instance", "get_from_params"]
@@ -50,7 +49,7 @@ def get_factory(name_or_object: Union[str, T]) -> Union[Factory, T]:
         factory
 
     Raises:
-        RegistryException: if no factory with provided name was registered
+        LookupError: if no factory with provided name was registered
 
     Examples:
         >>> to_int = get_factory("int")
@@ -60,7 +59,7 @@ def get_factory(name_or_object: Union[str, T]) -> Union[Factory, T]:
     if isinstance(name_or_object, str):
         factory = pydoc.locate(name_or_object)
         if not factory:
-            raise RegistryException(f"No factory with name '{name_or_object}' was registered")
+            raise LookupError(f"No factory with name '{name_or_object}' was registered")
 
         return factory
     return name_or_object
@@ -101,7 +100,7 @@ def _get_instance(
 
     Raises:
         TypeError: if factory name argument is missing
-        RegistryException: if could not create object instance
+        RuntimeError: if could not create object instance
     """
     get_factory_func = get_factory_func or get_factory
     meta_factory = meta_factory or default_meta_factory
@@ -123,9 +122,7 @@ def _get_instance(
         )
         return instance
     except Exception as e:
-        raise RegistryException(
-            f"Factory '{name}' call failed: args={args} kwargs={kwargs}"
-        ) from e
+        raise RuntimeError(f"Factory '{name}' call failed: args={args} kwargs={kwargs}") from e
 
 
 def get_instance(*args, meta_factory: Optional[MetaFactory] = None, **kwargs) -> Any:

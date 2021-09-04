@@ -1,7 +1,6 @@
 # flake8: noqa
 import pytest
 
-from hydra_slayer.exceptions import RegistryException
 from hydra_slayer.factory import call_meta_factory
 from hydra_slayer.registry import Registry
 
@@ -28,7 +27,7 @@ def test_add_function_name_override():
 def test_add_lambda_fail():
     r = Registry()
 
-    with pytest.raises(RegistryException):
+    with pytest.raises(ValueError):
         r.add(lambda x: x)
 
 
@@ -43,7 +42,7 @@ def test_add_lambda_override():
 def test_fail_multiple_with_name():
     r = Registry()
 
-    with pytest.raises(RegistryException):
+    with pytest.raises(ValueError):
         r.add(foo, foo, name="bar")
 
 
@@ -51,7 +50,7 @@ def test_fail_double_add_different():
     r = Registry()
     r.add(foo)
 
-    with pytest.raises(RegistryException):
+    with pytest.raises(LookupError):
 
         def bar():
             pass
@@ -91,7 +90,7 @@ def test_fail_instantiation():
 
     r.add(foo)
 
-    with pytest.raises((RegistryException, TypeError)) as e_ifo:
+    with pytest.raises((RuntimeError, TypeError)) as e_ifo:
         r.get_instance("foo", c=1)()
 
     assert hasattr(e_ifo.value, "__cause__")
@@ -122,7 +121,7 @@ def test_add_module():
 
     r.get("foo")
 
-    with pytest.raises(RegistryException):
+    with pytest.raises(LookupError):
         r.get_instance("bar")
 
 

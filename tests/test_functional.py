@@ -2,7 +2,6 @@
 import pytest
 
 from hydra_slayer import functional as F
-from hydra_slayer.exceptions import RegistryException
 from hydra_slayer.factory import call_meta_factory
 
 from . import foobar
@@ -20,7 +19,7 @@ def test_get_factories():
 
 
 def test_fail_get_factory():
-    with pytest.raises(RegistryException) as e_ifo:
+    with pytest.raises(LookupError) as e_ifo:
         F.get_factory("tests.foobar.corge")()
         assert hasattr(e_ifo.value, "__cause__")
 
@@ -40,7 +39,7 @@ def test_instantiations():
 
 
 def test_fail_instantiation():
-    with pytest.raises(RegistryException) as e_ifo:
+    with pytest.raises(LookupError) as e_ifo:
         F.get_instance("tests.foobar.corge")()
         assert hasattr(e_ifo.value, "__cause__")
 

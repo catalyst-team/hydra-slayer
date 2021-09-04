@@ -2,7 +2,6 @@
 import pytest
 
 from hydra_slayer.factory import call_meta_factory, default_meta_factory, partial_meta_factory
-from hydra_slayer.registry import RegistryException
 
 
 def test_call_meta_factory():

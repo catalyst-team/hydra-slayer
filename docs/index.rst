@@ -107,7 +107,6 @@ Please use this bibtex if you want to cite this repository in your publications:
    pages/api/registry
    pages/api/factory
    pages/api/functional
-   pages/api/exceptions
 
 Indices and tables
 ==================

@@ -4,7 +4,6 @@ import inspect
 import warnings
 
 from hydra_slayer import functional as F
-from hydra_slayer.exceptions import RegistryException
 from hydra_slayer.factory import default_meta_factory, Factory, MetaFactory
 
 __all__ = ["Registry"]
@@ -29,15 +28,13 @@ class Registry(abc.MutableMapping):
         self.name_key = name_key
 
     @staticmethod
-    def _get_factory_name(f, provided_name=None) -> str:
+    def _get_factory_name(f, provided_name: str = None) -> str:
         if not provided_name:
             provided_name = getattr(f, "__name__", None)
             if not provided_name:
-                raise RegistryException(
-                    f"Factory {f} has no __name__ and no " f"name was provided"
-                )
+                raise ValueError(f"Factory {f} has no '__name__' and no name was provided")
             if provided_name == "<lambda>":
-                raise RegistryException("Name for lambda factories must be provided")
+                raise ValueError("Name for lambda factories must be provided")
         return provided_name
 
     def _do_late_add(self):
@@ -60,18 +57,19 @@ class Registry(abc.MutableMapping):
         Args:
             factory: factory instance
             factories: more instances
-            name: provided name for first instance. Use only when pass
-                single instance
-            named_factories: factory and their names as kwargs
+            name: name to use for the first factory instance,
+                if a single instance is passed
+            named_factories: factory and their names as \*\*kwargs
 
         Returns:
             first factory passed
 
         Raises:
-            RegistryException: if factory with provided name is already present
+            ValueError: if multiple factories with a single name are provided
+            LookupError: if factory with provided name is already registered
         """
         if len(factories) > 0 and name is not None:
-            raise RegistryException("Multiple factories with single name are not allowed")
+            raise ValueError("Multiple factories with single name are not allowed")
 
         if factory is not None:
             named_factories[self._get_factory_name(factory, name)] = factory
@@ -87,7 +85,7 @@ class Registry(abc.MutableMapping):
             # self._factories[name] != f is a workaround for
             # https://github.com/catalyst-team/catalyst/issues/135
             if name in self._factories and self._factories[name] != f:
-                raise RegistryException(
+                raise LookupError(
                     f"Factory with name '{name}' is already present\n"
                     f"Already registered: '{self._factories[name]}'\n"
                     f"New: '{f}'"
@@ -198,7 +196,7 @@ class Registry(abc.MutableMapping):
         return instance
 
     def get_from_params(
-        self, *, shared_params: Optional[Dict[str, Any]] = None, **kwargs,
+        self, *, shared_params: Optional[Dict[str, Any]] = None, **kwargs
     ) -> Union[Any, Tuple[Any, Mapping[str, Any]]]:
         """
         Creates instance based in configuration dict with ``instantiation_fn``.
