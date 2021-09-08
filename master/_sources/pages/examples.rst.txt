@@ -7,11 +7,14 @@ Examples
 Basic Level
 ===========
 
+Creating object from config
+---------------------------
+
 .. raw:: html
 
    <div>
      <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px;" />
-     <p>Create instance from config file with params.</p>
+     <p>Create instance from YAML config file with params.</p>
      <blockquote>Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.</blockquote>
    </div>
 
@@ -31,6 +34,43 @@ Basic Level
        raw_config = yaml.safe_load(stream)
 
    transform = hydra_slayer.get_from_params(**raw_config)
+   transform
+   # Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+
+
+Creating object with ``Registry``
+---------------------------------
+
+.. raw:: html
+
+   <div>
+     <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px;" />
+     <p>Add python modules to the registry and create instance from config file with params.</p>
+     <blockquote>Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.</blockquote>
+   </div>
+
+.. code-block:: yaml
+
+   # transform.yaml
+   _target_: Normalize
+   mean: [0.5, 0.5, 0.5]
+   std: [0.5, 0.5, 0.5]
+
+.. code-block:: python
+
+   import hydra_slayer
+   import torchvision
+   import yaml
+
+   registry = hydra_slayer.Registry()
+   registry.add(torchvision.transforms.Normalize)
+   # or you can add all classes and functions from module with
+   #   registry.add_from_module(torchvision.transforms)
+
+   with open("transform.yaml") as stream:
+       raw_config = yaml.safe_load(stream)
+
+   transform = registry.get_from_params(**raw_config)
    transform
    # Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
 

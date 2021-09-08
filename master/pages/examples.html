@@ -100,7 +100,11 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#basic-level">Basic Level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-level">Basic Level</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-object-from-config">Creating object from config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-object-with-registry">Creating object with <code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#advanced-level">Advanced Level</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#expert-level">Expert level</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#creating-pd-dataframe-from-config">Creating <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> from config</a></li>
@@ -186,9 +190,11 @@
 <span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="basic-level">
 <h2>Basic Level<a class="headerlink" href="#basic-level" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-object-from-config">
+<h3>Creating object from config<a class="headerlink" href="#creating-object-from-config" title="Permalink to this headline">¶</a></h3>
 <div>
   <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px;" />
-  <p>Create instance from config file with params.</p>
+  <p>Create instance from YAML config file with params.</p>
   <blockquote>Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.</blockquote>
 </div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span>
 <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
@@ -206,6 +212,37 @@
 <span class="n">transform</span>
 <span class="c1"># Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="creating-object-with-registry">
+<h3>Creating object with <code class="docutils literal notranslate"><span class="pre">Registry</span></code><a class="headerlink" href="#creating-object-with-registry" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px;" />
+  <p>Add python modules to the registry and create instance from config file with params.</p>
+  <blockquote>Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.</blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span>
+<span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Normalize</span>
+<span class="nt">mean</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="nt">std</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="n">registry</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">Registry</span><span class="p">()</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">)</span>
+<span class="c1"># or you can add all classes and functions from module with</span>
+<span class="c1">#   registry.add_from_module(torchvision.transforms)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;transform.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+<span class="n">transform</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+<span class="n">transform</span>
+<span class="c1"># Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="advanced-level">
