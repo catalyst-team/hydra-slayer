@@ -3,7 +3,6 @@ import pytest
 
 from hydra_slayer.factory import call_meta_factory
 from hydra_slayer.registry import Registry
-
 from .foobar import foo
 from . import foobar as module
 
