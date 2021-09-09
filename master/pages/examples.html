@@ -102,13 +102,17 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#basic-level">Basic Level</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#creating-object-from-config">Creating object from config</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#creating-object-with-registry">Creating object with <code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-objects-with-registry">Creating objects with <code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#advanced-level">Advanced Level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-level">Advanced Level</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-complex-objects">Creating complex objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#passing-args-and-kwargs-parameters">Passing <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> parameters</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#expert-level">Expert level</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#creating-pd-dataframe-from-config">Creating <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> from config</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#extending-configs">‘Extending’ configs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extending-configs">Extending configs</a></li>
 </ul>
 </li>
 </ul>
@@ -193,9 +197,14 @@
 <div class="section" id="creating-object-from-config">
 <h3>Creating object from config<a class="headerlink" href="#creating-object-from-config" title="Permalink to this headline">¶</a></h3>
 <div>
-  <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px;" />
-  <p>Create instance from YAML config file with params.</p>
-  <blockquote>Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.</blockquote>
+  <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    One of the ways to create instance from YAML config file is
+    <code class="docutils literal notranslate"><span class="pre">get_from_params()</span></code>.
+  </p>
+  <blockquote>
+    Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.
+  </blockquote>
 </div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span>
 <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
 <span class="nt">mean</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
@@ -214,12 +223,18 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="creating-object-with-registry">
-<h3>Creating object with <code class="docutils literal notranslate"><span class="pre">Registry</span></code><a class="headerlink" href="#creating-object-with-registry" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="creating-objects-with-registry">
+<h3>Creating objects with <code class="docutils literal notranslate"><span class="pre">Registry</span></code><a class="headerlink" href="#creating-objects-with-registry" title="Permalink to this headline">¶</a></h3>
 <div>
-  <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px;" />
-  <p>Add python modules to the registry and create instance from config file with params.</p>
-  <blockquote>Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.</blockquote>
+  <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    You also can add python modules to the
+    <code class="docutils literal notranslate"><span class="pre">Registry()</span></code>
+    and then use it to create instances by shorter (or custom) name.
+  </p>
+  <blockquote>
+    Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.
+  </blockquote>
 </div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span>
 <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Normalize</span>
 <span class="nt">mean</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
@@ -231,9 +246,8 @@
 <span class="kn">import</span> <span class="nn">yaml</span>
 
 <span class="n">registry</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">Registry</span><span class="p">()</span>
-<span class="n">registry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">)</span>
-<span class="c1"># or you can add all classes and functions from module with</span>
-<span class="c1">#   registry.add_from_module(torchvision.transforms)</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">add_from_module</span><span class="p">(</span><span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="p">)</span>
+<span class="c1"># or you can use ``registry.add()`` to add only specific instances</span>
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;transform.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
     <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
@@ -247,10 +261,18 @@
 </div>
 <div class="section" id="advanced-level">
 <h2>Advanced Level<a class="headerlink" href="#advanced-level" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-complex-objects">
+<h3>Creating complex objects<a class="headerlink" href="#creating-complex-objects" title="Permalink to this headline">¶</a></h3>
 <div>
-  <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px;" />
-  <p>Create <a href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR100</a> dataset from config file with params.</p>
-  <blockquote>Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost and increased effectiveness.</blockquote>
+  <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    Nested data structures can be used to create complex objects like
+    <a href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR100</a> dataset with custom transforms.
+  </p>
+  <blockquote>
+    Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and increased effectiveness.
+  </blockquote>
 </div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
 <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.datasets.CIFAR100</span>
 <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./data</span>
@@ -285,14 +307,91 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="passing-args-and-kwargs-parameters">
+<h3>Passing <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> parameters<a class="headerlink" href="#passing-args-and-kwargs-parameters" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    *args (<i>var-positional</i> parameter) and **kwargs (<i>var-keyword</i> parameter) parameters
+    can be addressed by name, and you don't have to add
+    <code class="docutils literal notranslate"><span class="pre">*</span></code> /
+    <code class="docutils literal notranslate"><span class="pre">**</span></code>
+    to parameter names in config.
+  </p>
+  <blockquote>
+    Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and increased effectiveness.
+  </blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># first_block.yaml</span>
+<span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.Sequential</span>
+<span class="nt">args</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.Conv2d</span>
+    <span class="nt">in_channels</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+    <span class="nt">out_channels</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">64</span>
+    <span class="nt">kernel_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">7</span>
+    <span class="nt">stride</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+    <span class="nt">padding</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+    <span class="nt">bias</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.BatchNorm2d</span>
+    <span class="nt">num_features</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">64</span>
+  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.ReLU</span>
+    <span class="nt">inplace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.MaxPool2d</span>
+    <span class="nt">kernel_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+    <span class="nt">stride</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+    <span class="nt">padding</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;first_conv.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+<span class="n">first_block</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+<span class="n">first_block</span>
+<span class="c1"># Sequential(</span>
+<span class="c1">#   (0): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)</span>
+<span class="c1">#   (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)</span>
+<span class="c1">#   (2): ReLU(inplace=True)</span>
+<span class="c1">#   (3): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)</span>
+<span class="c1"># )</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The order of the arguments matters in Python. If you have function like
+<code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">example(arg1,</span> <span class="pre">*args,</span> <span class="pre">arg2=2,</span> <span class="pre">**kwargs):</span></code> there are multiple ways to pass parameters to the function,
+for example. And in some cases <em>positional-or-keyword</em> arguments (<code class="docutils literal notranslate"><span class="pre">arg1</span></code>) can be supplied only by position.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Yes</span><span class="p">:</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arg1=1, *args=(), arg2=2, kwargs={}</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># arg1=1, *args=(,), arg2=2, kwargs={}</span>
+  <span class="n">example</span><span class="p">(</span><span class="n">arg1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># arg1=1, args=(), arg2=4, kwargs={}</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># arg1=1, *args=(2,), arg2=2, kwargs={}</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg3</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># arg1=1, args=(2, 3), arg2=4, kwargs={&#39;arg3&#39;: 5}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">No</span><span class="p">:</span>
+  <span class="n">example</span><span class="p">(</span><span class="n">arg1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># SyntaxError: positional argument follows keyword argument</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">arg1</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># TypeError: got multiple values for argument &#39;arg1&#39;</span>
+</pre></div>
+</div>
+<p>For the <code class="docutils literal notranslate"><span class="pre">hydra-slayer</span></code> the same is true. So if you want to use *args please make sure
+that you don’t specify parameters followed by *args by keyword.</p>
+</div>
+</div>
+</div>
 <div class="section" id="expert-level">
 <h2>Expert level<a class="headerlink" href="#expert-level" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="creating-pd-dataframe-from-config">
 <h3>Creating <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> from config<a class="headerlink" href="#creating-pd-dataframe-from-config" title="Permalink to this headline">¶</a></h3>
 <div>
-  <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px;" />
-  <p>Read multiple CSV files as pandas dataframes and merge them.</p>
-  <blockquote>Please note that <b>Expert Fire Magic</b> also allows your hero to cast fire spells at reduced cost and maximum effectiveness.</blockquote>
+  <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>You also can read multiple CSV files as pandas dataframes and merge them.</p>
+  <blockquote>
+    Please note that <b>Expert Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and maximum effectiveness.
+  </blockquote>
 </div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
 <span class="nt">dataframe</span><span class="p">:</span>
   <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pandas.merge</span>
@@ -334,11 +433,14 @@
 </div>
 </div>
 <div class="section" id="extending-configs">
-<h3>‘Extending’ configs<a class="headerlink" href="#extending-configs" title="Permalink to this headline">¶</a></h3>
+<h3>Extending configs<a class="headerlink" href="#extending-configs" title="Permalink to this headline">¶</a></h3>
 <div>
-  <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px;" />
-  <p>Define the dataset in a separate config file and then pass it to the main config.</p>
-  <blockquote>Please note that <b>Maximum Fire Magic</b> also allows your hero to cast fire spells at reduced cost and maximum effectiveness.</blockquote>
+  <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>It is also possible define the dataset in a separate config file and then pass it to the main config.</p>
+  <blockquote>
+    Please note that <b>Maximum Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and maximum effectiveness.
+  </blockquote>
 </div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
 <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.utils.data.DataLoader</span>
 <span class="nt">dataset</span><span class="p">:</span>
