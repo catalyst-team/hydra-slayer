@@ -1,0 +1,449 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>hydra_slayer.functional &mdash; hydra-slayer 0.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/catalyst.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> hydra-slayer
+          
+
+          
+            
+            <img src="../../_static/slayer_sidebar_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/api/registry.html">Registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/api/factory.html">Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/api/functional.html">Functional</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hydra-slayer</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>hydra_slayer.functional</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for hydra_slayer.functional</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">pydoc</span>
+
+<span class="kn">from</span> <span class="nn">hydra_slayer.factory</span> <span class="kn">import</span> <span class="n">default_meta_factory</span><span class="p">,</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">MetaFactory</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;get_factory&quot;</span><span class="p">,</span> <span class="s2">&quot;get_instance&quot;</span><span class="p">,</span> <span class="s2">&quot;get_from_params&quot;</span><span class="p">]</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+
+<span class="n">DEFAULT_FACTORY_KEY</span> <span class="o">=</span> <span class="s2">&quot;_target_&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_factory_name_arg</span><span class="p">(</span>
+    <span class="n">factory_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_FACTORY_KEY</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Iterable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
+    <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">(),</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
+
+    <span class="n">factory_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">factory_key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">factory_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">factory_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+
+    <span class="k">return</span> <span class="n">factory_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_positional_keyword_vars</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Iterable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
+    <span class="c1"># make a copy of kwargs since we don&#39;t want to modify them directly</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="n">type2param</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="o">.</span><span class="n">kind</span><span class="p">:</span> <span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="n">var_kwarg</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">type2param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">),</span> <span class="p">{})</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">var_kwarg</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">type2param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">),</span> <span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span>
+
+
+<div class="viewcode-block" id="get_factory"><a class="viewcode-back" href="../../pages/api/functional.html#hydra_slayer.functional.get_factory">[docs]</a><span class="k">def</span> <span class="nf">get_factory</span><span class="p">(</span><span class="n">name_or_object</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Factory</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Retrieves factory, without creating any objects with it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name_or_object: factory name or any valid python object</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        factory</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        LookupError: if no factory with provided name was registered</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; to_int = get_factory(&quot;int&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; to_int(&quot;42&quot;)</span>
+<span class="sd">        42</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name_or_object</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">name_or_object</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">factory</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No factory with name &#39;</span><span class="si">{</span><span class="n">name_or_object</span><span class="si">}</span><span class="s2">&#39; was registered&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">factory</span>
+    <span class="k">return</span> <span class="n">name_or_object</span></div>
+
+
+<span class="k">def</span> <span class="nf">_meta_factory_call</span><span class="p">(</span>
+    <span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">meta_factory</span><span class="p">:</span> <span class="n">MetaFactory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="s2">&quot;get_from_params&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">factory</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_instance</span><span class="p">(</span>
+    <span class="n">factory_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_FACTORY_KEY</span><span class="p">,</span>
+    <span class="n">get_factory_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">meta_factory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MetaFactory</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Creates instance by calling specified factory with ``instantiate_fn``.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The name of the factory to use must be provided as the first argument</span>
+<span class="sd">        or directly by ``&#39;_target_&#39;`` keyword.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        factory_key: key to extract factory name from</span>
+<span class="sd">        get_factory_func: function that returns factory by its name.</span>
+<span class="sd">            Default: :py:func:`.functional.get_factory`</span>
+<span class="sd">        meta_factory: function that calls factory in the right way.</span>
+<span class="sd">            Default: :py:func:`.factory.default_meta_factory`</span>
+<span class="sd">        args: \*args to pass to the factory</span>
+<span class="sd">        kwargs: \*\*kwargs to pass to the factory</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        created instance</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: if factory name argument is missing</span>
+<span class="sd">        RuntimeError: if could not create object instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">get_factory_func</span> <span class="o">=</span> <span class="n">get_factory_func</span> <span class="ow">or</span> <span class="n">get_factory</span>
+    <span class="n">meta_factory</span> <span class="o">=</span> <span class="n">meta_factory</span> <span class="ow">or</span> <span class="n">default_meta_factory</span>
+    <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">(),</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
+
+    <span class="c1"># assume that name of the factory can be provided as first argument</span>
+    <span class="c1">#  or directly by keyword</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwarg</span> <span class="o">=</span> <span class="n">_extract_factory_name_arg</span><span class="p">(</span>
+        <span class="n">factory_key</span><span class="o">=</span><span class="n">factory_key</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;get_instance() missing at least 1 required argument: &#39;</span><span class="si">{</span><span class="n">factory_key</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+    <span class="n">factory</span> <span class="o">=</span> <span class="n">get_factory_func</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">_meta_factory_call</span><span class="p">(</span>
+            <span class="n">factory</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">meta_factory</span><span class="o">=</span><span class="n">meta_factory</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">instance</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Factory &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; call failed: args=</span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2"> kwargs=</span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+
+<div class="viewcode-block" id="get_instance"><a class="viewcode-back" href="../../pages/api/functional.html#hydra_slayer.functional.get_instance">[docs]</a><span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">meta_factory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MetaFactory</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Creates instance by calling specified factory with ``instantiate_fn``.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The name of the factory to use should be provided as the first argument</span>
+<span class="sd">        or directly by ``&#39;_target_&#39;`` keyword.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        *args: positional arguments to pass to the factory</span>
+<span class="sd">        meta_factory: function that calls factory in the right way.</span>
+<span class="sd">            Default: :py:func:`.factory.default_meta_factory`</span>
+<span class="sd">        **kwargs: named parameters to pass to the factory</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        created instance</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_instance(int, &quot;42&quot;, base=10)</span>
+<span class="sd">        42</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">_get_instance</span><span class="p">(</span><span class="n">meta_factory</span><span class="o">=</span><span class="n">meta_factory</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">instance</span></div>
+
+
+<span class="k">def</span> <span class="nf">_recursive_get_from_params</span><span class="p">(</span>
+    <span class="n">factory_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">get_factory_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">shared_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">params</span>
+
+    <span class="c1"># make a copy of params since we don&#39;t want to modify them directly</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="n">view</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">view</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_recursive_get_from_params</span><span class="p">(</span>
+            <span class="n">factory_key</span><span class="o">=</span><span class="n">factory_key</span><span class="p">,</span>
+            <span class="n">get_factory_func</span><span class="o">=</span><span class="n">get_factory_func</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">param</span><span class="p">,</span>
+            <span class="n">shared_params</span><span class="o">=</span><span class="n">shared_params</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">factory_key</span> <span class="ow">in</span> <span class="n">params</span> <span class="ow">or</span> <span class="n">factory_key</span> <span class="ow">in</span> <span class="n">shared_params</span><span class="p">):</span>
+        <span class="c1"># use additional dict to handle &#39;multiple values for keyword argument&#39;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">shared_params</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">}</span>
+
+        <span class="n">factory_name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_extract_factory_name_arg</span><span class="p">(</span>
+            <span class="n">factory_key</span><span class="o">=</span><span class="n">factory_key</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">get_factory_func</span><span class="p">(</span><span class="n">factory_name</span><span class="p">)</span>
+        <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_extract_positional_keyword_vars</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">meta_factory</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;meta_factory&quot;</span><span class="p">,</span> <span class="n">default_meta_factory</span><span class="p">)</span>
+
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">_meta_factory_call</span><span class="p">(</span>
+            <span class="n">factory</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">meta_factory</span><span class="o">=</span><span class="n">meta_factory</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">instance</span>
+    <span class="k">return</span> <span class="n">params</span>
+
+
+<div class="viewcode-block" id="get_from_params"><a class="viewcode-back" href="../../pages/api/functional.html#hydra_slayer.functional.get_from_params">[docs]</a><span class="k">def</span> <span class="nf">get_from_params</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">shared_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates instance based in configuration dict with ``instantiation_fn``.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The name of the factory to use should be provided by ``&#39;_target_&#39;`` keyword.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        shared_params: params to pass on all levels in case of recursive creation</span>
+<span class="sd">        **kwargs: named parameters for factory</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        result of calling ``instantiate_fn(factory, **sub_kwargs)``</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_from_params(_target_=&quot;torch.nn.Linear&quot;, in_features=20, out_features=30)</span>
+<span class="sd">        Linear(in_features=20, out_features=30, bias=True)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">_recursive_get_from_params</span><span class="p">(</span>
+        <span class="n">factory_key</span><span class="o">=</span><span class="n">DEFAULT_FACTORY_KEY</span><span class="p">,</span>
+        <span class="n">get_factory_func</span><span class="o">=</span><span class="n">get_factory</span><span class="p">,</span>
+        <span class="n">params</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="n">shared_params</span><span class="o">=</span><span class="n">shared_params</span> <span class="ow">or</span> <span class="p">{},</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">instance</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Catalyst-Team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 0.2.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../../0.1.0rc0/index.html">0.1.0rc0</a></dd>
+      <dd><a href="../../../0.1.1/index.html">0.1.1</a></dd>
+      <dd><a href="functional.html">0.2.0</a></dd>
+    </dl>
+  </div>
+</div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
