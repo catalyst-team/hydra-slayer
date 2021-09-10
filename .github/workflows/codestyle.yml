@@ -44,5 +44,5 @@ jobs:
 
       - name: check codestyle
         run: |
-          poetry run catalyst-check-codestyle hydra_slayer/ tests/
+          poetry run catalyst-check-codestyle --line-length 99 `find . -not -path './.venv/*' -name '*.py'`
           poetry run doc8 -q --file-encoding utf-8 -- docs
