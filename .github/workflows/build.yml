@@ -44,7 +44,7 @@ jobs:
           poetry run pip install -U pip
           poetry install
       - name: Install latest dependencies
-        if: matrix.requirements == 'latest'
+        if: ${{ matrix.requirements == 'latest' }}
         run: |
           poetry update
 
