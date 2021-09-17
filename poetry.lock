@@ -104,7 +104,7 @@ msgpack = ["msgpack-python (>=0.5,<0.6)"]
 
 [[package]]
 name = "catalyst-codestyle"
-version = "21.9.1"
+version = "21.9.2"
 description = "Catalyst.Codestyle"
 category = "dev"
 optional = false
@@ -536,7 +536,7 @@ python-versions = "*"
 
 [[package]]
 name = "more-itertools"
-version = "8.9.0"
+version = "8.10.0"
 description = "More routines for operating on iterables, beyond itertools"
 category = "dev"
 optional = false
@@ -1065,7 +1065,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "9c0daa83af83dd7e851a8ce50d0b7407e7f8b18884a5d725742fd0f3cde21d85"
+content-hash = "21c46b0f71fea37f084c0e343f57e6eb062b277269db241271adcb64cf511eb0"
 
 [metadata.files]
 aiocontextvars = [
@@ -1105,8 +1105,8 @@ cachy = [
     {file = "cachy-0.3.0.tar.gz", hash = "sha256:186581f4ceb42a0bbe040c407da73c14092379b1e4c0e327fdb72ae4a9b269b1"},
 ]
 catalyst-codestyle = [
-    {file = "catalyst-codestyle-21.9.1.tar.gz", hash = "sha256:a7aa9d1f3b19787c8c89d3d311beb55f3412c50eabc75bf6a42346d5df21ebf9"},
-    {file = "catalyst_codestyle-21.9.1-py2.py3-none-any.whl", hash = "sha256:e758c8f999f61f67a8f48ca356a456ef005035e6b76d04c2e90e559d63929b9f"},
+    {file = "catalyst-codestyle-21.9.2.tar.gz", hash = "sha256:b0241b8aea7880c3b8ceb404eb48da2293dc8312e4aa2a4cf4dcb3e69f568fea"},
+    {file = "catalyst_codestyle-21.9.2-py2.py3-none-any.whl", hash = "sha256:aba2facddc834195055da6b3808e7bd9afecb6f6d3b76a638bcded67412daece"},
 ]
 certifi = [
     {file = "certifi-2021.5.30-py2.py3-none-any.whl", hash = "sha256:50b1e4f8446b06f41be7dd6338db18e0990601dce795c2b1686458aa7e8fa7d8"},
@@ -1308,8 +1308,8 @@ mccabe = [
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
 ]
 more-itertools = [
-    {file = "more-itertools-8.9.0.tar.gz", hash = "sha256:8c746e0d09871661520da4f1241ba6b908dc903839733c8203b552cffaf173bd"},
-    {file = "more_itertools-8.9.0-py3-none-any.whl", hash = "sha256:70401259e46e216056367a0a6034ee3d3f95e0bf59d3aa6a4eb77837171ed996"},
+    {file = "more-itertools-8.10.0.tar.gz", hash = "sha256:1debcabeb1df793814859d64a81ad7cb10504c24349368ccf214c664c474f41f"},
+    {file = "more_itertools-8.10.0-py3-none-any.whl", hash = "sha256:56ddac45541718ba332db05f464bebfb0768110111affd27f66e0051f276fa43"},
 ]
 mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
