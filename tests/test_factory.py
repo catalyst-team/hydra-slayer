@@ -38,3 +38,35 @@ def test_default_meta_factory():
     res = default_meta_factory(lambda x: x, (42,), {})
 
     assert res() == 42
+
+
+def test_default_meta_factory_mode():
+    # `int` is class, so `call_meta_factory` is expected
+    res = default_meta_factory(int, (42,), {"_mode_": "auto"})
+
+    assert res == 42
+
+    # `lambda` is function, so `partial_meta_factory` is expected
+    res = default_meta_factory(lambda x: x, (42,), {"_mode_": "auto"})
+
+    assert res() == 42
+
+    # _mode_='call', so `call_meta_factory` is expected
+    res = default_meta_factory(int, (42,), {"_mode_": "call"})
+
+    assert res == 42
+
+    # _mode_='call', so `call_meta_factory` is expected
+    res = default_meta_factory(lambda x: x, (42,), {"_mode_": "call"})
+
+    assert res == 42
+
+    # _mode_='partial', so `partial_meta_factory` is expected
+    res = default_meta_factory(int, (42,), {"_mode_": "partial"})
+
+    assert res() == 42
+
+    # _mode_='partial', so `partial_meta_factory` is expected
+    res = default_meta_factory(lambda x: x, (42,), {"_mode_": "partial"})
+
+    assert res() == 42

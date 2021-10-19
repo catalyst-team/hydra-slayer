@@ -194,10 +194,12 @@ def get_from_params(*, shared_params: Optional[Dict[str, Any]] = None, **kwargs)
     Creates instance based in configuration dict with ``instantiation_fn``.
 
     Note:
-        The name of the factory to use should be provided by ``'_target_'`` keyword.
+        The name of the factory to use should be provided
+        by ``'_target_'`` keyword.
 
     Args:
-        shared_params: params to pass on all levels in case of recursive creation
+        shared_params: params to pass on all levels in case of
+            recursive creation
         **kwargs: named parameters for factory
 
     Returns:
