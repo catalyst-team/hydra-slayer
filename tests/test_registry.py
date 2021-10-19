@@ -12,7 +12,7 @@ def test_add_function():
 
     r.add(foo)
 
-    assert "foo" in r._factories  # noqa: WPS437
+    assert "foo" in r._factories
 
 
 def test_add_function_name_override():
@@ -20,7 +20,7 @@ def test_add_function_name_override():
 
     r.add(foo, name="bar")
 
-    assert "bar" in r._factories  # noqa: WPS437
+    assert "bar" in r._factories
 
 
 def test_add_lambda_fail():
@@ -35,7 +35,7 @@ def test_add_lambda_override():
 
     r.add(lambda x: x, name="bar")
 
-    assert "bar" in r._factories  # noqa: WPS437
+    assert "bar" in r._factories
 
 
 def test_fail_multiple_with_name():

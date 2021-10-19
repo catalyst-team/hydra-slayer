@@ -32,7 +32,7 @@ def _get_project_meta():
 
 pkg_meta = _get_project_meta()
 project = str(pkg_meta["name"])
-copyright = f"{datetime.now().year}, Catalyst-Team"  # noqa: WPS125
+copyright = f"{datetime.now().year}, Catalyst-Team"
 author = "Catalyst-Team"
 
 # The short X.Y version
