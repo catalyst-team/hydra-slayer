@@ -402,16 +402,15 @@ that you don’t specify parameters followed by *args by keyword.</p>
     <span class="c1"># By default, hydra-slayer use partial fit for functions</span>
     <span class="c1"># (what is useful with activation functions in neural networks).</span>
     <span class="c1"># But if we want to call ``pandas.read_csv`` function instead,</span>
-    <span class="c1"># then we should pass ``call_meta_factory`` manually.</span>
-    <span class="nt">meta_factory</span><span class="p">:</span> <span class="nl">&amp;call_function</span>
-      <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hydra_slayer.call_meta_factory</span>
+    <span class="c1"># then we should set ``call`` mode manually.</span>
+    <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
   <span class="nt">right</span><span class="p">:</span>
     <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span>
     <span class="nt">filepath_or_buffer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part2.csv</span>
-    <span class="nt">meta_factory</span><span class="p">:</span> <span class="nv">*call_function</span>
+    <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
   <span class="nt">how</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">inner</span>
   <span class="s">&#39;on&#39;</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">user</span>
-  <span class="nt">meta_factory</span><span class="p">:</span> <span class="nv">*call_function</span>
+  <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
@@ -461,11 +460,10 @@ that you don’t specify parameters followed by *args by keyword.</p>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># config.yaml</span>
 <span class="nt">dataset</span><span class="p">:</span>
-  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hydra_slayer.get_from_params</span>
   <span class="c1"># ``yaml.safe_load`` will return dictionary with parameters,</span>
   <span class="c1"># but to get ``DataLoader`` additional ``hydra_slayer.get_from_params``</span>
   <span class="c1"># should be used.</span>
-
+  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hydra_slayer.get_from_params</span>
   <span class="nt">kwargs</span><span class="p">:</span>
     <span class="c1"># Read dataset from &quot;dataset.yaml&quot;, roughly equivalent to</span>
     <span class="c1">#   with open(&quot;dataset.yaml&quot;) as stream:</span>
@@ -474,16 +472,13 @@ that you don’t specify parameters followed by *args by keyword.</p>
     <span class="nt">stream</span><span class="p">:</span>
       <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">open</span>
       <span class="nt">file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dataset.yaml</span>
-    <span class="nt">meta_factory</span><span class="p">:</span> <span class="nl">&amp;call_function</span>
-      <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hydra_slayer.call_meta_factory</span>
-
-  <span class="nt">meta_factory</span><span class="p">:</span> <span class="nv">*call_function</span>
+    <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
+  <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
 
 <span class="nt">model</span><span class="p">:</span>
   <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.models.resnet18</span>
   <span class="nt">pretrained</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-  <span class="nt">meta_factory</span><span class="p">:</span>
-    <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hydra_slayer.call_meta_factory</span>
+  <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
 
 <span class="nt">criterion</span><span class="p">:</span>
   <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.CrossEntropyLoss</span>

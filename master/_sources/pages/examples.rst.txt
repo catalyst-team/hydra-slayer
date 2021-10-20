@@ -252,16 +252,15 @@ Creating ``pd.DataFrame`` from config
        # By default, hydra-slayer use partial fit for functions
        # (what is useful with activation functions in neural networks).
        # But if we want to call ``pandas.read_csv`` function instead,
-       # then we should pass ``call_meta_factory`` manually.
-       meta_factory: &call_function
-         _target_: hydra_slayer.call_meta_factory
+       # then we should set ``call`` mode manually.
+       _mode_: call
      right:
        _target_: pandas.read_csv
        filepath_or_buffer: dataset/dataset_part2.csv
-       meta_factory: *call_function
+       _mode_: call
      how: inner
      'on': user
-     meta_factory: *call_function
+     _mode_: call
 
 .. code-block:: python
 
@@ -319,11 +318,10 @@ Extending configs
 
    # config.yaml
    dataset:
-     _target_: hydra_slayer.get_from_params
      # ``yaml.safe_load`` will return dictionary with parameters,
      # but to get ``DataLoader`` additional ``hydra_slayer.get_from_params``
      # should be used.
-
+     _target_: hydra_slayer.get_from_params
      kwargs:
        # Read dataset from "dataset.yaml", roughly equivalent to
        #   with open("dataset.yaml") as stream:
@@ -332,16 +330,13 @@ Extending configs
        stream:
          _target_: open
          file: dataset.yaml
-       meta_factory: &call_function
-         _target_: hydra_slayer.call_meta_factory
-
-     meta_factory: *call_function
+       _mode_: call
+     _mode_: call
 
    model:
      _target_: torchvision.models.resnet18
      pretrained: true
-     meta_factory:
-       _target_: hydra_slayer.call_meta_factory
+     _mode_: call
 
    criterion:
      _target_: torch.nn.CrossEntropyLoss
