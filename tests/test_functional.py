@@ -1,4 +1,6 @@
 # flake8: noqa
+import string
+
 import pytest
 
 from hydra_slayer import functional as F
@@ -7,14 +9,19 @@ from . import foobar
 
 
 def test_get_factories():
+    res = F.get_factory(int)
+    assert res == int
+
     res = F.get_factory("int")
     assert res == int
 
+    # from module
     res = F.get_factory("tests.foobar.foo")
     assert res == foobar.foo
 
-    res = F.get_factory(int)
-    assert res == int
+    # from class
+    res = F.get_factory("tests.foobar.grault.garply")
+    assert res == foobar.grault.garply
 
 
 def test_fail_get_factory():
@@ -27,13 +34,16 @@ def test_instantiations():
     res = F.get_instance("tests.foobar.foo", 1, 2)()
     assert res == {"a": 1, "b": 2}
 
-    res = F.get_instance("tests.foobar.foo", 1, b=2)()
-    assert res == {"a": 1, "b": 2}
-
     res = F.get_instance("tests.foobar.foo", a=1, b=2)()
     assert res == {"a": 1, "b": 2}
 
+    res = F.get_instance("tests.foobar.foo", 1, b=2)()
+    assert res == {"a": 1, "b": 2}
+
     res = F.get_instance(_target_="tests.foobar.foo", a=1, b=2)()
+    assert res == {"a": 1, "b": 2}
+
+    res = F.get_instance(_target_="tests.foobar.grault.garply", a=1, b=2)()
     assert res == {"a": 1, "b": 2}
 
 
@@ -74,10 +84,10 @@ def test_get_from_params_meta_factory():
     def meta_factory2(fn, args, kwargs):
         return 1
 
-    res = F.get_from_params(**{"_target_": "tests.foobar.foo"}, meta_factory=meta_factory1)
+    res = F.get_from_params(**{"_target_": "tests.foobar.foo"}, _meta_factory_=meta_factory1)
     assert res == foobar.foo
 
-    res = F.get_from_params(**{"_target_": "tests.foobar.foo"}, meta_factory=meta_factory2)
+    res = F.get_from_params(**{"_target_": "tests.foobar.foo"}, _meta_factory_=meta_factory2)
     assert res == 1
 
 
@@ -89,13 +99,13 @@ def test_get_from_recursive_params():
                 "_target_": "tests.foobar.foo",
                 "a": 1,
                 "b": 2,
-                "meta_factory": call_meta_factory,
+                "_mode_": "call",
             },
             "b": {
                 "_target_": "tests.foobar.foo",
                 "a": 3,
                 "b": 4,
-                "meta_factory": call_meta_factory,
+                "_mode_": "call",
             },
         },
     )()
@@ -104,14 +114,20 @@ def test_get_from_recursive_params():
 
 def test_get_from_params_shared_params():
     res = F.get_from_params(
-        **{"_target_": "tests.foobar.foo", "a": {"_target_": "tests.foobar.foo", "a": 1}},
-        shared_params={"b": 2, "meta_factory": call_meta_factory},
+        **{
+            "_target_": "tests.foobar.foo",
+            "a": {"_target_": "tests.foobar.foo", "a": 1},
+        },
+        shared_params={"b": 2, "_meta_factory_": call_meta_factory},
     )
     assert res == {"a": {"a": 1, "b": 2}, "b": 2}
 
     res = F.get_from_params(
-        **{"_target_": "tests.foobar.foo", "a": {"_target_": "tests.foobar.foo", "a": 1, "b": 2}},
-        shared_params={"b": 3, "meta_factory": call_meta_factory},
+        **{
+            "_target_": "tests.foobar.foo",
+            "a": {"_target_": "tests.foobar.foo", "a": 1, "b": 2},
+        },
+        shared_params={"b": 3, "_mode_": "call"},
     )
     assert res == {"a": {"a": 1, "b": 2}, "b": 3}
 
@@ -122,7 +138,7 @@ def test_get_from_params_nested_dicts_support():
             "a": {"_target_": "tests.foobar.foo", "a": 1, "b": 2},
             "b": {"_target_": "tests.foobar.foo", "a": 3, "b": 4},
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_meta_factory_": call_meta_factory},
     )
     assert res == {"a": {"a": 1, "b": 2}, "b": {"a": 3, "b": 4}}
 
@@ -135,7 +151,7 @@ def test_get_from_params_nested_dicts_support():
             },
             "b": 5,
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_mode_": "call"},
     )
     assert res == {"a": {"c": {"a": 1, "b": 2}, "d": {"a": 3, "b": 4}}, "b": 5}
 
@@ -156,7 +172,7 @@ def test_get_from_params_nested_dicts_support():
             },
             "b": {"e": {"f": {"g": {"_target_": "tests.foobar.foo", "a": 7, "b": 8}}}},
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_mode_": "call"},
     )
     assert res == {
         "a": {
@@ -177,7 +193,7 @@ def test_get_from_params_nested_lists_support():
             ],
             "b": 5,
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_meta_factory_": call_meta_factory},
     )
     assert res == {"a": [{"a": 1, "b": 2}, {"a": 3, "b": 4}], "b": 5}
 
@@ -187,7 +203,7 @@ def test_get_from_params_nested_lists_support():
             "a": [[[[[{"_target_": "tests.foobar.foo", "a": 1, "b": 2}]]]]],
             "b": 3,
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_mode_": "call"},
     )
     assert res == {"a": [[[[[{"a": 1, "b": 2}]]]]], "b": 3}
 
@@ -206,9 +222,12 @@ def test_recursive_get_from_params_nested_structures():
                 {"_target_": "tests.foobar.foo", "a": 1, "b": 2},
             ],
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_meta_factory_": call_meta_factory},
     )
-    assert res == {"a": {"a": {"a": 1, "b": 2}, "b": 2}, "b": [{"a": 1, "b": 2}, {"a": 1, "b": 2}]}
+    assert res == {
+        "a": {"a": {"a": 1, "b": 2}, "b": 2},
+        "b": [{"a": 1, "b": 2}, {"a": 1, "b": 2}],
+    }
 
 
 def test_get_from_params_args_support():
@@ -229,7 +248,7 @@ def test_get_from_params_args_support():
                 {"_target_": "tests.foobar.foo", "a": 3, "b": 4},
             ],
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_mode_": "call"},
     )
     assert res == ({"a": 1, "b": 2}, {"a": 3, "b": 4})
 
@@ -249,7 +268,12 @@ def test_get_from_params_kwargs_support():
     assert res == {"a": 3, "b": 2, "c": 1}
 
     res = F.get_from_params(
-        **{"_target_": "tests.foobar.quux", "a": 1, "b": 2, "kwargs": {"c": 3, "b": 4, "a": 5}}
+        **{
+            "_target_": "tests.foobar.quux",
+            "a": 1,
+            "b": 2,
+            "kwargs": {"c": 3, "b": 4, "a": 5},
+        }
     )()
     assert res == {"a": 5, "b": 4, "c": 3}
 

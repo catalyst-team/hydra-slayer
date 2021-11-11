@@ -4,7 +4,7 @@ import inspect
 import warnings
 
 from hydra_slayer import functional as F
-from hydra_slayer.factory import default_meta_factory, Factory, MetaFactory
+from hydra_slayer.factory import Factory
 
 __all__ = ["Registry"]
 
@@ -16,13 +16,10 @@ class Registry(abc.MutableMapping):
     Universal class allowing to add and access various factories by name.
 
     Args:
-        meta_factory: default object that calls factory.
-            Default: :py:func:`.factory.default_meta_factory`
         name_key: key to use to extract names of the factories from
     """
 
-    def __init__(self, meta_factory: MetaFactory = None, name_key: str = "_target_"):
-        self.meta_factory = meta_factory if meta_factory is not None else default_meta_factory
+    def __init__(self, name_key: str = "_target_"):
         self._factories: Dict[str, Factory] = {}
         self._late_add_callbacks: List[LateAddCallback] = []
         self.name_key = name_key
@@ -107,7 +104,10 @@ class Registry(abc.MutableMapping):
         self._late_add_callbacks.append(cb)
 
     def add_from_module(
-        self, module, prefix: Union[str, List[str]] = None, ignore_all: bool = False
+        self,
+        module,
+        prefix: Union[str, List[str]] = None,
+        ignore_all: bool = False,
     ) -> None:
         """
         Adds all factories present in module.
@@ -174,25 +174,19 @@ class Registry(abc.MutableMapping):
             return self.get(obj)
         return obj
 
-    def get_instance(self, *args, meta_factory: Optional[MetaFactory] = None, **kwargs):
+    def get_instance(self, *args, **kwargs):
         """
         Creates instance by calling specified factory with ``instantiate_fn``.
 
         Args:
             *args: \*args to pass to the factory
-            meta_factory: function that calls factory the right way.
-                Default: :py:func:`.factory.default_meta_factory`
             **kwargs: \*\*kwargs to pass to the factory
 
         Returns:
             created instance
         """
         instance = F._get_instance(
-            factory_key=self.name_key,
-            get_factory_func=self.get,
-            meta_factory=meta_factory or self.meta_factory,
-            args=args,
-            kwargs=kwargs,
+            factory_key=self.name_key, get_factory_func=self.get, args=args, kwargs=kwargs
         )
         return instance
 
