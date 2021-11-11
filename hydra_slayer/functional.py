@@ -3,7 +3,7 @@ import copy
 import inspect
 import pydoc
 
-from hydra_slayer.factory import default_meta_factory, Factory, MetaFactory
+from hydra_slayer.factory import Factory, metafactory_factory
 
 __all__ = ["get_factory", "get_instance", "get_from_params"]
 
@@ -65,18 +65,9 @@ def get_factory(name_or_object: Union[str, T]) -> Union[Factory, T]:
     return name_or_object
 
 
-def _meta_factory_call(
-    factory: Factory, meta_factory: MetaFactory, args: Iterable, kwargs: Dict
-) -> Any:
-    if hasattr(factory, "get_from_params"):
-        return factory.get_from_params(*args, **kwargs)
-    return meta_factory(factory, args, kwargs)
-
-
 def _get_instance(
     factory_key: str = DEFAULT_FACTORY_KEY,
     get_factory_func: Callable = None,
-    meta_factory: Optional[MetaFactory] = None,
     args: Optional[Iterable] = None,
     kwargs: Optional[Dict] = None,
 ) -> Any:
@@ -90,8 +81,6 @@ def _get_instance(
         factory_key: key to extract factory name from
         get_factory_func: function that returns factory by its name.
             Default: :py:func:`.functional.get_factory`
-        meta_factory: function that calls factory in the right way.
-            Default: :py:func:`.factory.default_meta_factory`
         args: \*args to pass to the factory
         kwargs: \*\*kwargs to pass to the factory
 
@@ -103,7 +92,6 @@ def _get_instance(
         RuntimeError: if could not create object instance
     """
     get_factory_func = get_factory_func or get_factory
-    meta_factory = meta_factory or default_meta_factory
     args, kwargs = args or (), kwargs or {}
 
     # assume that name of the factory can be provided as first argument
@@ -117,15 +105,13 @@ def _get_instance(
     factory = get_factory_func(name)
 
     try:
-        instance = _meta_factory_call(
-            factory=factory, meta_factory=meta_factory, args=args, kwargs=kwargs
-        )
+        instance = metafactory_factory(factory=factory, args=args, kwargs=kwargs)
         return instance
     except Exception as e:
         raise RuntimeError(f"Factory '{name}' call failed: args={args} kwargs={kwargs}") from e
 
 
-def get_instance(*args, meta_factory: Optional[MetaFactory] = None, **kwargs) -> Any:
+def get_instance(*args, **kwargs) -> Any:
     """Creates instance by calling specified factory with ``instantiate_fn``.
 
     Note:
@@ -134,8 +120,6 @@ def get_instance(*args, meta_factory: Optional[MetaFactory] = None, **kwargs) ->
 
     Args:
         *args: positional arguments to pass to the factory
-        meta_factory: function that calls factory in the right way.
-            Default: :py:func:`.factory.default_meta_factory`
         **kwargs: named parameters to pass to the factory
 
     Returns:
@@ -145,7 +129,7 @@ def get_instance(*args, meta_factory: Optional[MetaFactory] = None, **kwargs) ->
         >>> get_instance(int, "42", base=10)
         42
     """
-    instance = _get_instance(meta_factory=meta_factory, args=args, kwargs=kwargs)
+    instance = _get_instance(args=args, kwargs=kwargs)
     return instance
 
 
@@ -179,11 +163,8 @@ def _recursive_get_from_params(
         )
         factory = get_factory_func(factory_name)
         args, kwargs = _extract_positional_keyword_vars(factory, kwargs=kwargs)
-        meta_factory = kwargs.pop("meta_factory", default_meta_factory)
 
-        instance = _meta_factory_call(
-            factory=factory, meta_factory=meta_factory, args=args, kwargs=kwargs
-        )
+        instance = metafactory_factory(factory=factory, args=args, kwargs=kwargs)
 
         return instance
     return params

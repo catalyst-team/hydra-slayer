@@ -24,3 +24,9 @@ def quux(a=1, b=2, **kwargs):
 
 def quuz(**params):
     return {"a": params["a"], "b": params["b"]}
+
+
+class grault:
+    @staticmethod
+    def garply(a, b):
+        return {"a": a, "b": b}

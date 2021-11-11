@@ -1,7 +1,6 @@
 # flake8: noqa
 import pytest
 
-from hydra_slayer.factory import call_meta_factory
 from hydra_slayer.registry import Registry
 from .foobar import foo
 from . import foobar as module
@@ -162,10 +161,10 @@ def test_get_from_params_meta_factory():
 
     r.add(foo)
 
-    res = r.get_from_params(**{"_target_": "tests.foobar.foo"}, meta_factory=meta_factory1)
+    res = r.get_from_params(**{"_target_": "tests.foobar.foo"}, _meta_factory_=meta_factory1)
     assert res == foo
 
-    res = r.get_from_params(**{"_target_": "tests.foobar.foo"}, meta_factory=meta_factory2)
+    res = r.get_from_params(**{"_target_": "tests.foobar.foo"}, _meta_factory_=meta_factory2)
     assert res == 1
 
 
@@ -177,8 +176,8 @@ def test_get_from_recursive_params():
     res = r.get_from_params(
         **{
             "_target_": "foo",
-            "a": {"_target_": "foo", "a": 1, "b": 2, "meta_factory": call_meta_factory},
-            "b": {"_target_": "foo", "a": 3, "b": 4, "meta_factory": call_meta_factory},
+            "a": {"_target_": "foo", "a": 1, "b": 2, "_mode_": "call"},
+            "b": {"_target_": "foo", "a": 3, "b": 4, "_mode_": "call"},
         },
     )()
     assert res["a"] == {"a": 1, "b": 2} and res["b"] == {"a": 3, "b": 4}
@@ -191,13 +190,13 @@ def test_get_from_params_shared_params():
 
     res = r.get_from_params(
         **{"_target_": "foo", "a": {"_target_": "foo", "a": 1}},
-        shared_params={"b": 2, "meta_factory": call_meta_factory},
+        shared_params={"b": 2, "_mode_": "call"},
     )
     assert res == {"a": {"a": 1, "b": 2}, "b": 2}
 
     res = r.get_from_params(
         **{"_target_": "foo", "a": {"_target_": "foo", "a": 1, "b": 2}},
-        shared_params={"b": 3, "meta_factory": call_meta_factory},
+        shared_params={"b": 3, "_mode_": "call"},
     )
     assert res == {"a": {"a": 1, "b": 2}, "b": 3}
 
@@ -208,8 +207,11 @@ def test_get_from_params_nested_dicts_support():
     r.add(foo)
 
     res = r.get_from_params(
-        **{"a": {"_target_": "foo", "a": 1, "b": 2}, "b": {"_target_": "foo", "a": 3, "b": 4}},
-        shared_params={"meta_factory": call_meta_factory},
+        **{
+            "a": {"_target_": "foo", "a": 1, "b": 2},
+            "b": {"_target_": "foo", "a": 3, "b": 4},
+        },
+        shared_params={"_mode_": "call"},
     )
     assert res == {"a": {"a": 1, "b": 2}, "b": {"a": 3, "b": 4}}
 
@@ -222,7 +224,7 @@ def test_get_from_params_nested_dicts_support():
             },
             "b": 5,
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_mode_": "call"},
     )
     assert res == {"a": {"c": {"a": 1, "b": 2}, "d": {"a": 3, "b": 4}}, "b": 5}
 
@@ -230,12 +232,20 @@ def test_get_from_params_nested_dicts_support():
         **{
             "_target_": "foo",
             "a": {
-                "c": {"_target_": "foo", "a": {"_target_": "foo", "a": 1, "b": 2}, "b": {"b": 3}},
-                "d": {"_target_": "foo", "a": {"a": 4}, "b": {"_target_": "foo", "a": 5, "b": 6}},
+                "c": {
+                    "_target_": "foo",
+                    "a": {"_target_": "foo", "a": 1, "b": 2},
+                    "b": {"b": 3},
+                },
+                "d": {
+                    "_target_": "foo",
+                    "a": {"a": 4},
+                    "b": {"_target_": "foo", "a": 5, "b": 6},
+                },
             },
             "b": {"e": {"f": {"g": {"_target_": "foo", "a": 7, "b": 8}}}},
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_mode_": "call"},
     )
     assert res == {
         "a": {
@@ -254,16 +264,23 @@ def test_get_from_params_nested_lists_support():
     res = r.get_from_params(
         **{
             "_target_": "foo",
-            "a": [{"_target_": "foo", "a": 1, "b": 2}, {"_target_": "foo", "a": 3, "b": 4}],
+            "a": [
+                {"_target_": "foo", "a": 1, "b": 2},
+                {"_target_": "foo", "a": 3, "b": 4},
+            ],
             "b": 5,
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_mode_": "call"},
     )
     assert res == {"a": [{"a": 1, "b": 2}, {"a": 3, "b": 4}], "b": 5}
 
     res = r.get_from_params(
-        **{"_target_": "foo", "a": [[[[[{"_target_": "foo", "a": 1, "b": 2}]]]]], "b": 3},
-        shared_params={"meta_factory": call_meta_factory},
+        **{
+            "_target_": "foo",
+            "a": [[[[[{"_target_": "foo", "a": 1, "b": 2}]]]]],
+            "b": 3,
+        },
+        shared_params={"_mode_": "call"},
     )
     assert res == {"a": [[[[[{"a": 1, "b": 2}]]]]], "b": 3}
 
@@ -276,9 +293,19 @@ def test_recursive_get_from_params_nested_structures():
     res = r.get_from_params(
         **{
             "_target_": "foo",
-            "a": {"_target_": "foo", "a": {"_target_": "foo", "a": 1, "b": 2}, "b": 2},
-            "b": [{"_target_": "foo", "a": 1, "b": 2}, {"_target_": "foo", "a": 1, "b": 2}],
+            "a": {
+                "_target_": "foo",
+                "a": {"_target_": "foo", "a": 1, "b": 2},
+                "b": 2,
+            },
+            "b": [
+                {"_target_": "foo", "a": 1, "b": 2},
+                {"_target_": "foo", "a": 1, "b": 2},
+            ],
         },
-        shared_params={"meta_factory": call_meta_factory},
+        shared_params={"_mode_": "call"},
     )
-    assert res == {"a": {"a": {"a": 1, "b": 2}, "b": 2}, "b": [{"a": 1, "b": 2}, {"a": 1, "b": 2}]}
+    assert res == {
+        "a": {"a": {"a": 1, "b": 2}, "b": 2},
+        "b": [{"a": 1, "b": 2}, {"a": 1, "b": 2}],
+    }
