@@ -135,6 +135,16 @@ def test_get_from_params_shared_params():
 def test_get_from_params_nested_dicts_support():
     res = F.get_from_params(
         **{
+            "_target_": "tests.foobar.foo",
+            "a": 1,
+            "b": 2,
+            "_meta_factory_": {"_target_": "hydra_slayer.call_meta_factory"},
+        },
+    )
+    assert res == {"a": 1, "b": 2}
+
+    res = F.get_from_params(
+        **{
             "a": {"_target_": "tests.foobar.foo", "a": 1, "b": 2},
             "b": {"_target_": "tests.foobar.foo", "a": 3, "b": 4},
         },
@@ -281,3 +291,14 @@ def test_get_from_params_kwargs_support():
         **{"_target_": "tests.foobar.quuz", "params": {"a": 1, "b": 2, "c": 3}}
     )()
     assert res == {"a": 1, "b": 2}
+
+
+def test_get_from_params_var_keyword():
+    res = F.get_from_params(
+        **{
+            "a": {"_target_": "tests.foobar.foo", "a": 1, "b": 2, "_var_": "x"},
+            "b": {"_target_": "tests.foobar.foo", "a": {"_var_": "x"}, "b": 3},
+        },
+        shared_params={"_mode_": "call"},
+    )
+    assert res == {"a": {"a": 1, "b": 2}, "b": {"a": {"a": 1, "b": 2}, "b": 3}}

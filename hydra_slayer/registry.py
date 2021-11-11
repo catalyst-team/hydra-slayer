@@ -17,12 +17,16 @@ class Registry(abc.MutableMapping):
 
     Args:
         name_key: key to use to extract names of the factories from
+        var_key: key to use to for aliases. Aliases let you identify an item
+            and then refer to that item and reuse it multiple times.
     """
 
-    def __init__(self, name_key: str = "_target_"):
+    def __init__(self, name_key: str = "_target_", var_key: str = "_var_"):
         self._factories: Dict[str, Factory] = {}
         self._late_add_callbacks: List[LateAddCallback] = []
         self.name_key = name_key
+        self.var_key = var_key
+        self._vars_dict = {}
 
     @staticmethod
     def _get_factory_name(f, provided_name: str = None) -> str:
@@ -205,11 +209,13 @@ class Registry(abc.MutableMapping):
         Returns:
             result of calling ``instantiate_fn(factory, **sub_kwargs)``
         """
-        instance = F._recursive_get_from_params(
+        instance, _ = F._recursive_get_from_params(
             factory_key=self.name_key,
             get_factory_func=self.get,
             params=kwargs,
             shared_params=shared_params or {},
+            var_key=self.var_key,
+            vars_dict=self._vars_dict,
         )
         return instance
 

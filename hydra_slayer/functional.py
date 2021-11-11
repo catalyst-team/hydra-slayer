@@ -10,6 +10,7 @@ __all__ = ["get_factory", "get_instance", "get_from_params"]
 T = TypeVar("T")
 
 DEFAULT_FACTORY_KEY = "_target_"
+DEFAULT_VAR_KEY = "_var_"
 
 
 def _extract_factory_name_arg(
@@ -104,6 +105,9 @@ def _get_instance(
 
     factory = get_factory_func(name)
 
+    args_, kwargs = _extract_positional_keyword_vars(factory, kwargs=kwargs)
+    args = *args, *args_
+
     try:
         instance = metafactory_factory(factory=factory, args=args, kwargs=kwargs)
         return instance
@@ -138,36 +142,49 @@ def _recursive_get_from_params(
     get_factory_func: Callable,
     params: Union[Dict[str, Any], Any],
     shared_params: Dict[str, Any],
-) -> Any:
+    var_key: str,
+    vars_dict: Dict[str, Any],
+) -> Tuple[Any, Dict[str, Any]]:
     if not isinstance(params, (dict, list)):
-        return params
+        return params, vars_dict
 
     # make a copy of params since we don't want to modify them directly
     params = copy.copy(params)
 
     view = params.items() if isinstance(params, dict) else enumerate(params)
     for key, param in view:
-        params[key] = _recursive_get_from_params(
+        params[key], vars_dict = _recursive_get_from_params(
             factory_key=factory_key,
             get_factory_func=get_factory_func,
             params=param,
             shared_params=shared_params,
+            var_key=var_key,
+            vars_dict=vars_dict,
         )
 
-    if isinstance(params, dict) and (factory_key in params or factory_key in shared_params):
+    if isinstance(params, dict):
         # use additional dict to handle 'multiple values for keyword argument'
         kwargs = {**shared_params, **params}
 
-        factory_name, _, kwargs = _extract_factory_name_arg(
-            factory_key=factory_key, args=(), kwargs=kwargs
-        )
-        factory = get_factory_func(factory_name)
-        args, kwargs = _extract_positional_keyword_vars(factory, kwargs=kwargs)
+        alias = kwargs.pop(var_key, None)
+        if alias and alias in vars_dict:
+            kwargs = params = vars_dict[alias]
 
-        instance = metafactory_factory(factory=factory, args=args, kwargs=kwargs)
+        if factory_key in kwargs:
+            obj = _get_instance(
+                factory_key=factory_key,
+                get_factory_func=get_factory_func,
+                args=(),
+                kwargs=kwargs,
+            )
+        else:
+            obj = params
 
-        return instance
-    return params
+        if alias and alias not in vars_dict:
+            vars_dict[alias] = obj
+
+        return obj, vars_dict
+    return params, vars_dict
 
 
 def get_from_params(*, shared_params: Optional[Dict[str, Any]] = None, **kwargs) -> Any:
@@ -190,10 +207,12 @@ def get_from_params(*, shared_params: Optional[Dict[str, Any]] = None, **kwargs)
         >>> get_from_params(_target_="torch.nn.Linear", in_features=20, out_features=30)
         Linear(in_features=20, out_features=30, bias=True)
     """
-    instance = _recursive_get_from_params(
+    instance, _ = _recursive_get_from_params(
         factory_key=DEFAULT_FACTORY_KEY,
         get_factory_func=get_factory,
         params=kwargs,
         shared_params=shared_params or {},
+        var_key=DEFAULT_VAR_KEY,
+        vars_dict={},
     )
     return instance
