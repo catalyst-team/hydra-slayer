@@ -175,7 +175,7 @@
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">pydoc</span>
 
-<span class="kn">from</span> <span class="nn">hydra_slayer.factory</span> <span class="kn">import</span> <span class="n">default_meta_factory</span><span class="p">,</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">MetaFactory</span>
+<span class="kn">from</span> <span class="nn">hydra_slayer.factory</span> <span class="kn">import</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">metafactory_factory</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;get_factory&quot;</span><span class="p">,</span> <span class="s2">&quot;get_instance&quot;</span><span class="p">,</span> <span class="s2">&quot;get_from_params&quot;</span><span class="p">]</span>
 
@@ -237,18 +237,9 @@
     <span class="k">return</span> <span class="n">name_or_object</span></div>
 
 
-<span class="k">def</span> <span class="nf">_meta_factory_call</span><span class="p">(</span>
-    <span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">meta_factory</span><span class="p">:</span> <span class="n">MetaFactory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="s2">&quot;get_from_params&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">factory</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
-
-
 <span class="k">def</span> <span class="nf">_get_instance</span><span class="p">(</span>
     <span class="n">factory_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_FACTORY_KEY</span><span class="p">,</span>
     <span class="n">get_factory_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">meta_factory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MetaFactory</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
@@ -262,8 +253,6 @@
 <span class="sd">        factory_key: key to extract factory name from</span>
 <span class="sd">        get_factory_func: function that returns factory by its name.</span>
 <span class="sd">            Default: :py:func:`.functional.get_factory`</span>
-<span class="sd">        meta_factory: function that calls factory in the right way.</span>
-<span class="sd">            Default: :py:func:`.factory.default_meta_factory`</span>
 <span class="sd">        args: \*args to pass to the factory</span>
 <span class="sd">        kwargs: \*\*kwargs to pass to the factory</span>
 
@@ -275,7 +264,6 @@
 <span class="sd">        RuntimeError: if could not create object instance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">get_factory_func</span> <span class="o">=</span> <span class="n">get_factory_func</span> <span class="ow">or</span> <span class="n">get_factory</span>
-    <span class="n">meta_factory</span> <span class="o">=</span> <span class="n">meta_factory</span> <span class="ow">or</span> <span class="n">default_meta_factory</span>
     <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">(),</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
 
     <span class="c1"># assume that name of the factory can be provided as first argument</span>
@@ -289,15 +277,13 @@
     <span class="n">factory</span> <span class="o">=</span> <span class="n">get_factory_func</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="n">_meta_factory_call</span><span class="p">(</span>
-            <span class="n">factory</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">meta_factory</span><span class="o">=</span><span class="n">meta_factory</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
-        <span class="p">)</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">metafactory_factory</span><span class="p">(</span><span class="n">factory</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">instance</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Factory &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; call failed: args=</span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2"> kwargs=</span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
 
 
-<div class="viewcode-block" id="get_instance"><a class="viewcode-back" href="../../pages/api/functional.html#hydra_slayer.functional.get_instance">[docs]</a><span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">meta_factory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MetaFactory</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<div class="viewcode-block" id="get_instance"><a class="viewcode-back" href="../../pages/api/functional.html#hydra_slayer.functional.get_instance">[docs]</a><span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Creates instance by calling specified factory with ``instantiate_fn``.</span>
 
 <span class="sd">    Note:</span>
@@ -306,8 +292,6 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        *args: positional arguments to pass to the factory</span>
-<span class="sd">        meta_factory: function that calls factory in the right way.</span>
-<span class="sd">            Default: :py:func:`.factory.default_meta_factory`</span>
 <span class="sd">        **kwargs: named parameters to pass to the factory</span>
 
 <span class="sd">    Returns:</span>
@@ -317,7 +301,7 @@
 <span class="sd">        &gt;&gt;&gt; get_instance(int, &quot;42&quot;, base=10)</span>
 <span class="sd">        42</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">instance</span> <span class="o">=</span> <span class="n">_get_instance</span><span class="p">(</span><span class="n">meta_factory</span><span class="o">=</span><span class="n">meta_factory</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">_get_instance</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">instance</span></div>
 
 
@@ -351,11 +335,8 @@
         <span class="p">)</span>
         <span class="n">factory</span> <span class="o">=</span> <span class="n">get_factory_func</span><span class="p">(</span><span class="n">factory_name</span><span class="p">)</span>
         <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_extract_positional_keyword_vars</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">meta_factory</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;meta_factory&quot;</span><span class="p">,</span> <span class="n">default_meta_factory</span><span class="p">)</span>
 
-        <span class="n">instance</span> <span class="o">=</span> <span class="n">_meta_factory_call</span><span class="p">(</span>
-            <span class="n">factory</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">meta_factory</span><span class="o">=</span><span class="n">meta_factory</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
-        <span class="p">)</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">metafactory_factory</span><span class="p">(</span><span class="n">factory</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">instance</span>
     <span class="k">return</span> <span class="n">params</span>
@@ -432,6 +413,7 @@
       <dd><a href="../../../0.1.0rc0/index.html">0.1.0rc0</a></dd>
       <dd><a href="../../../0.1.1/index.html">0.1.1</a></dd>
       <dd><a href="../../../0.2.0/index.html">0.2.0</a></dd>
+      <dd><a href="../../../0.3.0/index.html">0.3.0</a></dd>
     </dl>
     <dl>
       <dt>Branches</dt>

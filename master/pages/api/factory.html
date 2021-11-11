@@ -198,6 +198,44 @@
 <dt class="sig sig-object py" id="hydra_slayer.factory.default_meta_factory">
 <span class="sig-prename descclassname"><span class="pre">hydra_slayer.factory.</span></span><span class="sig-name descname"><span class="pre">default_meta_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/factory.html#default_meta_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.factory.default_meta_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new instance or a new partial object.</p>
+<p>Creates a new instance from <code class="docutils literal notranslate"><span class="pre">factory</span></code> if <code class="docutils literal notranslate"><span class="pre">factory</span></code> is class
+(like <a class="reference internal" href="#hydra_slayer.factory.call_meta_factory" title="hydra_slayer.factory.call_meta_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">call_meta_factory()</span></code></a>), else returns a new partial object
+(like <a class="reference internal" href="#hydra_slayer.factory.partial_meta_factory" title="hydra_slayer.factory.partial_meta_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">partial_meta_factory()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factory</strong> – factory to create instance from</p></li>
+<li><p><strong>args</strong> – *args to pass to the factory</p></li>
+<li><p><strong>kwargs</strong> – **kwargs to pass to the factory</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Instance.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if factory object is not callable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">default_meta_factory</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="p">(</span><span class="mi">42</span><span class="p">,))</span>
+<span class="go">42</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># please note that additional () are used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">default_meta_factory</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="mi">42</span><span class="p">,))()</span>
+<span class="go">42</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">default_meta_factory</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;42&#39;</span><span class="p">,),</span> <span class="p">{</span><span class="s2">&quot;base&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
+<span class="go">66</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hydra_slayer.factory.metafactory_factory">
+<span class="sig-prename descclassname"><span class="pre">hydra_slayer.factory.</span></span><span class="sig-name descname"><span class="pre">metafactory_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Mapping</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/factory.html#metafactory_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.factory.metafactory_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new instance or a new partial object.</p>
 <blockquote>
 <div><ul>
 <li><p>_mode_=’auto’</p>
@@ -324,6 +362,7 @@ with the positional arguments <code class="docutils literal notranslate"><span c
       <dd><a href="../../../0.1.0rc0/pages/api/factory.html">0.1.0rc0</a></dd>
       <dd><a href="../../../0.1.1/pages/api/factory.html">0.1.1</a></dd>
       <dd><a href="../../../0.2.0/pages/api/factory.html">0.2.0</a></dd>
+      <dd><a href="../../../0.3.0/pages/api/factory.html">0.3.0</a></dd>
     </dl>
     <dl>
       <dt>Branches</dt>

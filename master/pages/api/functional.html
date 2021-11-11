@@ -228,7 +228,7 @@ recursive creation</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hydra_slayer.functional.get_instance">
-<span class="sig-prename descclassname"><span class="pre">hydra_slayer.functional.</span></span><span class="sig-name descname"><span class="pre">get_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_factory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">Mapping</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/hydra_slayer/functional.html#get_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.functional.get_instance" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hydra_slayer.functional.</span></span><span class="sig-name descname"><span class="pre">get_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/hydra_slayer/functional.html#get_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.functional.get_instance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates instance by calling specified factory with <code class="docutils literal notranslate"><span class="pre">instantiate_fn</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -239,8 +239,6 @@ or directly by <code class="docutils literal notranslate"><span class="pre">'_ta
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*args</strong> – positional arguments to pass to the factory</p></li>
-<li><p><strong>meta_factory</strong> – function that calls factory in the right way.
-Default: <a class="reference internal" href="factory.html#hydra_slayer.factory.default_meta_factory" title="hydra_slayer.factory.default_meta_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">factory.default_meta_factory()</span></code></a></p></li>
 <li><p><strong>**kwargs</strong> – named parameters to pass to the factory</p></li>
 </ul>
 </dd>
@@ -303,6 +301,7 @@ Default: <a class="reference internal" href="factory.html#hydra_slayer.factory.d
       <dd><a href="../../../0.1.0rc0/index.html">0.1.0rc0</a></dd>
       <dd><a href="../../../0.1.1/index.html">0.1.1</a></dd>
       <dd><a href="../../../0.2.0/pages/api/functional.html">0.2.0</a></dd>
+      <dd><a href="../../../0.3.0/pages/api/functional.html">0.3.0</a></dd>
     </dl>
     <dl>
       <dt>Branches</dt>
