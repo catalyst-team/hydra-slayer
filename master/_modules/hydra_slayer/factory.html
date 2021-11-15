@@ -222,22 +222,17 @@
 <span class="sd">        ValueError: if mode not in list: ``&#39;auto&#39;``, ``&#39;call&#39;``, ``&#39;partial&#39;``.</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; default_meta_factory(int, (42,))</span>
+<span class="sd">        &gt;&gt;&gt; metafactory_factory(int, (42,))</span>
 <span class="sd">        42</span>
-
-<span class="sd">        &gt;&gt;&gt; # please note that additional () are used</span>
-<span class="sd">        &gt;&gt;&gt; default_meta_factory(lambda x: x, (42,))()</span>
+<span class="sd">        &gt;&gt;&gt; metafactory_factory(lambda x: x, (42,))()  # note that additional () are used</span>
 <span class="sd">        42</span>
-
-<span class="sd">        &gt;&gt;&gt; default_meta_factory(int, (&#39;42&#39;,), {&quot;base&quot;: 16})</span>
-<span class="sd">        66</span>
-
-<span class="sd">        &gt;&gt;&gt; # please note that additional () are not needed</span>
-<span class="sd">        &gt;&gt;&gt; default_meta_factory(lambda x: x, (42,), {&quot;_mode_&quot;: &quot;call&quot;})</span>
+<span class="sd">        &gt;&gt;&gt; metafactory_factory(lambda x: x, (42,), {&#39;_mode_&#39;: &#39;call&#39;})</span>
 <span class="sd">        42</span>
-
-<span class="sd">        &gt;&gt;&gt; default_meta_factory(lambda x: x, (&#39;42&#39;,), {&quot;_mode_&quot;: &quot;partial&quot;, &quot;base&quot;: 16})()</span>
-<span class="sd">        66</span>
+<span class="sd">        &gt;&gt;&gt; metafactory_factory(int, (&#39;2A&#39;), {&#39;base&#39;: 16})</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; hex_to_dec = metafactory_factory(int, (), {&#39;_mode_&#39;: &#39;partial&#39;, &#39;base&#39;: 16})</span>
+<span class="sd">        &gt;&gt;&gt; hex_to_dec(&#39;2A&#39;)</span>
+<span class="sd">        42</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># make a copy of kwargs since we don&#39;t want to modify them directly</span>
     <span class="n">kwargs</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -273,6 +268,13 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Instance.</span>
 
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; call_meta_factory(int, (42,), {})</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; call_meta_factory(int, (&#39;2A&#39;,), {&#39;base&#39;: 16})</span>
+<span class="sd">        66</span>
+<span class="sd">        &gt;&gt;&gt; call_meta_factory(lambda x: x, (42,), {})</span>
+<span class="sd">        42</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">factory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -290,6 +292,13 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Partial object.</span>
 
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_answer_to_life = partial_meta_factory(lambda x: x, (42,), {})</span>
+<span class="sd">        &gt;&gt;&gt; get_answer_to_life()</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; hex_to_dec = partial_meta_factory(int, (), {&#39;base&#39;: 16})</span>
+<span class="sd">        &gt;&gt;&gt; hex_to_dec(&#39;2A&#39;)</span>
+<span class="sd">        42</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -298,8 +307,8 @@
     <span class="sd">&quot;&quot;&quot;Returns a new instance or a new partial object.</span>
 
 <span class="sd">    Creates a new instance from ``factory`` if ``factory`` is class</span>
-<span class="sd">    (like :py:func:`call_meta_factory`), else returns a new partial object</span>
-<span class="sd">    (like :py:func:`partial_meta_factory`).</span>
+<span class="sd">    (behaves like :py:func:`call_meta_factory`), else returns a new</span>
+<span class="sd">    partial object (behaves like :py:func:`partial_meta_factory`).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        factory: factory to create instance from</span>
@@ -313,15 +322,13 @@
 <span class="sd">        ValueError: if factory object is not callable.</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; default_meta_factory(int, (42,))</span>
+<span class="sd">        &gt;&gt;&gt; default_meta_factory(int, (42,), {})</span>
 <span class="sd">        42</span>
-
-<span class="sd">        &gt;&gt;&gt; # please note that additional () are used</span>
-<span class="sd">        &gt;&gt;&gt; default_meta_factory(lambda x: x, (42,))()</span>
+<span class="sd">        &gt;&gt;&gt; default_meta_factory(int, (&#39;2A&#39;,), {&#39;base&#39;: 16})</span>
 <span class="sd">        42</span>
-
-<span class="sd">        &gt;&gt;&gt; default_meta_factory(int, (&#39;42&#39;,), {&quot;base&quot;: 16})</span>
-<span class="sd">        66</span>
+<span class="sd">        &gt;&gt;&gt; get_answer_to_life = default_meta_factory(lambda x: x, (42,), {})</span>
+<span class="sd">        &gt;&gt;&gt; get_answer_to_life()</span>
+<span class="sd">        42</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">factory</span><span class="p">):</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">call_meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
