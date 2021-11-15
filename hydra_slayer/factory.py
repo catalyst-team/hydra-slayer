@@ -50,22 +50,17 @@ def metafactory_factory(factory: Factory, args: Tuple, kwargs: Mapping):
         ValueError: if mode not in list: ``'auto'``, ``'call'``, ``'partial'``.
 
     Examples:
-        >>> default_meta_factory(int, (42,))
+        >>> metafactory_factory(int, (42,))
         42
-
-        >>> # please note that additional () are used
-        >>> default_meta_factory(lambda x: x, (42,))()
+        >>> metafactory_factory(lambda x: x, (42,))()  # note that additional () are used
         42
-
-        >>> default_meta_factory(int, ('42',), {"base": 16})
-        66
-
-        >>> # please note that additional () are not needed
-        >>> default_meta_factory(lambda x: x, (42,), {"_mode_": "call"})
+        >>> metafactory_factory(lambda x: x, (42,), {'_mode_': 'call'})
         42
-
-        >>> default_meta_factory(lambda x: x, ('42',), {"_mode_": "partial", "base": 16})()
-        66
+        >>> metafactory_factory(int, ('2A'), {'base': 16})
+        42
+        >>> hex_to_dec = metafactory_factory(int, (), {'_mode_': 'partial', 'base': 16})
+        >>> hex_to_dec('2A')
+        42
     """
     # make a copy of kwargs since we don't want to modify them directly
     kwargs = copy.copy(kwargs)
@@ -101,6 +96,13 @@ def call_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
     Returns:
         Instance.
 
+    Examples:
+        >>> call_meta_factory(int, (42,), {})
+        42
+        >>> call_meta_factory(int, ('2A',), {'base': 16})
+        66
+        >>> call_meta_factory(lambda x: x, (42,), {})
+        42
     """
     return factory(*args, **kwargs)
 
@@ -118,6 +120,13 @@ def partial_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
     Returns:
         Partial object.
 
+    Examples:
+        >>> get_answer_to_life = partial_meta_factory(lambda x: x, (42,), {})
+        >>> get_answer_to_life()
+        42
+        >>> hex_to_dec = partial_meta_factory(int, (), {'base': 16})
+        >>> hex_to_dec('2A')
+        42
     """
     return functools.partial(factory, *args, **kwargs)
 
@@ -126,8 +135,8 @@ def default_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
     """Returns a new instance or a new partial object.
 
     Creates a new instance from ``factory`` if ``factory`` is class
-    (like :py:func:`call_meta_factory`), else returns a new partial object
-    (like :py:func:`partial_meta_factory`).
+    (behaves like :py:func:`call_meta_factory`), else returns a new
+    partial object (behaves like :py:func:`partial_meta_factory`).
 
     Args:
         factory: factory to create instance from
@@ -141,15 +150,13 @@ def default_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
         ValueError: if factory object is not callable.
 
     Examples:
-        >>> default_meta_factory(int, (42,))
+        >>> default_meta_factory(int, (42,), {})
         42
-
-        >>> # please note that additional () are used
-        >>> default_meta_factory(lambda x: x, (42,))()
+        >>> default_meta_factory(int, ('2A',), {'base': 16})
         42
-
-        >>> default_meta_factory(int, ('42',), {"base": 16})
-        66
+        >>> get_answer_to_life = default_meta_factory(lambda x: x, (42,), {})
+        >>> get_answer_to_life()
+        42
     """
     if inspect.isclass(factory):
         obj = call_meta_factory(factory, args, kwargs)
