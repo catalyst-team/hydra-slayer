@@ -178,11 +178,15 @@
 <p>Sorry, the person who is responsible for the description was eaten by hydras last week.</p>
 <span class="target" id="module-hydra_slayer.registry"></span><dl class="py class">
 <dt class="sig sig-object py" id="hydra_slayer.registry.Registry">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">hydra_slayer.registry.</span></span><span class="sig-name descname"><span class="pre">Registry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'_target_'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">hydra_slayer.registry.</span></span><span class="sig-name descname"><span class="pre">Registry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'_target_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'_var_'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hydra_slayer/registry.html#Registry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hydra_slayer.registry.Registry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Universal class allowing to add and access various factories by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name_key</strong> – key to use to extract names of the factories from</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name_key</strong> – key to use to extract names of the factories from</p></li>
+<li><p><strong>var_key</strong> – key to use to for aliases. Aliases let you identify an item
+and then refer to that item and reuse it multiple times.</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">

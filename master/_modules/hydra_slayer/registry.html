@@ -189,12 +189,16 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        name_key: key to use to extract names of the factories from</span>
+<span class="sd">        var_key: key to use to for aliases. Aliases let you identify an item</span>
+<span class="sd">            and then refer to that item and reuse it multiple times.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_target_&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_target_&quot;</span><span class="p">,</span> <span class="n">var_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_var_&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_factories</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Factory</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_late_add_callbacks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LateAddCallback</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name_key</span> <span class="o">=</span> <span class="n">name_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_key</span> <span class="o">=</span> <span class="n">var_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vars_dict</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_get_factory_name</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">provided_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -377,11 +381,13 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            result of calling ``instantiate_fn(factory, **sub_kwargs)``</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">_recursive_get_from_params</span><span class="p">(</span>
+        <span class="n">instance</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">_recursive_get_from_params</span><span class="p">(</span>
             <span class="n">factory_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_key</span><span class="p">,</span>
             <span class="n">get_factory_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">,</span>
             <span class="n">params</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="n">shared_params</span><span class="o">=</span><span class="n">shared_params</span> <span class="ow">or</span> <span class="p">{},</span>
+            <span class="n">var_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">var_key</span><span class="p">,</span>
+            <span class="n">vars_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_vars_dict</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">instance</span></div>
 
