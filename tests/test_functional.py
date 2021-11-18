@@ -302,3 +302,21 @@ def test_get_from_params_var_keyword():
         shared_params={"_mode_": "call"},
     )
     assert res == {"a": {"a": 1, "b": 2}, "b": {"a": {"a": 1, "b": 2}, "b": 3}}
+
+    res = F.get_from_params(
+        **{
+            "a": {"a": 1, "_var_": "x"},
+            "b": {"_target_": "tests.foobar.foo", "a": {"_var_": "x"}, "b": 2},
+        },
+        shared_params={"_mode_": "call"},
+    )
+    assert res == {"a": {"a": 1}, "b": {"a": {"a": 1}, "b": 2}}
+
+    res = F.get_from_params(
+        **{
+            "a": {"_target_": "tests.foobar.qux", "a": 1, "b": 2, "_var_": "x"},
+            "b": {"_target_": "tests.foobar.foo", "a": {"_var_": "x"}, "b": 3},
+        },
+        shared_params={"_mode_": "call"},
+    )
+    assert res == {"a": (1, 2), "b": {"a": (1, 2), "b": 3}}

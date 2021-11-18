@@ -167,10 +167,12 @@ def _recursive_get_from_params(
         kwargs = {**shared_params, **params}
 
         alias = kwargs.pop(var_key, None)
+        params.pop(var_key, None)
         if alias and alias in vars_dict:
             kwargs = params = vars_dict[alias]
 
-        if factory_key in kwargs:
+        # since `kwargs` can be replaced with the object, check the type again
+        if isinstance(kwargs, dict) and factory_key in kwargs:
             obj = _get_instance(
                 factory_key=factory_key,
                 get_factory_func=get_factory_func,
