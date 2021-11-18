@@ -309,3 +309,51 @@ def test_recursive_get_from_params_nested_structures():
         "a": {"a": {"a": 1, "b": 2}, "b": 2},
         "b": [{"a": 1, "b": 2}, {"a": 1, "b": 2}],
     }
+
+
+def test_get_from_params_var():
+    r = Registry()
+
+    r.add(foo)
+
+    res = r.get_from_params(
+        **{
+            "a": {"_target_": "foo", "a": 1, "b": 2, "_var_": "x"},
+            "b": {"_target_": "foo", "a": {"_var_": "x"}, "b": 3},
+        },
+        shared_params={"_mode_": "call"},
+    )
+    assert res == {"a": {"a": 1, "b": 2}, "b": {"a": {"a": 1, "b": 2}, "b": 3}}
+
+
+def test_get_from_params_var_keyword():
+    r = Registry(var_key="_variable_")
+
+    r.add(foo)
+
+    res = r.get_from_params(
+        **{
+            "a": {"_target_": "foo", "a": 1, "b": 2, "_variable_": "x"},
+            "b": {"_target_": "foo", "a": {"_variable_": "x"}, "b": 3},
+        },
+        shared_params={"_mode_": "call"},
+    )
+    assert res == {"a": {"a": 1, "b": 2}, "b": {"a": {"a": 1, "b": 2}, "b": 3}}
+
+
+def test_get_from_params_vars_dict():
+    r = Registry()
+
+    r.add(foo)
+
+    res = r.get_from_params(
+        **{"_target_": "foo", "a": 1, "b": 2, "_var_": "x"},
+        shared_params={"_mode_": "call"},
+    )
+    assert res == {"a": 1, "b": 2}
+
+    res = r.get_from_params(
+        **{"_target_": "foo", "a": {"_var_": "x"}, "b": 3},
+        shared_params={"_mode_": "call"},
+    )
+    assert res == {"a": {"a": 1, "b": 2}, "b": 3}
