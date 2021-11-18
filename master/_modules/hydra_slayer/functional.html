@@ -339,10 +339,12 @@
         <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">shared_params</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">}</span>
 
         <span class="n">alias</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">var_key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">var_key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">alias</span> <span class="ow">and</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">vars_dict</span><span class="p">:</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="n">params</span> <span class="o">=</span> <span class="n">vars_dict</span><span class="p">[</span><span class="n">alias</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">factory_key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="c1"># since `kwargs` can be replaced with the object, check the type again</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">factory_key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">_get_instance</span><span class="p">(</span>
                 <span class="n">factory_key</span><span class="o">=</span><span class="n">factory_key</span><span class="p">,</span>
                 <span class="n">get_factory_func</span><span class="o">=</span><span class="n">get_factory_func</span><span class="p">,</span>
