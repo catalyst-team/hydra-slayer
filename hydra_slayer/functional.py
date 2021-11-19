@@ -11,7 +11,6 @@ T = TypeVar("T")
 
 DEFAULT_FACTORY_KEY = "_target_"
 DEFAULT_VAR_KEY = "_var_"
-DEFAULT_ATTRS_KEY = "_attr_"
 DEFAULT_ATTRS_DELIMITER = "."
 
 
@@ -145,43 +144,43 @@ def _get_from_params(
     params: Dict[str, Any],
     shared_params: Dict[str, Any],
     var_key: str,
-    vars_dict: Dict[str, Any],
-    attrs_key: str,
     attrs_delimiter: str,
+    vars_dict: Dict[str, Any],
 ) -> Tuple[Any, Dict[str, Any]]:
     # use additional dict to handle 'multiple values for keyword argument'
     kwargs = {**shared_params, **params}
 
-    # extract attrs before `alias`, since params can be replaced with
-    #  the object, and we want to be able to get the attribute of that object
-    attrs = kwargs.pop(attrs_key, None)
-
-    alias = kwargs.pop(var_key, None)
     params.pop(var_key, None)
-    if alias and alias in vars_dict:
-        kwargs = params = vars_dict[alias]
 
-    # check the type, since `kwargs` can be replaced with the alias
-    if isinstance(kwargs, dict) and factory_key in kwargs:
-        instance = _get_instance(
+    alias = kwargs.pop(var_key, "")
+    alias, attribute_name = (
+        alias.split(attrs_delimiter) if attrs_delimiter in alias else (alias, None)
+    )
+
+    if alias and alias in vars_dict:
+        if factory_key in kwargs:
+            raise ValueError(
+                f"`{factory_key}` and `{var_key}` (in get mode) keywords are exclusive"
+            )
+
+        obj = vars_dict[alias]
+        if attribute_name is not None:
+            attr = getattr(obj, attribute_name)
+            obj = attr(**kwargs) if inspect.ismethod(attr) or inspect.isfunction(attr) else attr
+    elif factory_key in kwargs:
+        obj = _get_instance(
             factory_key=factory_key,
             get_factory_func=get_factory_func,
             args=(),
             kwargs=kwargs,
         )
     else:
-        instance = params
-
-    if attrs is not None:
-        for attrname in attrs.split(attrs_delimiter):
-            instance = getattr(instance, attrname)
-            if inspect.ismethod(instance) or inspect.isfunction(instance):
-                instance = instance()
+        obj = params
 
     if alias and alias not in vars_dict:
-        vars_dict[alias] = instance
+        vars_dict[alias] = obj
 
-    return instance, vars_dict
+    return obj, vars_dict
 
 
 def _recursive_get_from_params(
@@ -190,40 +189,30 @@ def _recursive_get_from_params(
     params: Union[Dict[str, Any], Any],
     shared_params: Dict[str, Any],
     var_key: str,
-    vars_dict: Dict[str, Any],
-    attrs_key: str,
     attrs_delimiter: str,
+    vars_dict: Dict[str, Any],
 ) -> Tuple[Any, Dict[str, Any]]:
     if not isinstance(params, (dict, list)):
         return params, vars_dict
 
     # make a copy of params since we don't want to modify them directly
     params = copy.copy(params)
+    common_params = {
+        "factory_key": factory_key,
+        "get_factory_func": get_factory_func,
+        "shared_params": shared_params,
+        "var_key": var_key,
+        "attrs_delimiter": attrs_delimiter,
+    }
 
     view = params.items() if isinstance(params, dict) else enumerate(params)
     for key, param in view:
         params[key], vars_dict = _recursive_get_from_params(
-            factory_key=factory_key,
-            get_factory_func=get_factory_func,
-            params=param,
-            shared_params=shared_params,
-            var_key=var_key,
-            vars_dict=vars_dict,
-            attrs_key=attrs_key,
-            attrs_delimiter=attrs_delimiter,
+            params=param, vars_dict=vars_dict, **common_params
         )
 
     if isinstance(params, dict):
-        instance, vars_dict = _get_from_params(
-            factory_key=factory_key,
-            get_factory_func=get_factory_func,
-            params=params,
-            shared_params=shared_params,
-            var_key=var_key,
-            vars_dict=vars_dict,
-            attrs_key=attrs_key,
-            attrs_delimiter=attrs_delimiter,
-        )
+        instance, vars_dict = _get_from_params(params=params, vars_dict=vars_dict, **common_params)
         return instance, vars_dict
     return params, vars_dict
 
@@ -255,7 +244,6 @@ def get_from_params(*, shared_params: Optional[Dict[str, Any]] = None, **kwargs)
         shared_params=shared_params or {},
         var_key=DEFAULT_VAR_KEY,
         vars_dict={},
-        attrs_key=DEFAULT_ATTRS_KEY,
         attrs_delimiter=DEFAULT_ATTRS_DELIMITER,
     )
     return instance

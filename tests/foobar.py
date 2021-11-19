@@ -37,6 +37,3 @@ class grault:
 
     def waldo(self):
         return {"a": self.a, "b": self.b}
-
-    def fred(self):
-        return self

@@ -176,8 +176,8 @@ def test_get_from_recursive_params():
     res = r.get_from_params(
         **{
             "_target_": "foo",
-            "a": {"_target_": "foo", "a": 1, "b": 2, "_mode_": "call"},
-            "b": {"_target_": "foo", "a": 3, "b": 4, "_mode_": "call"},
+            "a": {"_target_": "foo", "_mode_": "call", "a": 1, "b": 2},
+            "b": {"_target_": "foo", "_mode_": "call", "a": 3, "b": 4},
         },
     )()
     assert res["a"] == {"a": 1, "b": 2} and res["b"] == {"a": 3, "b": 4}
@@ -196,7 +196,7 @@ def test_get_from_params_shared_params():
 
     res = r.get_from_params(
         **{"_target_": "foo", "a": {"_target_": "foo", "a": 1, "b": 2}},
-        shared_params={"b": 3, "_mode_": "call"},
+        shared_params={"_mode_": "call", "b": 3},
     )
     assert res == {"a": {"a": 1, "b": 2}, "b": 3}
 
@@ -318,7 +318,7 @@ def test_get_from_params_var():
 
     res = r.get_from_params(
         **{
-            "a": {"_target_": "foo", "a": 1, "b": 2, "_var_": "x"},
+            "a": {"_var_": "x", "_target_": "foo", "a": 1, "b": 2},
             "b": {"_target_": "foo", "a": {"_var_": "x"}, "b": 3},
         },
         shared_params={"_mode_": "call"},
@@ -333,7 +333,7 @@ def test_get_from_params_var_keyword():
 
     res = r.get_from_params(
         **{
-            "a": {"_target_": "foo", "a": 1, "b": 2, "_variable_": "x"},
+            "a": {"_variable_": "x", "_target_": "foo", "a": 1, "b": 2},
             "b": {"_target_": "foo", "a": {"_variable_": "x"}, "b": 3},
         },
         shared_params={"_mode_": "call"},
@@ -347,7 +347,7 @@ def test_get_from_params_vars_dict():
     r.add(foo)
 
     res = r.get_from_params(
-        **{"_target_": "foo", "a": 1, "b": 2, "_var_": "x"},
+        **{"_var_": "x", "_target_": "foo", "a": 1, "b": 2},
         shared_params={"_mode_": "call"},
     )
     assert res == {"a": 1, "b": 2}
@@ -359,55 +359,106 @@ def test_get_from_params_vars_dict():
     assert res == {"a": {"a": 1, "b": 2}, "b": 3}
 
 
-def test_get_from_params_attrs():
+def test_get_from_params_var_attr():
     r = Registry()
 
     r.add(foo)
 
     res = r.get_from_params(
-        **{"_target_": "tests.foobar.grault", "a": 3, "b": 4, "_attr_": "waldo"},
-        shared_params={"_mode_": "call"},
+        **{
+            "a": {
+                "_var_": "x",
+                "_target_": "tests.foobar.grault",
+                "_mode_": "call",
+                "a": 3,
+                "b": 4,
+            },
+            "b": {"_var_": "x.waldo"},
+        },
     )
-    assert res == {"a": 3, "b": 4}
+    assert res["b"] == {"a": 3, "b": 4}
+
+
+def test_get_from_params_var_method_without_params():
+    r = Registry()
+
+    r.add(foo)
 
     res = r.get_from_params(
-        **{"_target_": "tests.foobar.grault", "a": 3, "b": 4, "_attr_": "fred.fred.waldo"},
-        shared_params={"_mode_": "call"},
+        **{
+            "a": {
+                "_var_": "x",
+                "_target_": "tests.foobar.grault",
+                "_mode_": "call",
+                "a": 3,
+                "b": 4,
+            },
+            "b": {"_var_": "x.b"},
+        },
     )
-    assert res == {"a": 3, "b": 4}
+    assert res["b"] == 4
+
+
+def test_get_from_params_var_method_with_params():
+    r = Registry()
+
+    r.add(foo)
+
+    res = r.get_from_params(
+        **{
+            "a": {
+                "_var_": "x",
+                "_target_": "tests.foobar.grault",
+                "_mode_": "call",
+                "a": 3,
+                "b": 4,
+            },
+            "b": {"_var_": "x.garply", "a": 1, "b": 2},
+        },
+    )
+    assert res["b"] == {"a": 1, "b": 2}
 
 
 def test_get_from_params_attrs_keyword():
-    r = Registry(attrs_key="_attributes_", attrs_delimiter="/")
+    r = Registry(attrs_delimiter="/")
 
     r.add(foo)
 
     res = r.get_from_params(
-        **{"_target_": "tests.foobar.grault", "a": 3, "b": 4, "_attributes_": "fred/fred/waldo"},
-        shared_params={"_mode_": "call"},
+        **{
+            "a": {
+                "_var_": "x",
+                "_target_": "tests.foobar.grault",
+                "_mode_": "call",
+                "a": 3,
+                "b": 4,
+            },
+            "b": {"_var_": "x/waldo"},
+        },
     )
-    assert res == {"a": 3, "b": 4}
+    assert res["b"] == {"a": 3, "b": 4}
 
 
-def test_get_from_params_var_attrs():
+def test_get_from_params_vars_dict():
     r = Registry()
 
     r.add(foo)
 
-    res = r.get_from_params(
+    r.get_from_params(
         **{
-            "a": {"_target_": "tests.foobar.grault", "a": 3, "b": 4, "_var_": "x"},
-            "b": {"_var_": "x", "_attr_": "waldo"},
+            "a": {
+                "_var_": "x",
+                "_target_": "tests.foobar.grault",
+                "_mode_": "call",
+                "a": 3,
+                "b": 4,
+            },
         },
-        shared_params={"_mode_": "call"},
     )
-    assert res["b"] == {"a": 3, "b": 4}
 
     res = r.get_from_params(
         **{
-            "a": {"_target_": "tests.foobar.grault", "a": 3, "b": 4, "_var_": "x"},
-            "b": {"_var_": "x", "_attr_": "fred.fred.waldo"},
+            "b": {"_var_": "x.b"},
         },
-        shared_params={"_mode_": "call"},
     )
-    assert res["b"] == {"a": 3, "b": 4}
+    assert res["b"] == 4
