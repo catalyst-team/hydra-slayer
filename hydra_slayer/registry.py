@@ -21,12 +21,20 @@ class Registry(abc.MutableMapping):
             and then refer to that item and reuse it multiple times.
     """
 
-    def __init__(self, name_key: str = "_target_", var_key: str = "_var_"):
+    def __init__(
+        self,
+        name_key: str = "_target_",
+        var_key: str = "_var_",
+        attrs_key: str = "_attr_",
+        attrs_delimiter: str = ".",
+    ):
         self._factories: Dict[str, Factory] = {}
         self._late_add_callbacks: List[LateAddCallback] = []
         self.name_key = name_key
         self.var_key = var_key
         self._vars_dict = {}
+        self.attrs_key = attrs_key
+        self.attrs_delimiter = attrs_delimiter
 
     @staticmethod
     def _get_factory_name(f, provided_name: str = None) -> str:
@@ -216,6 +224,8 @@ class Registry(abc.MutableMapping):
             shared_params=shared_params or {},
             var_key=self.var_key,
             vars_dict=self._vars_dict,
+            attrs_key=self.attrs_key,
+            attrs_delimiter=self.attrs_delimiter,
         )
         return instance
 

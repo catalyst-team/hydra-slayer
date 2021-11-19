@@ -320,3 +320,37 @@ def test_get_from_params_var_keyword():
         shared_params={"_mode_": "call"},
     )
     assert res == {"a": (1, 2), "b": {"a": (1, 2), "b": 3}}
+
+
+def test_get_from_params_attrs():
+    res = F.get_from_params(
+        **{"_target_": "tests.foobar.grault", "a": 3, "b": 4, "_attr_": "waldo"},
+        shared_params={"_mode_": "call"},
+    )
+    assert res == {"a": 3, "b": 4}
+
+    res = F.get_from_params(
+        **{"_target_": "tests.foobar.grault", "a": 3, "b": 4, "_attr_": "fred.fred.waldo"},
+        shared_params={"_mode_": "call"},
+    )
+    assert res == {"a": 3, "b": 4}
+
+
+def test_get_from_params_var_attrs():
+    res = F.get_from_params(
+        **{
+            "a": {"_target_": "tests.foobar.grault", "a": 3, "b": 4, "_var_": "x"},
+            "b": {"_var_": "x", "_attr_": "waldo"},
+        },
+        shared_params={"_mode_": "call"},
+    )
+    assert res["b"] == {"a": 3, "b": 4}
+
+    res = F.get_from_params(
+        **{
+            "a": {"_target_": "tests.foobar.grault", "a": 3, "b": 4, "_var_": "x"},
+            "b": {"_var_": "x", "_attr_": "fred.fred.waldo"},
+        },
+        shared_params={"_mode_": "call"},
+    )
+    assert res["b"] == {"a": 3, "b": 4}
