@@ -165,8 +165,12 @@ def _get_from_params(
 
         obj = vars_dict[alias]
         if attribute_name is not None:
-            attr = getattr(obj, attribute_name)
-            obj = attr(**kwargs) if inspect.ismethod(attr) or inspect.isfunction(attr) else attr
+            obj_or_callable = getattr(obj, attribute_name)
+            if callable(obj_or_callable):
+                args, kwargs = _extract_positional_keyword_vars(obj_or_callable, kwargs=kwargs)
+                obj = obj_or_callable(*args, **kwargs)
+            else:
+                obj = obj_or_callable
     elif factory_key in kwargs:
         obj = _get_instance(
             factory_key=factory_key,
