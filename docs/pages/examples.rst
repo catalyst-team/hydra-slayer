@@ -223,6 +223,97 @@ Passing ``*args`` and ``**kwargs`` parameters
    that you don't specify parameters followed by \*args by keyword.
 
 
+MNIST classifier with Catalyst
+---------------------------------------------
+
+.. raw:: html
+
+   <div>
+     <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+     <p>
+       You can use <code class="docutils literal notranslate"><span class="pre">hydra-slayer</span></code>
+       to prepare parameters for the entire training loop and train your neural networks with it.
+     </p>
+     <blockquote>
+       Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+       and increased effectiveness.
+     </blockquote>
+   </div>
+
+.. code-block:: yaml
+
+   # config.yaml
+   model:
+     _var_: model
+     _target_: torch.nn.Sequential
+     args:
+       - _target_: torch.nn.Flatten
+       - _target_: torch.nn.Linear
+         in_features: 784  # 28 * 28
+         out_features: &num_classes 10
+
+   criterion:
+     _target_: torch.nn.CrossEntropyLoss
+
+   optimizer:
+     _target_: torch.optim.Adam
+     params:  # model.parameters()
+       _var_: model.parameters
+     lr: 0.02
+
+   loaders:
+     train:
+       _target_: torch.utils.data.DataLoader
+       dataset: &dataset
+         _target_: catalyst.contrib.datasets.MNIST
+         root: data
+         train: true
+         transform:
+           _target_: catalyst.data.transforms.ToTensor
+         download: true
+       batch_size: 32
+     valid:
+       _target_: torch.utils.data.DataLoader
+       dataset:
+         <<: *dataset
+         train: false
+       batch_size: 32
+
+   callbacks:
+     - _target_: catalyst.dl.AccuracyCallback
+       input_key: logits
+       target_key: targets
+       topk_args: [1,3,5]
+     - _target_: catalyst.dl.PrecisionRecallF1SupportCallback
+       input_key: logits
+       target_key: targets
+       num_classes: *num_classes
+
+.. code-block:: python
+
+   import catalyst
+   import hydra_slayer
+   import yaml
+
+   with open("config.yaml") as stream:
+       raw_config = yaml.safe_load(stream)
+   config = hydra_slayer.get_from_params(**raw_config)
+
+   runner = catalyst.dl.SupervisedRunner()
+   runner.train(
+       **config,  # model, criterion, optimizer, loaders, callbacks
+       num_epochs=1,
+       logdir="./logs",
+       valid_loader="valid",
+       valid_metric="loss",
+       minimize_valid_metric=True,
+       verbose=True,
+       load_best_on_end=True,
+   )
+   # Top best models:
+   # logs/checkpoints/train.1.pth	≈0.835
+
+
 Expert level
 ============
 
@@ -249,7 +340,7 @@ Creating ``pd.DataFrame`` from config
        _target_: pandas.read_csv
        filepath_or_buffer: dataset/dataset_part1.csv
 
-       # By default, hydra-slayer use partial fit for functions
+       # By default, hydra-slayer uses partial fit for functions
        # (what is useful with activation functions in neural networks).
        # But if we want to call ``pandas.read_csv`` function instead,
        # then we should set ``call`` mode manually.
@@ -361,5 +452,5 @@ Extending configs
            loss = criterion(outputs, labels)
            losses.append(loss.tolist())
    mean_loss = sum(losses) / len(losses)
-   mean_loss
+   print(mean_loss)
    # ≈8.6087
