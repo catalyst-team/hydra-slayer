@@ -184,10 +184,9 @@
 
 <span class="n">Factory</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
 
-<span class="c1"># DEFAULT_ATTR_KEY = &quot;_attr_&quot;</span>
 <span class="n">DEFAULT_FROM_PARAMS_KEY</span> <span class="o">=</span> <span class="s2">&quot;get_from_params&quot;</span>
 <span class="n">DEFAULT_META_FACTORY_KEY</span> <span class="o">=</span> <span class="s2">&quot;_meta_factory_&quot;</span>
-<span class="n">DEFAULT_CALL_MODE_KEY</span> <span class="o">=</span> <span class="s2">&quot;_mode_&quot;</span>  <span class="c1"># TODO: (@scitator) rename (maybe to `_fit_`?)</span>
+<span class="n">DEFAULT_CALL_MODE_KEY</span> <span class="o">=</span> <span class="s2">&quot;_mode_&quot;</span>  <span class="c1"># TODO: discuss with @scitator and rename</span>
 
 
 <div class="viewcode-block" id="metafactory_factory"><a class="viewcode-back" href="../../pages/api/factory.html#hydra_slayer.factory.metafactory_factory">[docs]</a><span class="k">def</span> <span class="nf">metafactory_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">):</span>
@@ -239,10 +238,9 @@
     <span class="n">meta_factory</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">DEFAULT_META_FACTORY_KEY</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">meta_factory_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">DEFAULT_CALL_MODE_KEY</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">)</span>
 
-    <span class="c1"># TODO: (replace with `_attr_` and) remove {</span>
+    <span class="c1"># legacy, for the compatibility with the Catalyst library</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">DEFAULT_FROM_PARAMS_KEY</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">DEFAULT_FROM_PARAMS_KEY</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="c1"># TODO: } remove</span>
 
     <span class="k">if</span> <span class="n">meta_factory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">meta_factories</span> <span class="o">=</span> <span class="p">{</span>
