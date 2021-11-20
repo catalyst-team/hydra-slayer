@@ -108,6 +108,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#advanced-level">Advanced Level</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#creating-complex-objects">Creating complex objects</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#passing-args-and-kwargs-parameters">Passing <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mnist-classifier-with-catalyst">MNIST classifier with Catalyst</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#expert-level">Expert level</a><ul>
@@ -380,6 +381,90 @@ for example. And in some cases <em>positional-or-keyword</em> arguments (<code c
 that you don’t specify parameters followed by *args by keyword.</p>
 </div>
 </div>
+<div class="section" id="mnist-classifier-with-catalyst">
+<h3>MNIST classifier with Catalyst<a class="headerlink" href="#mnist-classifier-with-catalyst" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    You can use <code class="docutils literal notranslate"><span class="pre">hydra-slayer</span></code>
+    to prepare parameters for the entire training loop and train your neural networks with it.
+  </p>
+  <blockquote>
+    Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and increased effectiveness.
+  </blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># config.yaml</span>
+<span class="nt">model</span><span class="p">:</span>
+  <span class="nt">_var_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">model</span>
+  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.Sequential</span>
+  <span class="nt">args</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.Flatten</span>
+    <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.Linear</span>
+      <span class="nt">in_features</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">784</span>  <span class="c1"># 28 * 28</span>
+      <span class="nt">out_features</span><span class="p">:</span> <span class="nl">&amp;num_classes</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+
+<span class="nt">criterion</span><span class="p">:</span>
+  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.CrossEntropyLoss</span>
+
+<span class="nt">optimizer</span><span class="p">:</span>
+  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.optim.Adam</span>
+  <span class="nt">params</span><span class="p">:</span>  <span class="c1"># model.parameters()</span>
+    <span class="nt">_var_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">model.parameters</span>
+  <span class="nt">lr</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.02</span>
+
+<span class="nt">loaders</span><span class="p">:</span>
+  <span class="nt">train</span><span class="p">:</span>
+    <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.utils.data.DataLoader</span>
+    <span class="nt">dataset</span><span class="p">:</span> <span class="nl">&amp;dataset</span>
+      <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">catalyst.contrib.datasets.MNIST</span>
+      <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">data</span>
+      <span class="nt">train</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">transform</span><span class="p">:</span>
+        <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">catalyst.data.transforms.ToTensor</span>
+      <span class="nt">download</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">batch_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">32</span>
+  <span class="nt">valid</span><span class="p">:</span>
+    <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.utils.data.DataLoader</span>
+    <span class="nt">dataset</span><span class="p">:</span>
+      <span class="nt">&lt;&lt;</span><span class="p">:</span> <span class="nv">*dataset</span>
+      <span class="nt">train</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+    <span class="nt">batch_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">32</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">catalyst.dl.AccuracyCallback</span>
+    <span class="nt">input_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">logits</span>
+    <span class="nt">target_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">targets</span>
+    <span class="nt">topk_args</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="nv">5</span><span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">catalyst.dl.PrecisionRecallF1SupportCallback</span>
+    <span class="nt">input_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">logits</span>
+    <span class="nt">target_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">targets</span>
+    <span class="nt">num_classes</span><span class="p">:</span> <span class="nv">*num_classes</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">catalyst</span>
+<span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">catalyst</span><span class="o">.</span><span class="n">dl</span><span class="o">.</span><span class="n">SupervisedRunner</span><span class="p">()</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="o">**</span><span class="n">config</span><span class="p">,</span>  <span class="c1"># model, criterion, optimizer, loaders, callbacks</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">logdir</span><span class="o">=</span><span class="s2">&quot;./logs&quot;</span><span class="p">,</span>
+    <span class="n">valid_loader</span><span class="o">=</span><span class="s2">&quot;valid&quot;</span><span class="p">,</span>
+    <span class="n">valid_metric</span><span class="o">=</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span>
+    <span class="n">minimize_valid_metric</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">load_best_on_end</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># Top best models:</span>
+<span class="c1"># logs/checkpoints/train.1.pth       ≈0.835</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="expert-level">
 <h2>Expert level<a class="headerlink" href="#expert-level" title="Permalink to this headline">¶</a></h2>
@@ -399,7 +484,7 @@ that you don’t specify parameters followed by *args by keyword.</p>
     <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span>
     <span class="nt">filepath_or_buffer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part1.csv</span>
 
-    <span class="c1"># By default, hydra-slayer use partial fit for functions</span>
+    <span class="c1"># By default, hydra-slayer uses partial fit for functions</span>
     <span class="c1"># (what is useful with activation functions in neural networks).</span>
     <span class="c1"># But if we want to call ``pandas.read_csv`` function instead,</span>
     <span class="c1"># then we should set ``call`` mode manually.</span>
@@ -502,7 +587,7 @@ that you don’t specify parameters followed by *args by keyword.</p>
         <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
         <span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
 <span class="n">mean_loss</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
-<span class="n">mean_loss</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mean_loss</span><span class="p">)</span>
 <span class="c1"># ≈8.6087</span>
 </pre></div>
 </div>
