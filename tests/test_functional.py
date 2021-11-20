@@ -95,18 +95,8 @@ def test_get_from_recursive_params():
     res = F.get_from_params(
         **{
             "_target_": "tests.foobar.foo",
-            "a": {
-                "_target_": "tests.foobar.foo",
-                "a": 1,
-                "b": 2,
-                "_mode_": "call",
-            },
-            "b": {
-                "_target_": "tests.foobar.foo",
-                "a": 3,
-                "b": 4,
-                "_mode_": "call",
-            },
+            "a": {"_target_": "tests.foobar.foo", "_mode_": "call", "a": 1, "b": 2},
+            "b": {"_target_": "tests.foobar.foo", "_mode_": "call", "a": 3, "b": 4},
         },
     )()
     assert res["a"] == {"a": 1, "b": 2} and res["b"] == {"a": 3, "b": 4}
@@ -127,7 +117,7 @@ def test_get_from_params_shared_params():
             "_target_": "tests.foobar.foo",
             "a": {"_target_": "tests.foobar.foo", "a": 1, "b": 2},
         },
-        shared_params={"b": 3, "_mode_": "call"},
+        shared_params={"_mode_": "call", "b": 3},
     )
     assert res == {"a": {"a": 1, "b": 2}, "b": 3}
 
@@ -296,7 +286,7 @@ def test_get_from_params_kwargs_support():
 def test_get_from_params_var_keyword():
     res = F.get_from_params(
         **{
-            "a": {"_target_": "tests.foobar.foo", "a": 1, "b": 2, "_var_": "x"},
+            "a": {"_var_": "x", "_target_": "tests.foobar.foo", "a": 1, "b": 2},
             "b": {"_target_": "tests.foobar.foo", "a": {"_var_": "x"}, "b": 3},
         },
         shared_params={"_mode_": "call"},
@@ -305,7 +295,7 @@ def test_get_from_params_var_keyword():
 
     res = F.get_from_params(
         **{
-            "a": {"a": 1, "_var_": "x"},
+            "a": {"_var_": "x", "a": 1},
             "b": {"_target_": "tests.foobar.foo", "a": {"_var_": "x"}, "b": 2},
         },
         shared_params={"_mode_": "call"},
@@ -314,9 +304,57 @@ def test_get_from_params_var_keyword():
 
     res = F.get_from_params(
         **{
-            "a": {"_target_": "tests.foobar.qux", "a": 1, "b": 2, "_var_": "x"},
+            "a": {"_var_": "x", "_target_": "tests.foobar.qux", "a": 1, "b": 2},
             "b": {"_target_": "tests.foobar.foo", "a": {"_var_": "x"}, "b": 3},
         },
         shared_params={"_mode_": "call"},
     )
     assert res == {"a": (1, 2), "b": {"a": (1, 2), "b": 3}}
+
+
+def test_get_from_params_var_attr():
+    res = F.get_from_params(
+        **{
+            "a": {
+                "_var_": "x",
+                "_target_": "tests.foobar.grault",
+                "_mode_": "call",
+                "a": 3,
+                "b": 4,
+            },
+            "b": {"_var_": "x.b"},
+        },
+    )
+    assert res["b"] == 4
+
+
+def test_get_from_params_var_method_without_params():
+    res = F.get_from_params(
+        **{
+            "a": {
+                "_var_": "x",
+                "_target_": "tests.foobar.grault",
+                "_mode_": "call",
+                "a": 3,
+                "b": 4,
+            },
+            "b": {"_var_": "x.waldo"},
+        },
+    )
+    assert res["b"] == {"a": 3, "b": 4}
+
+
+def test_get_from_params_var_method_with_params():
+    res = F.get_from_params(
+        **{
+            "a": {
+                "_var_": "x",
+                "_target_": "tests.foobar.grault",
+                "_mode_": "call",
+                "a": 3,
+                "b": 4,
+            },
+            "b": {"_var_": "x.garply", "a": 1, "b": 2},
+        },
+    )
+    assert res["b"] == {"a": 1, "b": 2}

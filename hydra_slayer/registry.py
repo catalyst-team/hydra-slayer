@@ -17,15 +17,25 @@ class Registry(abc.MutableMapping):
 
     Args:
         name_key: key to use to extract names of the factories from
-        var_key: key to use to for aliases. Aliases let you identify an item
-            and then refer to that item and reuse it multiple times.
+        var_key: key to use to for aliases, aliases let you identify an item
+            and then refer to that item and reuse it multiple times
+        attrs_delimiter: delimiter to use for separation of alias and
+            attribute of an instance to get
     """
 
-    def __init__(self, name_key: str = "_target_", var_key: str = "_var_"):
-        self._factories: Dict[str, Factory] = {}
+    def __init__(
+        self,
+        name_key: str = F.DEFAULT_FACTORY_KEY,
+        var_key: str = F.DEFAULT_VAR_KEY,
+        attrs_delimiter: str = F.DEFAULT_ATTRS_DELIMITER,
+    ):
         self._late_add_callbacks: List[LateAddCallback] = []
+
         self.name_key = name_key
+        self._factories: Dict[str, Factory] = {}
+
         self.var_key = var_key
+        self.attrs_delimiter = attrs_delimiter
         self._vars_dict = {}
 
     @staticmethod
@@ -215,6 +225,7 @@ class Registry(abc.MutableMapping):
             params=kwargs,
             shared_params=shared_params or {},
             var_key=self.var_key,
+            attrs_delimiter=self.attrs_delimiter,
             vars_dict=self._vars_dict,
         )
         return instance

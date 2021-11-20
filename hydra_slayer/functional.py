@@ -11,6 +11,7 @@ T = TypeVar("T")
 
 DEFAULT_FACTORY_KEY = "_target_"
 DEFAULT_VAR_KEY = "_var_"
+DEFAULT_ATTRS_DELIMITER = "."
 
 
 def _extract_factory_name_arg(
@@ -137,12 +138,62 @@ def get_instance(*args, **kwargs) -> Any:
     return instance
 
 
+def _get_from_params(
+    factory_key: str,
+    get_factory_func: Callable,
+    params: Dict[str, Any],
+    shared_params: Dict[str, Any],
+    var_key: str,
+    attrs_delimiter: str,
+    vars_dict: Dict[str, Any],
+) -> Tuple[Any, Dict[str, Any]]:
+    # use additional dict to handle 'multiple values for keyword argument'
+    kwargs = {**shared_params, **params}
+
+    params.pop(var_key, None)
+
+    alias = kwargs.pop(var_key, "")
+    alias, attribute_name = (
+        alias.split(attrs_delimiter) if attrs_delimiter in alias else (alias, None)
+    )
+
+    if alias and alias in vars_dict:
+        if factory_key in kwargs:
+            raise ValueError(
+                f"`{factory_key}` and `{var_key}` (in get mode) keywords are exclusive"
+            )
+
+        obj = vars_dict[alias]
+        if attribute_name is not None:
+            obj_or_callable = getattr(obj, attribute_name)
+            if callable(obj_or_callable):
+                args, kwargs = _extract_positional_keyword_vars(obj_or_callable, kwargs=kwargs)
+                obj = obj_or_callable(*args, **kwargs)
+            else:
+                obj = obj_or_callable
+    elif factory_key in kwargs:
+        obj = _get_instance(
+            factory_key=factory_key,
+            get_factory_func=get_factory_func,
+            args=(),
+            kwargs=kwargs,
+        )
+    else:
+        obj = params
+
+    if alias and alias not in vars_dict:
+        vars_dict[alias] = obj
+
+    return obj, vars_dict
+
+
 def _recursive_get_from_params(
     factory_key: str,
     get_factory_func: Callable,
     params: Union[Dict[str, Any], Any],
     shared_params: Dict[str, Any],
     var_key: str,
+    attrs_delimiter: str,
     vars_dict: Dict[str, Any],
 ) -> Tuple[Any, Dict[str, Any]]:
     if not isinstance(params, (dict, list)):
@@ -150,42 +201,23 @@ def _recursive_get_from_params(
 
     # make a copy of params since we don't want to modify them directly
     params = copy.copy(params)
+    common_params = {
+        "factory_key": factory_key,
+        "get_factory_func": get_factory_func,
+        "shared_params": shared_params,
+        "var_key": var_key,
+        "attrs_delimiter": attrs_delimiter,
+    }
 
     view = params.items() if isinstance(params, dict) else enumerate(params)
     for key, param in view:
         params[key], vars_dict = _recursive_get_from_params(
-            factory_key=factory_key,
-            get_factory_func=get_factory_func,
-            params=param,
-            shared_params=shared_params,
-            var_key=var_key,
-            vars_dict=vars_dict,
+            params=param, vars_dict=vars_dict, **common_params
         )
 
     if isinstance(params, dict):
-        # use additional dict to handle 'multiple values for keyword argument'
-        kwargs = {**shared_params, **params}
-
-        alias = kwargs.pop(var_key, None)
-        params.pop(var_key, None)
-        if alias and alias in vars_dict:
-            kwargs = params = vars_dict[alias]
-
-        # since `kwargs` can be replaced with the object, check the type again
-        if isinstance(kwargs, dict) and factory_key in kwargs:
-            obj = _get_instance(
-                factory_key=factory_key,
-                get_factory_func=get_factory_func,
-                args=(),
-                kwargs=kwargs,
-            )
-        else:
-            obj = params
-
-        if alias and alias not in vars_dict:
-            vars_dict[alias] = obj
-
-        return obj, vars_dict
+        instance, vars_dict = _get_from_params(params=params, vars_dict=vars_dict, **common_params)
+        return instance, vars_dict
     return params, vars_dict
 
 
@@ -216,5 +248,6 @@ def get_from_params(*, shared_params: Optional[Dict[str, Any]] = None, **kwargs)
         shared_params=shared_params or {},
         var_key=DEFAULT_VAR_KEY,
         vars_dict={},
+        attrs_delimiter=DEFAULT_ATTRS_DELIMITER,
     )
     return instance

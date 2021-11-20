@@ -12,10 +12,9 @@ __all__ = [
 
 Factory = Union[Type, Callable[..., Any]]
 
-# DEFAULT_ATTR_KEY = "_attr_"
 DEFAULT_FROM_PARAMS_KEY = "get_from_params"
 DEFAULT_META_FACTORY_KEY = "_meta_factory_"
-DEFAULT_CALL_MODE_KEY = "_mode_"  # TODO: (@scitator) rename (maybe to `_fit_`?)
+DEFAULT_CALL_MODE_KEY = "_mode_"  # TODO: discuss with @scitator and rename
 
 
 def metafactory_factory(factory: Factory, args: Tuple, kwargs: Mapping):
@@ -67,10 +66,9 @@ def metafactory_factory(factory: Factory, args: Tuple, kwargs: Mapping):
     meta_factory = kwargs.pop(DEFAULT_META_FACTORY_KEY, None)
     meta_factory_name = kwargs.pop(DEFAULT_CALL_MODE_KEY, "auto")
 
-    # TODO: (replace with `_attr_` and) remove {
+    # legacy, for the compatibility with the Catalyst library
     if hasattr(factory, DEFAULT_FROM_PARAMS_KEY):
         return getattr(factory, DEFAULT_FROM_PARAMS_KEY)(*args, **kwargs)
-    # TODO: } remove
 
     if meta_factory is None:
         meta_factories = {

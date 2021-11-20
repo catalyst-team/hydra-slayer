@@ -27,6 +27,13 @@ def quuz(**params):
 
 
 class grault:
+    def __init__(self, a=1, b=2):
+        self.a = a
+        self.b = b
+
     @staticmethod
     def garply(a, b):
         return {"a": a, "b": b}
+
+    def waldo(self):
+        return {"a": self.a, "b": self.b}
