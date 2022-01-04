@@ -1,4 +1,4 @@
-<img src="docs/_static/slayer.png" width="198" align="right">
+<img src="https://raw.githubusercontent.com/catalyst-team/hydra-slayer/master/docs/_static/slayer.png" width="198" align="right">
 
 # Hydra Slayer
 
