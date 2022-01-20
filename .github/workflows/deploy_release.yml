@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8]
+        python-version: ['3.8']
 
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
       - name: Install poetry
         run: |
           pip install -U pip
-          curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
+          curl -sSL "https://install.python-poetry.org" | python -
           echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
       - name: Set up cache
         uses: actions/cache@v2
@@ -60,7 +60,7 @@ jobs:
       - name: Install poetry
         run: |
           pip install -U pip
-          curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
+          curl -sSL "https://install.python-poetry.org" | python -
           echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
       - name: Set up cache
         uses: actions/cache@v2
