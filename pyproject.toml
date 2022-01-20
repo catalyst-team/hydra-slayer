@@ -48,7 +48,7 @@ python = "^3.6"
 [tool.poetry.dev-dependencies]
 catalyst-codestyle = "21.09.2"
 doc8 = "^0.8"
-pytest = "^5.3.1"
+pytest = "^6.0.0"
 Sphinx = "^4.1.1"
 sphinx-multiversion = "^0.2.4"
 sphinx-rtd-theme = "^0.5.2"
