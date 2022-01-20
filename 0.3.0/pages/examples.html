@@ -205,10 +205,10 @@
   <blockquote>
     Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.
   </blockquote>
-</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span>
-<span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
-<span class="nt">mean</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
-<span class="nt">std</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span><span class="w"></span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span><span class="w"></span>
+<span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
@@ -235,10 +235,10 @@
   <blockquote>
     Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.
   </blockquote>
-</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span>
-<span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Normalize</span>
-<span class="nt">mean</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
-<span class="nt">std</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span><span class="w"></span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Normalize</span><span class="w"></span>
+<span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
@@ -273,18 +273,18 @@
     Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost
     and increased effectiveness.
   </blockquote>
-</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
-<span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.datasets.CIFAR100</span>
-<span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./data</span>
-<span class="nt">train</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="nt">transform</span><span class="p">:</span>
-  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Compose</span>
-  <span class="nt">transforms</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.ToTensor</span>
-    <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
-      <span class="nt">mean</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
-      <span class="nt">std</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
-<span class="nt">download</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span><span class="w"></span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.datasets.CIFAR100</span><span class="w"></span>
+<span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./data</span><span class="w"></span>
+<span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="nt">transform</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Compose</span><span class="w"></span>
+<span class="w">  </span><span class="nt">transforms</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.ToTensor</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span><span class="w"></span>
+<span class="w">      </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="nt">download</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
@@ -322,24 +322,24 @@
     Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost
     and increased effectiveness.
   </blockquote>
-</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># first_block.yaml</span>
-<span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.Sequential</span>
-<span class="nt">args</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.Conv2d</span>
-    <span class="nt">in_channels</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
-    <span class="nt">out_channels</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">64</span>
-    <span class="nt">kernel_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">7</span>
-    <span class="nt">stride</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
-    <span class="nt">padding</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
-    <span class="nt">bias</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
-  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.BatchNorm2d</span>
-    <span class="nt">num_features</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">64</span>
-  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.ReLU</span>
-    <span class="nt">inplace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-  <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.MaxPool2d</span>
-    <span class="nt">kernel_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
-    <span class="nt">stride</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
-    <span class="nt">padding</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># first_block.yaml</span><span class="w"></span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.Sequential</span><span class="w"></span>
+<span class="nt">args</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.Conv2d</span><span class="w"></span>
+<span class="w">    </span><span class="nt">in_channels</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">out_channels</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span><span class="w"></span>
+<span class="w">    </span><span class="nt">kernel_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">stride</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">padding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">bias</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.BatchNorm2d</span><span class="w"></span>
+<span class="w">    </span><span class="nt">num_features</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.ReLU</span><span class="w"></span>
+<span class="w">    </span><span class="nt">inplace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.MaxPool2d</span><span class="w"></span>
+<span class="w">    </span><span class="nt">kernel_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">stride</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">padding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
@@ -392,25 +392,25 @@ that you don’t specify parameters followed by *args by keyword.</p>
     Please note that <b>Expert Fire Magic</b> also allows your hero to cast fire spells at reduced cost
     and maximum effectiveness.
   </blockquote>
-</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
-<span class="nt">dataframe</span><span class="p">:</span>
-  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pandas.merge</span>
-  <span class="nt">left</span><span class="p">:</span>
-    <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span>
-    <span class="nt">filepath_or_buffer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part1.csv</span>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span><span class="w"></span>
+<span class="nt">dataframe</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.merge</span><span class="w"></span>
+<span class="w">  </span><span class="nt">left</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span><span class="w"></span>
+<span class="w">    </span><span class="nt">filepath_or_buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part1.csv</span><span class="w"></span>
 
-    <span class="c1"># By default, hydra-slayer use partial fit for functions</span>
-    <span class="c1"># (what is useful with activation functions in neural networks).</span>
-    <span class="c1"># But if we want to call ``pandas.read_csv`` function instead,</span>
-    <span class="c1"># then we should set ``call`` mode manually.</span>
-    <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
-  <span class="nt">right</span><span class="p">:</span>
-    <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span>
-    <span class="nt">filepath_or_buffer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part2.csv</span>
-    <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
-  <span class="nt">how</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">inner</span>
-  <span class="s">&#39;on&#39;</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">user</span>
-  <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
+<span class="w">    </span><span class="c1"># By default, hydra-slayer use partial fit for functions</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># (what is useful with activation functions in neural networks).</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># But if we want to call ``pandas.read_csv`` function instead,</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># then we should set ``call`` mode manually.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span><span class="w"></span>
+<span class="w">  </span><span class="nt">right</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span><span class="w"></span>
+<span class="w">    </span><span class="nt">filepath_or_buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part2.csv</span><span class="w"></span>
+<span class="w">    </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span><span class="w"></span>
+<span class="w">  </span><span class="nt">how</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inner</span><span class="w"></span>
+<span class="w">  </span><span class="s">&#39;on&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span><span class="w"></span>
+<span class="w">  </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
@@ -440,48 +440,48 @@ that you don’t specify parameters followed by *args by keyword.</p>
     Please note that <b>Maximum Fire Magic</b> also allows your hero to cast fire spells at reduced cost
     and maximum effectiveness.
   </blockquote>
-</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
-<span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.utils.data.DataLoader</span>
-<span class="nt">dataset</span><span class="p">:</span>
-  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.datasets.CIFAR100</span>
-  <span class="nt">root</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./data</span>
-  <span class="nt">train</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
-  <span class="nt">transform</span><span class="p">:</span>
-    <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Compose</span>
-    <span class="nt">transforms</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.ToTensor</span>
-      <span class="p p-Indicator">-</span> <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
-        <span class="nt">mean</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
-        <span class="nt">std</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
-  <span class="nt">download</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">batch_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">32</span>
-<span class="nt">shuffle</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span><span class="w"></span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.utils.data.DataLoader</span><span class="w"></span>
+<span class="nt">dataset</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.datasets.CIFAR100</span><span class="w"></span>
+<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./data</span><span class="w"></span>
+<span class="w">  </span><span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Compose</span><span class="w"></span>
+<span class="w">    </span><span class="nt">transforms</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.ToTensor</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span><span class="w"></span>
+<span class="w">        </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">        </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">download</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span><span class="w"></span>
+<span class="nt">shuffle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 </pre></div>
 </div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># config.yaml</span>
-<span class="nt">dataset</span><span class="p">:</span>
-  <span class="c1"># ``yaml.safe_load`` will return dictionary with parameters,</span>
-  <span class="c1"># but to get ``DataLoader`` additional ``hydra_slayer.get_from_params``</span>
-  <span class="c1"># should be used.</span>
-  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hydra_slayer.get_from_params</span>
-  <span class="nt">kwargs</span><span class="p">:</span>
-    <span class="c1"># Read dataset from &quot;dataset.yaml&quot;, roughly equivalent to</span>
-    <span class="c1">#   with open(&quot;dataset.yaml&quot;) as stream:</span>
-    <span class="c1">#       kwargs = yaml.safe_load(stream)</span>
-    <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yaml.safe_load</span>
-    <span class="nt">stream</span><span class="p">:</span>
-      <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">open</span>
-      <span class="nt">file</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dataset.yaml</span>
-    <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
-  <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># config.yaml</span><span class="w"></span>
+<span class="nt">dataset</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># ``yaml.safe_load`` will return dictionary with parameters,</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># but to get ``DataLoader`` additional ``hydra_slayer.get_from_params``</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># should be used.</span><span class="w"></span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hydra_slayer.get_from_params</span><span class="w"></span>
+<span class="w">  </span><span class="nt">kwargs</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># Read dataset from &quot;dataset.yaml&quot;, roughly equivalent to</span><span class="w"></span>
+<span class="w">    </span><span class="c1">#   with open(&quot;dataset.yaml&quot;) as stream:</span><span class="w"></span>
+<span class="w">    </span><span class="c1">#       kwargs = yaml.safe_load(stream)</span><span class="w"></span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yaml.safe_load</span><span class="w"></span>
+<span class="w">    </span><span class="nt">stream</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">open</span><span class="w"></span>
+<span class="w">      </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.yaml</span><span class="w"></span>
+<span class="w">    </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span><span class="w"></span>
+<span class="w">  </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span><span class="w"></span>
 
-<span class="nt">model</span><span class="p">:</span>
-  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torchvision.models.resnet18</span>
-  <span class="nt">pretrained</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-  <span class="nt">_mode_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">call</span>
+<span class="nt">model</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.models.resnet18</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pretrained</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span><span class="w"></span>
 
-<span class="nt">criterion</span><span class="p">:</span>
-  <span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torch.nn.CrossEntropyLoss</span>
+<span class="nt">criterion</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.CrossEntropyLoss</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
