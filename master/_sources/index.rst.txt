@@ -4,9 +4,9 @@ Hydra Slayer |version|
 
 .. raw:: html
 
-    <a class="github-button" href="https://github.com/catalyst-team/hydra-slayer" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star leverxgroup/esrgan on GitHub">Star</a> |
-    <a class="github-button" href="https://github.com/catalyst-team/hydra-slayer/fork" data-icon="octicon-repo-forked" data-size="large" data-show-count="true" aria-label="Fork leverxgroup/esrgan on GitHub">Fork</a> |
-    <a class="github-button" href="https://github.com/catalyst-team/hydra-slayer/issues" data-icon="octicon-issue-opened" data-size="large" data-show-count="true" aria-label="Issue leverxgroup/esrgan on GitHub">Issue</a>
+    <a class="github-button" href="https://github.com/catalyst-team/hydra-slayer" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star catalyst-team/hydra-slayer on GitHub">Star</a> |
+    <a class="github-button" href="https://github.com/catalyst-team/hydra-slayer/fork" data-icon="octicon-repo-forked" data-size="large" data-show-count="true" aria-label="Fork catalyst-team/hydra-slayer on GitHub">Fork</a> |
+    <a class="github-button" href="https://github.com/catalyst-team/hydra-slayer/issues" data-icon="octicon-issue-opened" data-size="large" data-show-count="true" aria-label="Issue catalyst-team/hydra-slayer on GitHub">Issue</a>
 
 |Build-Status| |PyPI-Version| |Py-Versions| |License| |Slack|
 
