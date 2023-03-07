@@ -18,12 +18,8 @@ jobs:
       max-parallel: 4
       matrix:
         os: [ubuntu-18.04, ubuntu-latest]
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7', '3.8', '3.9', '3.10']
         requirements: ['latest', 'minimal']
-        exclude:
-          # ubuntu >=22.04 supports python3.7+
-          - python-version: 3.6
-            os: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
