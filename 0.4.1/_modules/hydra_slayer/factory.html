@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>hydra_slayer.factory &mdash; hydra-slayer 0.4.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/catalyst.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> hydra-slayer
+          
+
+          
+            
+            <img src="../../_static/slayer_sidebar_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/api/registry.html">Registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/api/factory.html">Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pages/api/functional.html">Functional</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hydra-slayer</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>hydra_slayer.factory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for hydra_slayer.factory</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;metafactory_factory&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;call_meta_factory&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;partial_meta_factory&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;default_meta_factory&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">Factory</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+
+<span class="n">DEFAULT_FROM_PARAMS_KEY</span> <span class="o">=</span> <span class="s2">&quot;get_from_params&quot;</span>
+<span class="n">DEFAULT_META_FACTORY_KEY</span> <span class="o">=</span> <span class="s2">&quot;_meta_factory_&quot;</span>
+<span class="n">DEFAULT_CALL_MODE_KEY</span> <span class="o">=</span> <span class="s2">&quot;_mode_&quot;</span>  <span class="c1"># TODO: discuss with @scitator and rename</span>
+
+
+<div class="viewcode-block" id="metafactory_factory"><a class="viewcode-back" href="../../pages/api/factory.html#hydra_slayer.factory.metafactory_factory">[docs]</a><span class="k">def</span> <span class="nf">metafactory_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a new instance or a new partial object.</span>
+
+<span class="sd">      * _mode_=&#39;auto&#39;</span>
+
+<span class="sd">        Creates a new instance from ``factory`` if ``factory`` is class</span>
+<span class="sd">        (like :py:func:`call_meta_factory`), else returns a new partial object</span>
+<span class="sd">        (like :py:func:`partial_meta_factory`).</span>
+
+<span class="sd">      * _mode_=&#39;call&#39;</span>
+
+<span class="sd">        Returns a result of the factory called with the positional arguments</span>
+<span class="sd">        ``args`` and keyword arguments ``kwargs``.</span>
+
+<span class="sd">      * _mode_=&#39;partial&#39;</span>
+
+<span class="sd">        Returns a new partial object which when called will behave like factory</span>
+<span class="sd">        called with the positional arguments ``args`` and keyword arguments</span>
+<span class="sd">        ``kwargs``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        factory: factory to create instance from</span>
+<span class="sd">        args: \*args to pass to the factory</span>
+<span class="sd">        kwargs: \*\*kwargs to pass to the factory</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Instance.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: if mode not in list: ``&#39;auto&#39;``, ``&#39;call&#39;``, ``&#39;partial&#39;``.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; metafactory_factory(int, (42,))</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; metafactory_factory(lambda x: x, (42,))()  # note that additional () are used</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; metafactory_factory(lambda x: x, (42,), {&#39;_mode_&#39;: &#39;call&#39;})</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; metafactory_factory(int, (&#39;2A&#39;), {&#39;base&#39;: 16})</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; hex_to_dec = metafactory_factory(int, (), {&#39;_mode_&#39;: &#39;partial&#39;, &#39;base&#39;: 16})</span>
+<span class="sd">        &gt;&gt;&gt; hex_to_dec(&#39;2A&#39;)</span>
+<span class="sd">        42</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># make a copy of kwargs since we don&#39;t want to modify them directly</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">meta_factory</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">DEFAULT_META_FACTORY_KEY</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">meta_factory_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">DEFAULT_CALL_MODE_KEY</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+
+    <span class="c1"># legacy, for the compatibility with the Catalyst library</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">DEFAULT_FROM_PARAMS_KEY</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">DEFAULT_FROM_PARAMS_KEY</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">meta_factory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">meta_factories</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;auto&quot;</span><span class="p">:</span> <span class="n">default_meta_factory</span><span class="p">,</span>
+            <span class="s2">&quot;call&quot;</span><span class="p">:</span> <span class="n">call_meta_factory</span><span class="p">,</span>
+            <span class="s2">&quot;partial&quot;</span><span class="p">:</span> <span class="n">partial_meta_factory</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">meta_factory_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">meta_factories</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">meta_factory_name</span><span class="si">}</span><span class="s2">&#39; is not a valid call mode&quot;</span><span class="p">)</span>
+        <span class="n">meta_factory</span> <span class="o">=</span> <span class="n">meta_factories</span><span class="p">[</span><span class="n">meta_factory_name</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="call_meta_factory"><a class="viewcode-back" href="../../pages/api/factory.html#hydra_slayer.factory.call_meta_factory">[docs]</a><span class="k">def</span> <span class="nf">call_meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a new instance from ``factory``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        factory: factory to create instance from</span>
+<span class="sd">        args: \*args to pass to the factory</span>
+<span class="sd">        kwargs: \*\*kwargs to pass to the factory</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Instance.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; call_meta_factory(int, (42,), {})</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; call_meta_factory(int, (&#39;2A&#39;,), {&#39;base&#39;: 16})</span>
+<span class="sd">        66</span>
+<span class="sd">        &gt;&gt;&gt; call_meta_factory(lambda x: x, (42,), {})</span>
+<span class="sd">        42</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">factory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="partial_meta_factory"><a class="viewcode-back" href="../../pages/api/factory.html#hydra_slayer.factory.partial_meta_factory">[docs]</a><span class="k">def</span> <span class="nf">partial_meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a new partial object which when called will behave like func called</span>
+<span class="sd">    with the positional arguments ``args`` and keyword arguments ``kwargs``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        factory: factory to create instance from</span>
+<span class="sd">        args: \*args to merge into the factory</span>
+<span class="sd">        kwargs: \*\*kwargs to merge into the factory</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Partial object.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_answer_to_life = partial_meta_factory(lambda x: x, (42,), {})</span>
+<span class="sd">        &gt;&gt;&gt; get_answer_to_life()</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; hex_to_dec = partial_meta_factory(int, (), {&#39;base&#39;: 16})</span>
+<span class="sd">        &gt;&gt;&gt; hex_to_dec(&#39;2A&#39;)</span>
+<span class="sd">        42</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="default_meta_factory"><a class="viewcode-back" href="../../pages/api/factory.html#hydra_slayer.factory.default_meta_factory">[docs]</a><span class="k">def</span> <span class="nf">default_meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a new instance or a new partial object.</span>
+
+<span class="sd">    Creates a new instance from ``factory`` if ``factory`` is class</span>
+<span class="sd">    (behaves like :py:func:`call_meta_factory`), else returns a new</span>
+<span class="sd">    partial object (behaves like :py:func:`partial_meta_factory`).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        factory: factory to create instance from</span>
+<span class="sd">        args: \*args to pass to the factory</span>
+<span class="sd">        kwargs: \*\*kwargs to pass to the factory</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Instance.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: if factory object is not callable.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; default_meta_factory(int, (42,), {})</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; default_meta_factory(int, (&#39;2A&#39;,), {&#39;base&#39;: 16})</span>
+<span class="sd">        42</span>
+<span class="sd">        &gt;&gt;&gt; get_answer_to_life = default_meta_factory(lambda x: x, (42,), {})</span>
+<span class="sd">        &gt;&gt;&gt; get_answer_to_life()</span>
+<span class="sd">        42</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">factory</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">call_meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismethod</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span> <span class="ow">or</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">(</span><span class="n">factory</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">partial_meta_factory</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;factory &#39;</span><span class="si">{</span><span class="n">factory</span><span class="si">}</span><span class="s2">&#39; is not callable&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2023, Catalyst-Team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 0.4.1
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../../0.1.0rc0/index.html">0.1.0rc0</a></dd>
+      <dd><a href="../../../0.1.1/index.html">0.1.1</a></dd>
+      <dd><a href="../../../0.2.0/index.html">0.2.0</a></dd>
+      <dd><a href="../../../0.3.0/index.html">0.3.0</a></dd>
+      <dd><a href="../../../0.4.0/index.html">0.4.0</a></dd>
+      <dd><a href="factory.html">0.4.1</a></dd>
+    </dl>
+  </div>
+</div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
