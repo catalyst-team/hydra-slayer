@@ -2,6 +2,7 @@ from typing import Any, Callable, Dict, Iterable, Optional, Tuple, TypeVar, Unio
 import copy
 import inspect
 import pydoc
+import warnings
 
 from hydra_slayer.factory import Factory, metafactory_factory
 
@@ -30,8 +31,14 @@ def _extract_positional_keyword_vars(func: Callable, kwargs: Dict) -> Tuple[Iter
     # make a copy of kwargs since we don't want to modify them directly
     kwargs = copy.copy(kwargs)
 
-    signature = inspect.signature(func)
-    type2param = {p.kind: name for name, p in signature.parameters.items()}
+    try:
+        signature = inspect.signature(func)
+        type2param = {p.kind: name for name, p in signature.parameters.items()}
+    except ValueError:
+        type2param = {}
+        warnings.warn(
+            f"No signature found for `{func}`, *args and **kwargs arguments cannot be extracted"
+        )
 
     var_kwarg = kwargs.pop(type2param.get(inspect.Parameter.VAR_KEYWORD), {})
     kwargs.update(var_kwarg)
