@@ -46,6 +46,8 @@ classifiers = [
 python = "^3.6"
 
 [tool.poetry.dev-dependencies]
+# fix version of black since latest version requires Python >=3.7
+black = "~20.8b1"
 catalyst-codestyle = "21.09.2"
 doc8 = "^0.8"
 pytest = "^6.0.0"
