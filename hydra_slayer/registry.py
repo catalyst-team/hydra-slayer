@@ -70,7 +70,7 @@ class Registry(abc.MutableMapping):
             factories: more instances
             name: name to use for the first factory instance,
                 if a single instance is passed
-            named_factories: factory and their names as \*\*kwargs
+            named_factories: factory and their names as keyword arguments
 
         Returns:
             first factory passed
@@ -193,8 +193,8 @@ class Registry(abc.MutableMapping):
         Creates instance by calling specified factory with ``instantiate_fn``.
 
         Args:
-            *args: \*args to pass to the factory
-            **kwargs: \*\*kwargs to pass to the factory
+            *args: positional arguments to be passed into the factory
+            **kwargs: keyword arguments to be passed into the factory
 
         Returns:
             created instance
@@ -214,7 +214,7 @@ class Registry(abc.MutableMapping):
         Args:
             shared_params: params to pass on all levels in case of
                 recursive creation
-            **kwargs: \*\*kwargs to pass to the factory
+            **kwargs: keyword arguments to be passed into the factory
 
         Returns:
             result of calling ``instantiate_fn(factory, **sub_kwargs)``

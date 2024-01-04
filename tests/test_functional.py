@@ -367,7 +367,7 @@ def test_get_from_params_var_method_with_params():
 
 
 def test_fail_get_from_params_on_exclusive_keywords():
-    error_msg = "`.+` and `.+` \(in get mode\) keywords are exclusive"
+    error_msg = r"`.+` and `.+` \(in get mode\) keywords are exclusive"
     with pytest.raises(ValueError, match=error_msg):
         F.get_from_params(
             **{

@@ -90,8 +90,8 @@ def _get_instance(
         factory_key: key to extract factory name from
         get_factory_func: function that returns factory by its name.
             Default: :py:func:`.functional.get_factory`
-        args: \*args to pass to the factory
-        kwargs: \*\*kwargs to pass to the factory
+        args: positional arguments to be passed into the factory
+        kwargs: keyword arguments to be passed into the factory
 
     Returns:
         created instance
