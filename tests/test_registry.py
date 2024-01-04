@@ -2,7 +2,7 @@
 import pytest
 
 from hydra_slayer.registry import Registry
-from .foobar import foo, bar
+from .foobar import bar, foo
 from . import foobar as module
 
 

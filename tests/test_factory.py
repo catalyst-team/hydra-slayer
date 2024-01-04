@@ -100,6 +100,7 @@ def test_metafactory_factory_modes():
 
     assert res() == 42
 
+
 def test_fail_metafactory_factory_modes():
     error_msg = "'.+' is not a valid call mode"
     with pytest.raises(ValueError, match=error_msg):

@@ -366,7 +366,6 @@ def test_get_from_params_var_method_with_params():
     assert res["b"] == {"a": 1, "b": 2}
 
 
-
 def test_fail_get_from_params_on_exclusive_keywords():
     error_msg = "`.+` and `.+` \(in get mode\) keywords are exclusive"
     with pytest.raises(ValueError, match=error_msg):
