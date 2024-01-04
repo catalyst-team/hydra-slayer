@@ -42,3 +42,12 @@ class grault:
 
     def waldo(self):
         return {"a": self.a, "b": self.b}
+
+
+class fred:
+    def __init__(self, a):
+        self.a = a
+
+    @classmethod
+    def get_from_params(cls, a):
+        return cls(a)

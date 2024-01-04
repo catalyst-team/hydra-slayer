@@ -23,9 +23,9 @@ def test_get_factories():
 
 
 def test_fail_get_factory():
-    with pytest.raises(LookupError) as e_ifo:
+    error_msg = "No factory with name '.+' was registered"
+    with pytest.raises(LookupError, match=error_msg):
         F.get_factory("tests.foobar.corge")()
-        assert hasattr(e_ifo.value, "__cause__")
 
 
 def test_instantiations():
@@ -369,7 +369,7 @@ def test_get_from_params_var_method_with_params():
 
 def test_fail_get_from_params_on_exclusive_keywords():
     error_msg = r"`.+` and `.+` \(in get mode\) keywords are exclusive"
-    with pytest.raises(ValueError, match=error_msg) as e_ifo:
+    with pytest.raises(ValueError, match=error_msg):
         F.get_from_params(
             **{
                 "_target_": "tests.foobar.foo",
