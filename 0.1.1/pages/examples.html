@@ -186,10 +186,10 @@
   <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px;" />
   <p>Create instance from config file with params.</p>
   <blockquote>Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.</blockquote>
-</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span><span class="w"></span>
-<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span><span class="w"></span>
-<span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
+<span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
@@ -211,18 +211,18 @@
   <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px;" />
   <p>Create <a href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR100</a> dataset from config file with params.</p>
   <blockquote>Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost and increased effectiveness.</blockquote>
-</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span><span class="w"></span>
-<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.datasets.CIFAR100</span><span class="w"></span>
-<span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./data</span><span class="w"></span>
-<span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="nt">transform</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Compose</span><span class="w"></span>
-<span class="w">  </span><span class="nt">transforms</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.ToTensor</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span><span class="w"></span>
-<span class="w">      </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">      </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="nt">download</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.datasets.CIFAR100</span>
+<span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./data</span>
+<span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">transform</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Compose</span>
+<span class="w">  </span><span class="nt">transforms</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.ToTensor</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
+<span class="w">      </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="nt">download</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
@@ -252,26 +252,26 @@
   <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px;" />
   <p>Read multiple CSV files as pandas dataframes and merge them.</p>
   <blockquote>Please note that <b>Expert Fire Magic</b> also allows your hero to cast fire spells at reduced cost and maximum effectiveness.</blockquote>
-</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span><span class="w"></span>
-<span class="nt">dataframe</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.merge</span><span class="w"></span>
-<span class="w">  </span><span class="nt">left</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span><span class="w"></span>
-<span class="w">    </span><span class="nt">filepath_or_buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part1.csv</span><span class="w"></span>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
+<span class="nt">dataframe</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.merge</span>
+<span class="w">  </span><span class="nt">left</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span>
+<span class="w">    </span><span class="nt">filepath_or_buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part1.csv</span>
 
-<span class="w">    </span><span class="c1"># By default, hydra-slayer use partial fit for functions</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># (what is useful with activation functions in neural networks).</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># But if we want to call ``pandas.read_csv`` function instead,</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># then we should pass ``call_meta_factory`` manually.</span><span class="w"></span>
-<span class="w">    </span><span class="nt">meta_factory</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;call_function</span><span class="w"></span>
-<span class="w">      </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">catalyst.tools.registry.call_meta_factory</span><span class="w"></span>
-<span class="w">  </span><span class="nt">right</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span><span class="w"></span>
-<span class="w">    </span><span class="nt">filepath_or_buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part2.csv</span><span class="w"></span>
-<span class="w">    </span><span class="nt">meta_factory</span><span class="p">:</span><span class="w"> </span><span class="nv">*call_function</span><span class="w"></span>
-<span class="w">  </span><span class="nt">how</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inner</span><span class="w"></span>
-<span class="w">  </span><span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span><span class="w"></span>
-<span class="w">  </span><span class="nt">meta_factory</span><span class="p">:</span><span class="w"> </span><span class="nv">*call_function</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># By default, hydra-slayer use partial fit for functions</span>
+<span class="w">    </span><span class="c1"># (what is useful with activation functions in neural networks).</span>
+<span class="w">    </span><span class="c1"># But if we want to call ``pandas.read_csv`` function instead,</span>
+<span class="w">    </span><span class="c1"># then we should pass ``call_meta_factory`` manually.</span>
+<span class="w">    </span><span class="nt">meta_factory</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;call_function</span>
+<span class="w">      </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">catalyst.tools.registry.call_meta_factory</span>
+<span class="w">  </span><span class="nt">right</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span>
+<span class="w">    </span><span class="nt">filepath_or_buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part2.csv</span>
+<span class="w">    </span><span class="nt">meta_factory</span><span class="p">:</span><span class="w"> </span><span class="nv">*call_function</span>
+<span class="w">  </span><span class="nt">how</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inner</span>
+<span class="w">  </span><span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+<span class="w">  </span><span class="nt">meta_factory</span><span class="p">:</span><span class="w"> </span><span class="nv">*call_function</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
@@ -309,7 +309,7 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2023, Catalyst-Team.
+        &#169; Copyright 2024, Catalyst-Team.
 
     </p>
   </div>
@@ -345,6 +345,10 @@
       <dd><a href="../../0.3.0/pages/examples.html">0.3.0</a></dd>
       <dd><a href="../../0.4.0/pages/examples.html">0.4.0</a></dd>
       <dd><a href="../../0.4.1/pages/examples.html">0.4.1</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../master/pages/examples.html">master</a></dd>
     </dl>
   </div>
 </div>
