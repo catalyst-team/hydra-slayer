@@ -242,7 +242,7 @@
 <span class="sd">            factories: more instances</span>
 <span class="sd">            name: name to use for the first factory instance,</span>
 <span class="sd">                if a single instance is passed</span>
-<span class="sd">            named_factories: factory and their names as \*\*kwargs</span>
+<span class="sd">            named_factories: factory and their names as keyword arguments</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            first factory passed</span>
@@ -365,8 +365,8 @@
 <span class="sd">        Creates instance by calling specified factory with ``instantiate_fn``.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            *args: \*args to pass to the factory</span>
-<span class="sd">            **kwargs: \*\*kwargs to pass to the factory</span>
+<span class="sd">            *args: positional arguments to be passed into the factory</span>
+<span class="sd">            **kwargs: keyword arguments to be passed into the factory</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            created instance</span>
@@ -386,7 +386,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            shared_params: params to pass on all levels in case of</span>
 <span class="sd">                recursive creation</span>
-<span class="sd">            **kwargs: \*\*kwargs to pass to the factory</span>
+<span class="sd">            **kwargs: keyword arguments to be passed into the factory</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            result of calling ``instantiate_fn(factory, **sub_kwargs)``</span>
