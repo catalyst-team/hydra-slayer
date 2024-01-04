@@ -35,26 +35,46 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Information Analysis",
   # Programming
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.6",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython"
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7"
 
-[tool.poetry.dev-dependencies]
-# fix version of black since latest version requires Python >=3.7
-black = "~20.8b1"
+[tool.poetry.group.dev.dependencies]
+poetry = "^1.4.0"
+setuptools = "*"
+
+[tool.poetry.group.codestyle]
+optional = true
+
+[tool.poetry.group.codestyle.dependencies]
+black = "~20.8b0"
+# Fix version of click because of: https://github.com/psf/black/issues/2964
+click = "~8.0.2"
 catalyst-codestyle = "21.09.2"
 doc8 = "^0.8"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
 pytest = "^6.0.0"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
 Sphinx = "^4.1.1"
 sphinx-multiversion = "^0.2.4"
 sphinx-rtd-theme = "^0.5.2"
-tomlkit = "^0.7.2"
+tomlkit = "^0.11.0"
 
 [tool.nitpick]
 style = "https://raw.githubusercontent.com/catalyst-team/codestyle/v21.09.2/styles/nitpick-style-catalyst.toml"

@@ -17,8 +17,8 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        os: [ubuntu-18.04, ubuntu-latest]
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        os: [ubuntu-20.04, ubuntu-latest]
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
         requirements: ['latest', 'minimal']
 
     steps:
@@ -31,7 +31,7 @@ jobs:
       - name: Install poetry
         run: |
           pip install -U pip
-          curl -sSL "https://install.python-poetry.org" | python -
+          curl -sSL "https://install.python-poetry.org" | python - --version 1.5.1
           echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
       - name: Set up cache
         uses: actions/cache@v2
@@ -42,7 +42,7 @@ jobs:
         run: |
           poetry config virtualenvs.in-project true
           poetry run pip install -U pip
-          poetry install
+          poetry install --with codestyle,test,docs
       - name: Install latest dependencies
         if: ${{ matrix.requirements == 'latest' }}
         run: |
