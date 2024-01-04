@@ -1,6 +1,4 @@
 # flake8: noqa
-import string
-
 import pytest
 
 from hydra_slayer import functional as F
@@ -48,17 +46,25 @@ def test_instantiations():
 
 
 def test_fail_instantiation():
-    with pytest.raises(LookupError) as e_ifo:
+    error_msg = "No factory with name '.+' was registered"
+    with pytest.raises(LookupError, match=None):
         F.get_instance("tests.foobar.corge")()
-        assert hasattr(e_ifo.value, "__cause__")
 
-    with pytest.raises(TypeError) as e_ifo:
+    error_msg = r"get_instance\(\) missing at least 1 required argument: '.+'"
+    with pytest.raises(TypeError, match=error_msg):
         F.get_instance(a=1, b=2)()
-        assert hasattr(e_ifo.value, "__cause__")
 
-    with pytest.raises(TypeError) as e_ifo:
+    error_msg = ".+ got an unexpected keyword argument '.+'"
+    with pytest.raises(TypeError, match=error_msg):
         F.get_instance("tests.foobar.foo", c=1)()
-        assert hasattr(e_ifo.value, "__cause__")
+
+    error_msg = "Factory '.+' call failed: args=.+ kwargs=.+"
+    with pytest.raises(RuntimeError, match=error_msg):
+        F.get_instance("tests.foobar.grault", b=1.0)()
+
+    warn_msg = r"No signature found for `.+`, \*args and \*\*kwargs arguments cannot be extracted"
+    with pytest.warns(UserWarning, match=warn_msg):
+        F.get_instance("int", 1)
 
 
 def test_from_params():
@@ -358,3 +364,20 @@ def test_get_from_params_var_method_with_params():
         },
     )
     assert res["b"] == {"a": 1, "b": 2}
+
+
+
+def test_fail_get_from_params_on_exclusive_keywords():
+    error_msg = r"`.+` and `.+` \(in get mode\) keywords are exclusive"
+    with pytest.raises(ValueError, match=error_msg) as e_ifo:
+        F.get_from_params(
+            **{
+                "_target_": "tests.foobar.foo",
+                "a": [
+                    {"_target_": "tests.foobar.foo", "a": 1, "b": 2, "_var_": "x"},
+                    {"_target_": "tests.foobar.foo", "a": 3, "b": 4, "_var_": "x"},
+                ],
+                "b": 5,
+            },
+            shared_params={"_meta_factory_": call_meta_factory},
+        )

@@ -1,6 +1,4 @@
 # flake8: noqa
-import string
-
 import pytest
 
 from hydra_slayer import factory

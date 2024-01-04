@@ -1,4 +1,6 @@
 # flake8: noqa
+from typing import Any
+
 __all__ = ["foo"]
 
 
@@ -27,8 +29,11 @@ def quuz(**params):
 
 
 class grault:
-    def __init__(self, a=1, b=2):
+    def __init__(self, a: Any = 1, b: int = 2):
         self.a = a
+
+        if not isinstance(b, int):
+            raise ValueError
         self.b = b
 
     @staticmethod
