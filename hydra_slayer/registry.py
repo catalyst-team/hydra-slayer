@@ -43,7 +43,7 @@ class Registry(abc.MutableMapping):
         if not provided_name:
             provided_name = getattr(f, "__name__", None)
             if not provided_name:
-                raise ValueError(f"Factory {f} has no '__name__' and no name was provided")
+                raise ValueError(f"Factory '{f}' has no '__name__' and no name was provided")
             if provided_name == "<lambda>":
                 raise ValueError("Name for lambda factories must be provided")
         return provided_name
@@ -153,9 +153,9 @@ class Registry(abc.MutableMapping):
             prefix = [prefix]
         elif isinstance(prefix, list):
             if any((not isinstance(p, str)) for p in prefix):
-                raise TypeError("All prefix in list must be strings.")
+                raise TypeError("All prefix in list must be strings")
         else:
-            raise TypeError(f"Prefix must be a list or a string, got {type(prefix)}.")
+            raise TypeError(f"Prefix must be a list or a string, got {type(prefix)}")
 
         to_add = {f"{p}{name}": factories[name] for p in prefix for name in names_to_add}
         self.add(**to_add)

@@ -1,9 +1,8 @@
 # flake8: noqa
-import string
-
 import pytest
 
 from hydra_slayer import factory
+from . import foobar
 
 
 def test_call_meta_factory():
@@ -43,9 +42,9 @@ def test_default_meta_factory():
 
 
 def test_fail_get_factory():
-    with pytest.raises(ValueError) as e_ifo:
+    error_msg = "factory '.+' is not callable"
+    with pytest.raises(ValueError, match=error_msg):
         factory.default_meta_factory(5, tuple(), {})
-        assert hasattr(e_ifo.value, "__cause__")
 
 
 def test_metafactory_factory_meta_factory_arg():
@@ -100,3 +99,15 @@ def test_metafactory_factory_modes():
     res = factory.metafactory_factory(lambda x: x, (42,), {"_mode_": "partial"})
 
     assert res() == 42
+
+
+def test_fail_metafactory_factory_modes():
+    error_msg = "'.+' is not a valid call mode"
+    with pytest.raises(ValueError, match=error_msg):
+        factory.metafactory_factory(int, (42,), {"_mode_": "foo"})
+
+
+def test_metafactory_from_params():
+    res = factory.metafactory_factory(foobar.fred, (), {"a": 42})
+
+    assert res.a == 42

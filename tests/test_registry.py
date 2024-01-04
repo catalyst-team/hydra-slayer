@@ -2,7 +2,7 @@
 import pytest
 
 from hydra_slayer.registry import Registry
-from .foobar import foo
+from .foobar import bar, foo
 from . import foobar as module
 
 
@@ -22,11 +22,22 @@ def test_add_function_name_override():
     assert "bar" in r._factories
 
 
-def test_add_lambda_fail():
+def test_add_fail_on_lambda():
     r = Registry()
 
-    with pytest.raises(ValueError):
+    error_msg = "Name for lambda factories must be provided"
+    with pytest.raises(ValueError, match=error_msg):
         r.add(lambda x: x)
+
+
+def test_add_fail_on_no_name():
+    r = Registry()
+
+    obj = 42
+
+    error_msg = "Factory '.+' has no '__name__' and no name was provided"
+    with pytest.raises(ValueError, match=error_msg):
+        r.add(obj, name=None)
 
 
 def test_add_lambda_override():
@@ -40,29 +51,73 @@ def test_add_lambda_override():
 def test_fail_multiple_with_name():
     r = Registry()
 
-    with pytest.raises(ValueError):
+    error_msg = "Multiple factories with single name are not allowed"
+    with pytest.raises(ValueError, match=error_msg):
         r.add(foo, foo, name="bar")
 
 
 def test_fail_double_add_different():
     r = Registry()
+
     r.add(foo)
 
-    with pytest.raises(LookupError):
-
-        def bar():
-            pass
-
+    error_msg = "Factory with name '.+' is already present\nAlready registered: '.+'\nNew: '.+'"
+    with pytest.raises(LookupError, match=error_msg):
         r.add(foo=bar)
 
 
 def test_double_add_same_nofail():
     r = Registry()
+
     r.add(foo)
+
     # It's ok to add same twice, forced by python relative import
     # implementation
     # https://github.com/catalyst-team/catalyst/issues/135
     r.add(foo)
+
+
+def test_add_args_support():
+    r = Registry()
+
+    r.add(foo, bar)
+
+    assert "foo" in r._factories and "bar" in r._factories
+
+
+def test_add_kwargs_support():
+    r = Registry()
+
+    r.add(foo=foo)
+
+    assert "foo" in r._factories
+
+
+def test_add_warns_on_empty_kwargs():
+    r = Registry()
+
+    warn_msg = "No factories were provided!"
+    with pytest.warns(UserWarning, match=warn_msg):
+        r.add(**{})
+
+
+def test_get_empty():
+    r = Registry()
+
+    res = r.get(None)
+    assert res is None
+
+
+def test_get_if_str():
+    r = Registry()
+
+    r.add(foo=foo)
+
+    res = r.get_if_str("foo")
+    assert res == foo
+
+    res = r.get_if_str(42)
+    assert res == 42
 
 
 def test_instantiations():
@@ -86,12 +141,11 @@ def test_instantiations():
 def test_fail_instantiation():
     r = Registry()
 
-    r.add(foo)
+    assert r.add(foo) is not None
 
-    with pytest.raises((RuntimeError, TypeError)) as e_ifo:
+    error_msg = ".+ got an unexpected keyword argument '.+'"
+    with pytest.raises((RuntimeError, TypeError), match=error_msg):
         r.get_instance("foo", c=1)()
-
-    assert hasattr(e_ifo.value, "__cause__")
 
 
 def test_decorator():
@@ -101,7 +155,7 @@ def test_decorator():
     def bar():
         pass
 
-    r.get("bar")
+    assert r.get("bar") is not None
 
 
 def test_kwargs():
@@ -109,7 +163,20 @@ def test_kwargs():
 
     r.add(bar=foo)
 
-    r.get("bar")
+    assert r.get("bar") is not None
+
+
+def test_late_add():
+    def callback(registry: Registry) -> None:
+        registry.add(foo)
+
+    r = Registry()
+
+    r.late_add(callback)
+
+    assert r._factories == {}
+
+    assert r.all() == ("foo",)
 
 
 def test_add_module():
@@ -117,10 +184,43 @@ def test_add_module():
 
     r.add_from_module(module)
 
-    r.get("foo")
+    assert r.get("foo") is not None
 
-    with pytest.raises(LookupError):
+    error_msg = "No factory with name '.+' was registered"
+    with pytest.raises(LookupError, match=error_msg):
         r.get_instance("bar")
+
+
+def test_add_module_adds_all():
+    r = Registry()
+
+    r.add_from_module(module, ignore_all=True)
+
+    assert "foo" in r._factories and "bar" in r._factories
+
+
+def test_add_module_prefix_support():
+    r = Registry()
+
+    r.add_from_module(module, prefix="m.")
+
+    r.get("m.foo")
+
+    error_msg = "No factory with name '.+' was registered"
+    with pytest.raises(LookupError, match=error_msg):
+        r.get_instance("foo")
+
+
+def test_add_from_module_fails_on_invalid_prefix():
+    r = Registry()
+
+    error_msg = "All prefix in list must be strings"
+    with pytest.raises(TypeError, match=error_msg):
+        r.add_from_module(module, prefix=["42", 42])
+
+    error_msg = "Prefix must be a list or a string, got .+"
+    with pytest.raises(TypeError, match=error_msg):
+        r.add_from_module(module, prefix=42)
 
 
 def test_from_config():
@@ -462,3 +562,102 @@ def test_get_from_params_vars_dict():
         },
     )
     assert res["b"] == 4
+
+
+def test_all_magic_method():
+    r = Registry()
+
+    r.add(foo)
+
+    res = r.all()
+    assert res == ("foo",)
+
+    r.add(bar)
+
+    res = r.all()
+    assert res == ("foo", "bar")
+
+
+def test_str_magic_method():
+    r = Registry()
+
+    r.add(foo)
+
+    res = r.__str__()
+    assert res == "('foo',)"
+
+    r.add(bar)
+
+    res = r.__str__()
+    assert res == "('foo', 'bar')"
+
+
+def test_repr_magic_method():
+    r = Registry()
+
+    r.add(foo)
+
+    res = r.__repr__()
+    assert res == "('foo',)"
+
+    r.add(bar)
+
+    res = r.__repr__()
+    assert res == "('foo', 'bar')"
+
+
+def test_len_magic_method():
+    r = Registry()
+
+    r.add(foo)
+
+    res = len(r)
+    assert res == 1
+
+    r.add(bar)
+
+    res = len(r)
+    assert res == 2
+
+
+def test_getitem_magic_method():
+    r = Registry()
+
+    r.add(foo)
+
+    res = r["foo"]
+    assert res == foo
+
+
+def test_iter_magic_method():
+    r = Registry()
+
+    r.add(foo)
+
+    res = next(iter(r))
+    assert res == "foo"
+
+
+def test_contains_magic_method():
+    r = Registry()
+
+    r.add(foo)
+
+    assert "foo" in r
+
+
+def test_setitem_magic_method():
+    r = Registry()
+
+    r["bar"] = foo
+
+    assert "bar" in r._factories
+
+
+def test_delitem_magic_method():
+    r = Registry()
+
+    r.add(foo)
+
+    del r["foo"]
+    assert r._factories == {}
