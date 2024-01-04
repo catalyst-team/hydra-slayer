@@ -52,7 +52,7 @@ jobs:
         env:
           REQUIREMENTS: ${{ matrix.requirements }}
         run: |
-          poetry run pytest .
+          poetry run pytest --cov hydra_slayer -vvv -p no:cacheprovider .
 
       - name: Check dependencies compatibility
         run: |
