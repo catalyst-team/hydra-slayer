@@ -39,8 +39,8 @@ def metafactory_factory(factory: Factory, args: Tuple, kwargs: Mapping):
 
     Args:
         factory: factory to create instance from
-        args: \*args to pass to the factory
-        kwargs: \*\*kwargs to pass to the factory
+        args: positional arguments to be passed into the factory
+        kwargs: keyword arguments to be passed into the factory
 
     Returns:
         Instance.
@@ -88,8 +88,8 @@ def call_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
 
     Args:
         factory: factory to create instance from
-        args: \*args to pass to the factory
-        kwargs: \*\*kwargs to pass to the factory
+        args: positional arguments to be passed into the factory
+        kwargs: keyword arguments to be passed into the factory
 
     Returns:
         Instance.
@@ -112,8 +112,8 @@ def partial_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
 
     Args:
         factory: factory to create instance from
-        args: \*args to merge into the factory
-        kwargs: \*\*kwargs to merge into the factory
+        args: positional arguments to be merged into the factory
+        kwargs: keyword arguments to be merged into the factory
 
     Returns:
         Partial object.
@@ -138,8 +138,8 @@ def default_meta_factory(factory: Factory, args: Tuple, kwargs: Mapping):
 
     Args:
         factory: factory to create instance from
-        args: \*args to pass to the factory
-        kwargs: \*\*kwargs to pass to the factory
+        args: positional arguments to be passed into the factory
+        kwargs: keyword arguments to be passed into the factory
 
     Returns:
         Instance.
