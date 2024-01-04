@@ -1,0 +1,665 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Examples &mdash; hydra-slayer 0.5.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/catalyst.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Registry" href="api/registry.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> hydra-slayer
+          
+
+          
+            
+            <img src="../_static/slayer_sidebar_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">General</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-level">Basic Level</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-object-from-config">Creating object from config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-objects-with-registry">Creating objects with <code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-level">Advanced Level</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-complex-objects">Creating complex objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#passing-args-and-kwargs-parameters">Passing <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mnist-classifier-with-catalyst">MNIST classifier with Catalyst</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#expert-level">Expert level</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-pd-dataframe-from-config">Creating <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> from config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extending-configs">Extending configs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/registry.html">Registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/factory.html">Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/functional.html">Functional</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">hydra-slayer</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Examples</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/examples.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="examples">
+<span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-level">
+<h2>Basic Level<a class="headerlink" href="#basic-level" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-object-from-config">
+<h3>Creating object from config<a class="headerlink" href="#creating-object-from-config" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    One of the ways to create instance from YAML config file is
+    <code class="docutils literal notranslate"><span class="pre">get_from_params()</span></code>.
+  </p>
+  <blockquote>
+    Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.
+  </blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
+<span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;transform.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+<span class="n">transform</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+<span class="n">transform</span>
+<span class="c1"># Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-objects-with-registry">
+<h3>Creating objects with <code class="docutils literal notranslate"><span class="pre">Registry</span></code><a class="headerlink" href="#creating-objects-with-registry" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/basic_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    You also can add python modules to the
+    <code class="docutils literal notranslate"><span class="pre">Registry()</span></code>
+    and then use it to create instances by shorter (or custom) name.
+  </p>
+  <blockquote>
+    Please note that <b>Basic Fire Magic</b> also allows your hero to cast fire spells at reduced cost.
+  </blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform.yaml</span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Normalize</span>
+<span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="n">registry</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">Registry</span><span class="p">()</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">add_from_module</span><span class="p">(</span><span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="p">)</span>
+<span class="c1"># or you can use ``registry.add()`` to add only specific instances</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;transform.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+<span class="n">transform</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+<span class="n">transform</span>
+<span class="c1"># Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="advanced-level">
+<h2>Advanced Level<a class="headerlink" href="#advanced-level" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-complex-objects">
+<h3>Creating complex objects<a class="headerlink" href="#creating-complex-objects" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    Nested data structures can be used to create complex objects like
+    <a href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR100</a> dataset with custom transforms.
+  </p>
+  <blockquote>
+    Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and increased effectiveness.
+  </blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.datasets.CIFAR100</span>
+<span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./data</span>
+<span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">transform</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Compose</span>
+<span class="w">  </span><span class="nt">transforms</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.ToTensor</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
+<span class="w">      </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="nt">download</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;dataset.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+<span class="n">dataset</span>
+<span class="c1"># Dataset CIFAR100</span>
+<span class="c1">#     Number of datapoints: 10000</span>
+<span class="c1">#     Root location: ./data</span>
+<span class="c1">#     Split: Test</span>
+<span class="c1">#     StandardTransform</span>
+<span class="c1"># Transform: Compose(</span>
+<span class="c1">#                ToTensor()</span>
+<span class="c1">#                Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])</span>
+<span class="c1">#            )</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="passing-args-and-kwargs-parameters">
+<h3>Passing <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> parameters<a class="headerlink" href="#passing-args-and-kwargs-parameters" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    *args (<i>var-positional</i> parameter) and **kwargs (<i>var-keyword</i> parameter) parameters
+    can be addressed by name, and you don't have to add
+    <code class="docutils literal notranslate"><span class="pre">*</span></code> /
+    <code class="docutils literal notranslate"><span class="pre">**</span></code>
+    to parameter names in config.
+  </p>
+  <blockquote>
+    Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and increased effectiveness.
+  </blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># first_block.yaml</span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.Sequential</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.Conv2d</span>
+<span class="w">    </span><span class="nt">in_channels</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">    </span><span class="nt">out_channels</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">    </span><span class="nt">kernel_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span>
+<span class="w">    </span><span class="nt">stride</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">padding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">    </span><span class="nt">bias</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.BatchNorm2d</span>
+<span class="w">    </span><span class="nt">num_features</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.ReLU</span>
+<span class="w">    </span><span class="nt">inplace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.MaxPool2d</span>
+<span class="w">    </span><span class="nt">kernel_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">    </span><span class="nt">stride</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">padding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;first_conv.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+<span class="n">first_block</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+<span class="n">first_block</span>
+<span class="c1"># Sequential(</span>
+<span class="c1">#   (0): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)</span>
+<span class="c1">#   (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)</span>
+<span class="c1">#   (2): ReLU(inplace=True)</span>
+<span class="c1">#   (3): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)</span>
+<span class="c1"># )</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The order of the arguments matters in Python. If you have function like
+<code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">example(arg1,</span> <span class="pre">*args,</span> <span class="pre">arg2=2,</span> <span class="pre">**kwargs):</span></code> there are multiple ways to pass parameters to the function,
+for example. And in some cases <em>positional-or-keyword</em> arguments (<code class="docutils literal notranslate"><span class="pre">arg1</span></code>) can be supplied only by position.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Yes</span><span class="p">:</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arg1=1, *args=(), arg2=2, kwargs={}</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># arg1=1, *args=(,), arg2=2, kwargs={}</span>
+  <span class="n">example</span><span class="p">(</span><span class="n">arg1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># arg1=1, args=(), arg2=4, kwargs={}</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># arg1=1, *args=(2,), arg2=2, kwargs={}</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">arg3</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># arg1=1, args=(2, 3), arg2=4, kwargs={&#39;arg3&#39;: 5}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">No</span><span class="p">:</span>
+  <span class="n">example</span><span class="p">(</span><span class="n">arg1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># SyntaxError: positional argument follows keyword argument</span>
+  <span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">arg1</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># TypeError: got multiple values for argument &#39;arg1&#39;</span>
+</pre></div>
+</div>
+<p>For the <code class="docutils literal notranslate"><span class="pre">hydra-slayer</span></code> the same is true. So if you want to use *args please make sure
+that you don’t specify parameters followed by *args by keyword.</p>
+</div>
+</div>
+<div class="section" id="mnist-classifier-with-catalyst">
+<h3>MNIST classifier with Catalyst<a class="headerlink" href="#mnist-classifier-with-catalyst" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/advanced_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>
+    You can use <code class="docutils literal notranslate"><span class="pre">hydra-slayer</span></code>
+    to prepare parameters for the entire training loop and train your neural networks with it.
+  </p>
+  <blockquote>
+    Please note that <b>Advanced Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and increased effectiveness.
+  </blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># config.yaml</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_var_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">model</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.Sequential</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.Flatten</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.Linear</span>
+<span class="w">      </span><span class="nt">in_features</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">784</span><span class="w">  </span><span class="c1"># 28 * 28</span>
+<span class="w">      </span><span class="nt">out_features</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;num_classes</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+
+<span class="nt">criterion</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.CrossEntropyLoss</span>
+
+<span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.optim.Adam</span>
+<span class="w">  </span><span class="nt">params</span><span class="p">:</span><span class="w">  </span><span class="c1"># model.parameters()</span>
+<span class="w">    </span><span class="nt">_var_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">model.parameters</span>
+<span class="w">  </span><span class="nt">lr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.02</span>
+
+<span class="nt">loaders</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">train</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.utils.data.DataLoader</span>
+<span class="w">    </span><span class="nt">dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;dataset</span>
+<span class="w">      </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">catalyst.contrib.datasets.MNIST</span>
+<span class="w">      </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+<span class="w">      </span><span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">transform</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">catalyst.data.transforms.ToTensor</span>
+<span class="w">      </span><span class="nt">download</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="w">  </span><span class="nt">valid</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.utils.data.DataLoader</span>
+<span class="w">    </span><span class="nt">dataset</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">&lt;&lt;</span><span class="p">:</span><span class="w"> </span><span class="nv">*dataset</span>
+<span class="w">      </span><span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">catalyst.dl.AccuracyCallback</span>
+<span class="w">    </span><span class="nt">input_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logits</span>
+<span class="w">    </span><span class="nt">target_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">targets</span>
+<span class="w">    </span><span class="nt">topk_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="nv">5</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">catalyst.dl.PrecisionRecallF1SupportCallback</span>
+<span class="w">    </span><span class="nt">input_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logits</span>
+<span class="w">    </span><span class="nt">target_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">targets</span>
+<span class="w">    </span><span class="nt">num_classes</span><span class="p">:</span><span class="w"> </span><span class="nv">*num_classes</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">catalyst</span>
+<span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">catalyst</span><span class="o">.</span><span class="n">dl</span><span class="o">.</span><span class="n">SupervisedRunner</span><span class="p">()</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="o">**</span><span class="n">config</span><span class="p">,</span>  <span class="c1"># model, criterion, optimizer, loaders, callbacks</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">logdir</span><span class="o">=</span><span class="s2">&quot;./logs&quot;</span><span class="p">,</span>
+    <span class="n">valid_loader</span><span class="o">=</span><span class="s2">&quot;valid&quot;</span><span class="p">,</span>
+    <span class="n">valid_metric</span><span class="o">=</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span>
+    <span class="n">minimize_valid_metric</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">load_best_on_end</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># Top best models:</span>
+<span class="c1"># logs/checkpoints/train.1.pth       ≈0.835</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="expert-level">
+<h2>Expert level<a class="headerlink" href="#expert-level" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-pd-dataframe-from-config">
+<h3>Creating <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> from config<a class="headerlink" href="#creating-pd-dataframe-from-config" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>You also can read multiple CSV files as pandas dataframes and merge them.</p>
+  <blockquote>
+    Please note that <b>Expert Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and maximum effectiveness.
+  </blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
+<span class="nt">dataframe</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.merge</span>
+<span class="w">  </span><span class="nt">left</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span>
+<span class="w">    </span><span class="nt">filepath_or_buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part1.csv</span>
+
+<span class="w">    </span><span class="c1"># By default, hydra-slayer uses partial fit for functions</span>
+<span class="w">    </span><span class="c1"># (what is useful with activation functions in neural networks).</span>
+<span class="w">    </span><span class="c1"># But if we want to call ``pandas.read_csv`` function instead,</span>
+<span class="w">    </span><span class="c1"># then we should set ``call`` mode manually.</span>
+<span class="w">    </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span>
+<span class="w">  </span><span class="nt">right</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas.read_csv</span>
+<span class="w">    </span><span class="nt">filepath_or_buffer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset/dataset_part2.csv</span>
+<span class="w">    </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span>
+<span class="w">  </span><span class="nt">how</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inner</span>
+<span class="w">  </span><span class="s">&#39;on&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+<span class="w">  </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;dataset.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;dataframe&quot;</span><span class="p">]</span>
+<span class="n">dataset</span>
+<span class="c1"># &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</span>
+<span class="c1">#    user country  premium  ...</span>
+<span class="c1"># 0     1     USA    False  ...</span>
+<span class="c1"># 1     2      UK     True  ...</span>
+<span class="c1">#     ...     ...      ...  ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="extending-configs">
+<h3>Extending configs<a class="headerlink" href="#extending-configs" title="Permalink to this headline">¶</a></h3>
+<div>
+  <img src="../_static/expert_fire_magic.png" style="float: right; padding-left: 24px; padding-bottom: 24px;" />
+  <p>It is also possible define the dataset in a separate config file and then pass it to the main config.</p>
+  <blockquote>
+    Please note that <b>Maximum Fire Magic</b> also allows your hero to cast fire spells at reduced cost
+    and maximum effectiveness.
+  </blockquote>
+</div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset.yaml</span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.utils.data.DataLoader</span>
+<span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.datasets.CIFAR100</span>
+<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./data</span>
+<span class="w">  </span><span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">transform</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Compose</span>
+<span class="w">    </span><span class="nt">transforms</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.ToTensor</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.transforms.Normalize</span>
+<span class="w">        </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">std</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">download</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="nt">shuffle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># config.yaml</span>
+<span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># ``yaml.safe_load`` will return dictionary with parameters,</span>
+<span class="w">  </span><span class="c1"># but to get ``DataLoader`` additional ``hydra_slayer.get_from_params``</span>
+<span class="w">  </span><span class="c1"># should be used.</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hydra_slayer.get_from_params</span>
+<span class="w">  </span><span class="nt">kwargs</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Read dataset from &quot;dataset.yaml&quot;, roughly equivalent to</span>
+<span class="w">    </span><span class="c1">#   with open(&quot;dataset.yaml&quot;) as stream:</span>
+<span class="w">    </span><span class="c1">#       kwargs = yaml.safe_load(stream)</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yaml.safe_load</span>
+<span class="w">    </span><span class="nt">stream</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">open</span>
+<span class="w">      </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dataset.yaml</span>
+<span class="w">    </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span>
+<span class="w">  </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span>
+
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torchvision.models.resnet18</span>
+<span class="w">  </span><span class="nt">pretrained</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">_mode_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">call</span>
+
+<span class="nt">criterion</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch.nn.CrossEntropyLoss</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hydra_slayer</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">hydra_slayer</span><span class="o">.</span><span class="n">get_from_params</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+<span class="n">model</span><span class="p">,</span> <span class="n">criterion</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;criterion&quot;</span><span class="p">]</span>
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="n">losses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">batch</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">]:</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+        <span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="n">mean_loss</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mean_loss</span><span class="p">)</span>
+<span class="c1"># ≈8.6087</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api/registry.html" class="btn btn-neutral float-right" title="Registry" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2024, Catalyst-Team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 0.5.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../0.1.0rc0/index.html">0.1.0rc0</a></dd>
+      <dd><a href="../../0.1.1/pages/examples.html">0.1.1</a></dd>
+      <dd><a href="../../0.2.0/pages/examples.html">0.2.0</a></dd>
+      <dd><a href="../../0.3.0/pages/examples.html">0.3.0</a></dd>
+      <dd><a href="../../0.4.0/pages/examples.html">0.4.0</a></dd>
+      <dd><a href="../../0.4.1/pages/examples.html">0.4.1</a></dd>
+      <dd><a href="examples.html">0.5.0</a></dd>
+    </dl>
+  </div>
+</div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
