@@ -47,7 +47,7 @@ def test_instantiations():
 
 def test_fail_instantiation():
     error_msg = "No factory with name '.+' was registered"
-    with pytest.raises(LookupError, match=None):
+    with pytest.raises(LookupError, match=error_msg):
         F.get_instance("tests.foobar.corge")()
 
     error_msg = r"get_instance\(\) missing at least 1 required argument: '.+'"
@@ -368,7 +368,7 @@ def test_get_from_params_var_method_with_params():
 
 
 def test_fail_get_from_params_on_exclusive_keywords():
-    error_msg = r"`.+` and `.+` \(in get mode\) keywords are exclusive"
+    error_msg = "`.+` and `.+` \(in get mode\) keywords are exclusive"
     with pytest.raises(ValueError, match=error_msg):
         F.get_from_params(
             **{

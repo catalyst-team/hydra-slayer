@@ -105,7 +105,7 @@ def _get_instance(
 
     # assume that name of the factory can be provided as first argument
     #  or directly by keyword
-    name, args, kwarg = _extract_factory_name_arg(
+    name, args, kwargs = _extract_factory_name_arg(
         factory_key=factory_key, args=args, kwargs=kwargs
     )
     if name is None:

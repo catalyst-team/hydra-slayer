@@ -25,7 +25,8 @@ def test_add_function_name_override():
 def test_add_fail_on_lambda():
     r = Registry()
 
-    with pytest.raises(ValueError):
+    error_msg = "Name for lambda factories must be provided"
+    with pytest.raises(ValueError, match=error_msg):
         r.add(lambda x: x)
 
 
@@ -50,7 +51,8 @@ def test_add_lambda_override():
 def test_fail_multiple_with_name():
     r = Registry()
 
-    with pytest.raises(ValueError):
+    error_msg = "Multiple factories with single name are not allowed"
+    with pytest.raises(ValueError, match=error_msg):
         r.add(foo, foo, name="bar")
 
 
@@ -59,11 +61,8 @@ def test_fail_double_add_different():
 
     r.add(foo)
 
-    with pytest.raises(LookupError):
-
-        def bar():
-            pass
-
+    error_msg = "Factory with name '.+' is already present\nAlready registered: '.+'\nNew: '.+'"
+    with pytest.raises(LookupError, match=error_msg):
         r.add(foo=bar)
 
 
@@ -144,10 +143,9 @@ def test_fail_instantiation():
 
     assert r.add(foo) is not None
 
-    with pytest.raises((RuntimeError, TypeError)) as e_ifo:
+    error_msg = ".+ got an unexpected keyword argument '.+'"
+    with pytest.raises((RuntimeError, TypeError), match=error_msg):
         r.get_instance("foo", c=1)()
-
-    assert hasattr(e_ifo.value, "__cause__")
 
 
 def test_decorator():
@@ -216,11 +214,11 @@ def test_add_module_prefix_support():
 def test_add_from_module_fails_on_invalid_prefix():
     r = Registry()
 
-    error_msg = r"All prefix in list must be strings\."
+    error_msg = "All prefix in list must be strings"
     with pytest.raises(TypeError, match=error_msg):
         r.add_from_module(module, prefix=["42", 42])
 
-    error_msg = r"Prefix must be a list or a string, got .+\."
+    error_msg = "Prefix must be a list or a string, got .+"
     with pytest.raises(TypeError, match=error_msg):
         r.add_from_module(module, prefix=42)
 
